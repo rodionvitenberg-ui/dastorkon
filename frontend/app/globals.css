@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  /* Наша фирменная этно-палитра */
+  --color-brand-red: #721C1C;
+  --color-brand-redDark: #4A1010;
+  --color-brand-cream: #F5F2EB;
+  --color-brand-dark: #2B1E17;
+  --color-brand-gold: #D4AF37;
+
+  /* Подключение шрифтов из next/font (настроено в layout.tsx) */
+  --font-serif: var(--font-serif), serif;
+  --font-sans: var(--font-sans), sans-serif;
+}
+
+/* Базовые глобальные стили */
+@layer base {
+  body {
+    background-color: var(--color-brand-cream);
+    color: var(--color-brand-dark);
+  }
+  
+  /* Плавный скролл для якорных ссылок */
+  html {
+    scroll-behavior: smooth;
+  }
+}

@@ -1,0 +1,7 @@
+# Игнорируем тяжелые папки фронтенда
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.env*
+.DS_Store

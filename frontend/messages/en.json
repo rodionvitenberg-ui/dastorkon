@@ -1,0 +1,48 @@
+{
+  "navigation": {
+    "about": "About Us",
+    "menu": "Menu",
+    "booking": "Book a Table",
+    "contacts": "Contacts",
+    "events": "Events",
+    "gallery": "Gallery"
+  },
+  "hero": {
+    "title": "DASTORKON — A JOURNEY INTO TRADITION THROUGH FOOD",
+    "cta": "Book a Table"
+  },
+  "about": {
+    "subtitle": "Our Philosophy",
+    "title": "The Spirit of Nomadic Hospitality",
+    "description": "Dastorkon is more than just a table filled with food. It is an ancient tradition of ultimate respect, the heart of the home, and a sacred place where the heritage of Central Asian nomads unfolds through an open heart and authentic flavors. Every dish at Dastorkon is crafted following deeply preserved recipes, bringing the rich mosaic of our ancestors' traditions straight to your plate.",
+    "cta": "Узнать историю"
+  },
+  "menuPreview": {
+    "subtitle": "Cuisine",
+    "title": "The heritage of nomadic taste",
+    "description": "Every dish at Dastorkon is a journey through centuries. We prepare authentic plov, manti, and beshbarmak using regional farm products and traditional spices, carefully preserving the culinary heritage of our ancestors.",
+    "cta": "View Full Menu"
+  },
+  "interior": {
+    "subtitle": "Atmosphere",
+    "title": "Restaurant Interior",
+    "description": "The interior of Dastorkon embodies the patterns of history, daily life, and traditions of nomadic people. Every detail — from the carved tyunduk on the ceiling to authentic antler chandeliers — showcases the kinship of tribes, nomadic hospitality, and the great spirit of freedom."
+  },
+  "contacts": {
+    "subtitle": "Contacts",
+    "title": "Visit Us",
+    "address_label": "Address",
+    "address_value": "123 Abdrakhmanov St, Bishkek",
+    "phones_label": "Phones",
+    "hours_label": "Working Hours",
+    "hours_value": "Sun - Thu:\n12:00 PM – 00:00 AM\n\nFri - Sat:\n12:00 PM – 02:00 AM",
+    "route_cta": "Get Directions"
+  },
+  "footer": {
+    "address": "Przhevalsky / Zhanylyk St, Karakol",
+    "phone": "+996 (555) 123-456",
+    "phone2": "+996 (700) 654-321",
+    "copyright": "© 2026 Dasterkon, Inc. All rights reserved.",
+    "sitemap": "Site map"
+  }
+}
