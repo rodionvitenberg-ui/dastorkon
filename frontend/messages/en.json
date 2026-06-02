@@ -1,6 +1,7 @@
 {
   "navigation": {
     "about": "About Us",
+    "home": "Home",
     "menu": "Menu",
     "booking": "Book a Table",
     "contacts": "Contacts",
@@ -8,41 +9,91 @@
     "gallery": "Gallery"
   },
   "hero": {
-    "title": "DASTORKON — A JOURNEY INTO TRADITION THROUGH FOOD",
+    "title": "DASTORKON — A STORY WE TELL THROUGH FOOD",
     "cta": "Book a Table"
   },
   "about": {
     "subtitle": "Our Philosophy",
     "title": "The Spirit of Nomadic Hospitality",
-    "description": "Dastorkon is more than just a table filled with food. It is an ancient tradition of ultimate respect, the heart of the home, and a sacred place where the heritage of Central Asian nomads unfolds through an open heart and authentic flavors. Every dish at Dastorkon is crafted following deeply preserved recipes, bringing the rich mosaic of our ancestors' traditions straight to your plate.",
-    "cta": "Узнать историю"
+    "description": "Dastarkhan is not just a table with food. It is a centuries-old tradition of respect, the center of the home, and a place where the history of the great nomads of Central Asia unfolds through an open heart and authentic flavors. Every dish at Dastorkon is prepared according to carefully preserved recipes, conveying the true mosaic of our ancestors' flavors.",
+    "cta": "Discover the Story"
   },
   "menuPreview": {
     "subtitle": "Cuisine",
-    "title": "The heritage of nomadic taste",
-    "description": "Every dish at Dastorkon is a journey through centuries. We prepare authentic plov, manti, and beshbarmak using regional farm products and traditional spices, carefully preserving the culinary heritage of our ancestors.",
-    "cta": "View Full Menu"
+    "title": "Nomadic Taste Traditions",
+    "description": "Every dish at Dastorkon is a journey through the centuries. We prepare plov, manti, and beshbarmak using authentic recipes, local farm products, and traditional spices, carefully preserving the gastronomic heritage of our ancestors.",
+    "cta": "Open Menu"
   },
   "interior": {
     "subtitle": "Atmosphere",
     "title": "Restaurant Interior",
-    "description": "The interior of Dastorkon embodies the patterns of history, daily life, and traditions of nomadic people. Every detail — from the carved tyunduk on the ceiling to authentic antler chandeliers — showcases the kinship of tribes, nomadic hospitality, and the great spirit of freedom."
+    "description": "The interior of Dastorkon embodies the patterns of history, daily life, and traditions of nomadic peoples. Every detail — from the carved tyundyuk on the ceiling to the authentic antler lamps — showcases tribal kinship, nomadic hospitality, and the great spirit of freedom."
   },
   "contacts": {
     "subtitle": "Contacts",
-    "title": "Visit Us",
+    "title": "We Look Forward to Your Visit",
     "address_label": "Address",
     "address_value": "123 Abdrakhmanov St, Bishkek",
     "phones_label": "Phones",
-    "hours_label": "Working Hours",
-    "hours_value": "Sun - Thu:\n12:00 PM – 00:00 AM\n\nFri - Sat:\n12:00 PM – 02:00 AM",
+    "hours_label": "Opening Hours",
+    "hours_value": "Sun - Thu:\n12:00 – 00:00\n\nFri - Sat:\n12:00 – 02:00",
     "route_cta": "Get Directions"
   },
   "footer": {
     "address": "Przhevalsky / Zhanylyk St, Karakol",
     "phone": "+996 (555) 123-456",
     "phone2": "+996 (700) 654-321",
-    "copyright": "© 2026 Dasterkon, Inc. All rights reserved.",
-    "sitemap": "Site map"
+    "copyright": "© 2026 Dastorkon, Inc. All rights reserved.",
+    "sitemap": "Sitemap"
+  },
+  "menuPage": {
+    "category_title": "Exquisite Dishes",
+    "category_desc": "Immerse yourself in the atmosphere of nomadic aesthetics with our signature dishes, prepared according to ancient recipes using the freshest local ingredients.",
+    "items": [
+      {
+        "title": "Samarkand Plov",
+        "description": "Traditional Uzbek plov made with devzira rice, tender lamb, yellow carrots, and aromatic spices.",
+        "price": "450",
+        "image": "/dish-1.jpg"
+      },
+      {
+        "title": "Mariestan Dip Set",
+        "description": "An assortment of Central Asian dips served with crispy tandoor flatbreads.",
+        "price": "180",
+        "image": "/dish-2.jpg"
+      },
+      {
+        "title": "Special Sauces",
+        "description": "Tangy tomato and garlic sauces to complement meat dishes.",
+        "price": "120",
+        "image": "/dish-3.jpg"
+      },
+      {
+        "title": "Dinper Sauce",
+        "description": "A secret recipe from our chef made with aromatic herbs.",
+        "price": "170",
+        "image": "/dish-4.jpg"
+      }
+    ]
+  },
+  "bookPage": {
+    "subtitle": "Reservation",
+    "title": "Book a Table",
+    "description": "Please fill out the form below, and we will contact you to confirm your reservation.",
+    "name_label": "Your Name *",
+    "name_placeholder": "e.g., Ermek",
+    "datetime_label": "Date and Time *",
+    "datetime_placeholder": "e.g., May 15 at 19:00",
+    "guests_label": "Number of Guests *",
+    "guests_placeholder": "e.g., 4 people",
+    "phone_label": "Phone / WhatsApp *",
+    "phone_placeholder": "+996 (555) 00-00-00",
+    "notes_label": "Special Requests (up to 500 characters)",
+    "notes_placeholder": "Special preferences, allergies, or occasion...",
+    "submit_button": "Book Now",
+    "submit_loading": "Sending...",
+    "success_title": "Thank You!",
+    "success_desc": "Your request has been successfully sent. We will contact you shortly.",
+    "error_msg": "An error occurred. Please try again later."
   }
 }

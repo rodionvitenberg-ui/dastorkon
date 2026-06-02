@@ -39,24 +39,28 @@ export default function Hero() {
         {/* Навигация */}
         <nav className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-y-4 w-full max-w-[290px] mx-auto sm:flex sm:flex-row sm:items-center sm:justify-center sm:gap-x-5 sm:max-w-none mb-16 text-xs md:text-sm font-sans tracking-[0.15em] uppercase">
           
+          {/* 1. ГЛАВНАЯ (вместо Меню) */}
+          <Link href="/" className="text-left sm:text-center hover:text-brand-gold transition-colors">
+            {tNav("home")}
+          </Link>
+          
+          <span className="hidden sm:inline text-white/60 font-light">|</span>
+          
+          {/* 2. МЕНЮ (вместо Галереи) */}
           <Link href="/menu" className="text-left sm:text-center hover:text-brand-gold transition-colors">
             {tNav("menu")}
           </Link>
           
           <span className="hidden sm:inline text-white/60 font-light">|</span>
           
-          <Link href="/gallery" className="text-left sm:text-center hover:text-brand-gold transition-colors">
-            {tNav("gallery")}
-          </Link>
-          
-          <span className="hidden sm:inline text-white/60 font-light">|</span>
-          
+          {/* 3. МЕРОПРИЯТИЯ */}
           <Link href="/events" className="text-right sm:text-center hover:text-brand-gold transition-colors">
             {tNav("events")}
           </Link>
           
           <span className="hidden sm:inline text-white/60 font-light">|</span>
           
+          {/* 4. КОНТАКТЫ */}
           <Link href="/contacts" className="text-right sm:text-center hover:text-brand-gold transition-colors">
             {tNav("contacts")}
           </Link>

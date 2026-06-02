@@ -5,5 +5,5 @@ export default createMiddleware(routing);
 
 export const config = {
   // Настройки матчера для чистых URL
-  matcher: ['/', '/(ru|en|kg)/:path*', '/((?!api|_next|_next/image|favicon.ico|.*\\..*).*)']
+  matcher: ['/', '/(ru|en|ky)/:path*', '/((?!api|_next|_next/image|favicon.ico|.*\\..*).*)']
 };

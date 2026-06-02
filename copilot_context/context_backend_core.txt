@@ -1,0 +1,594 @@
+
+
+========== START FILE: backend/core/urls.py ==========
+# backend/core/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import CategoryViewSet, DishViewSet, ComboCategoryViewSet, ComboViewSet
+
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet, basename='category')
+router.register(r'dishes', DishViewSet, basename='dish')
+router.register(r'combo-categories', ComboCategoryViewSet, basename='combo-category')
+router.register(r'combos', ComboViewSet, basename='combo')
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
+========== END FILE: backend/core/urls.py ==========
+
+
+========== START FILE: backend/core/tests.py ==========
+from django.test import TestCase
+
+# Create your tests here.
+
+========== END FILE: backend/core/tests.py ==========
+
+
+========== START FILE: backend/core/views.py ==========
+# backend/core/views.py
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .models import Category, Dish, ComboCategory, Combo
+from .serializers import (
+    CategoryWithDishesSerializer, 
+    DishDetailSerializer,
+    ComboCategoryWithCombosSerializer,
+    ComboDetailSerializer,
+    ComboListSerializer
+)
+
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для категорий блюд со всеми активными блюдами"""
+    queryset = Category.objects.prefetch_related('dishes').all()
+    serializer_class = CategoryWithDishesSerializer
+    
+    @action(detail=True, methods=['get'])
+    def dishes(self, request, pk=None):
+        """Получить все активные блюда категории"""
+        category = self.get_object()
+        dishes = category.dishes.filter(is_active=True).order_by('order')
+        serializer = DishDetailSerializer(dishes, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class DishViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для блюд"""
+    queryset = Dish.objects.filter(is_active=True)
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return DishDetailSerializer
+        return DishDetailSerializer
+    
+    @action(detail=True, methods=['get'])
+    def combos(self, request, pk=None):
+        """Получить все сборки, в которые входит это блюдо"""
+        dish = self.get_object()
+        combos = dish.combos.filter(is_active=True).order_by('order')
+        serializer = ComboListSerializer(combos, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class ComboCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для категорий сборок со всеми активными сборками"""
+    queryset = ComboCategory.objects.prefetch_related('combos').all()
+    serializer_class = ComboCategoryWithCombosSerializer
+    
+    @action(detail=True, methods=['get'])
+    def combos(self, request, pk=None):
+        """Получить все активные сборки категории"""
+        category = self.get_object()
+        combos = category.combos.filter(is_active=True).order_by('order')
+        serializer = ComboDetailSerializer(combos, many=True, context={'request': request})
+        return Response(serializer.data)
+
+
+class ComboViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для сборок"""
+    queryset = Combo.objects.filter(is_active=True).prefetch_related('dishes')
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ComboDetailSerializer
+        return ComboListSerializer
+    
+    @action(detail=True, methods=['get'])
+    def dishes(self, request, pk=None):
+        """Получить все блюда в сборке"""
+        combo = self.get_object()
+        dishes = combo.dishes.filter(is_active=True).order_by('order')
+        serializer = DishDetailSerializer(dishes, many=True, context={'request': request})
+        return Response(serializer.data)
+
+========== END FILE: backend/core/views.py ==========
+
+
+========== START FILE: backend/core/serializers.py ==========
+# backend/core/serializers.py
+from rest_framework import serializers
+from django.utils import translation
+from .models import Category, Dish, ComboCategory, Combo
+
+
+# ============================
+# Универсальная функция локализации
+# ============================
+
+from django.utils import translation
+
+LANG_EQUIV = {
+    "kg": "ky",   # если фронт использует kg, а modeltranslation использует ky
+    "ky": "ky",
+    "ru": "ru",
+    "en": "en",
+}
+
+def _localized_value(obj, field: str, context: dict | None = None, default_lang: str = "ru"):
+    """
+    Надёжный выбор локализованного поля.
+    Порядок языка: request.LANGUAGE_CODE -> translation.get_language() -> default_lang
+    Поддерживает эквивалентность kg <-> ky.
+    Порядок поиска значения:
+      1) field_<lang> (и эквиваленты, если есть)
+      2) field_<default_lang>
+      3) field (базовое)
+    """
+    # 1) язык из request в context
+    lang = None
+    if context:
+        req = context.get("request")
+        if req:
+            lang = getattr(req, "LANGUAGE_CODE", None)
+
+    # 2) глобальная активная локаль
+    if not lang:
+        lang = translation.get_language()
+
+    if not lang:
+        lang = default_lang
+
+    lang = str(lang).split("-")[0].lower()
+
+    # нормализуем (поддержка kg/ky)
+    norm = LANG_EQUIV.get(lang, lang)
+
+    # пробуем основной вариант
+    candidates = [norm]
+    # если norm == 'ky', также попробуем 'kg' и наоборот
+    if norm == "ky":
+        candidates.append("kg")
+    elif norm == "kg":
+        candidates.append("ky")
+
+    # 1) пробуем field_<candidate>
+    for c in candidates:
+        val = getattr(obj, f"{field}_{c}", None)
+        if val:
+            return val
+
+    # 2) пробуем default_lang (обычно ru)
+    val = getattr(obj, f"{field}_{default_lang}", None)
+    if val:
+        return val
+
+    # 3) базовое поле
+    return getattr(obj, field, "") or ""
+
+
+# ============================
+# Dish (список)
+# ============================
+
+class DishListSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+    short_description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Dish
+        fields = ["id", "title", "short_description", "price", "images"]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_short_description(self, obj):
+        return _localized_value(obj, "short_description", context=self.context)
+
+    def get_images(self, obj):
+        request = self.context.get("request")
+        images_list = []
+        for img_field in [obj.image, obj.image_2, obj.image_3]:
+            if img_field:
+                images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        return images_list
+
+
+# ============================
+# Dish (детальная страница)
+# ============================
+
+class DishDetailSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+    short_description = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Dish
+        fields = [
+            "id",
+            "title",
+            "short_description",
+            "description",
+            "price",
+            "images",
+            "category_name",
+        ]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_short_description(self, obj):
+        return _localized_value(obj, "short_description", context=self.context)
+
+    def get_description(self, obj):
+        return _localized_value(obj, "description", context=self.context)
+
+    def get_category_name(self, obj):
+        if not getattr(obj, "category", None):
+            return ""
+        return _localized_value(obj.category, "title", context=self.context)
+
+    def get_images(self, obj):
+        request = self.context.get("request")
+        images_list = []
+        for img_field in [obj.image, obj.image_2, obj.image_3]:
+            if img_field:
+                images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        return images_list
+
+
+# ============================
+# Category
+# ============================
+
+class CategoryWithDishesSerializer(serializers.ModelSerializer):
+    dishes = serializers.SerializerMethodField()
+    icon = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ["id", "title", "description", "icon", "dishes"]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_description(self, obj):
+        return _localized_value(obj, "description", context=self.context)
+
+    def get_icon(self, obj):
+        if not obj.icon:
+            return None
+        request = self.context.get("request")
+        return request.build_absolute_uri(obj.icon.url) if request else obj.icon.url
+
+    def get_dishes(self, obj):
+        active_dishes = obj.dishes.filter(is_active=True).order_by("order")
+        # Копируем контекст и гарантируем передачу request
+        ctx = dict(self.context or {})
+        if self.context and self.context.get("request"):
+            ctx["request"] = self.context.get("request")
+        return DishListSerializer(active_dishes, many=True, context=ctx).data
+
+
+# ============================
+# Combo (список)
+# ============================
+
+class ComboListSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+    short_description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Combo
+        fields = ["id", "title", "short_description", "price", "images"]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_short_description(self, obj):
+        return _localized_value(obj, "short_description", context=self.context)
+
+    def get_images(self, obj):
+        request = self.context.get("request")
+        images_list = []
+        for img_field in [obj.image, obj.image_2, obj.image_3]:
+            if img_field:
+                images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        return images_list
+
+
+# ============================
+# Combo (детальная страница)
+# ============================
+
+class ComboDetailSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+    dishes = DishListSerializer(many=True, read_only=True)
+    title = serializers.SerializerMethodField()
+    short_description = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Combo
+        fields = [
+            "id",
+            "title",
+            "short_description",
+            "description",
+            "price",
+            "images",
+            "category_name",
+            "dishes",
+        ]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_short_description(self, obj):
+        return _localized_value(obj, "short_description", context=self.context)
+
+    def get_description(self, obj):
+        return _localized_value(obj, "description", context=self.context)
+
+    def get_category_name(self, obj):
+        if not getattr(obj, "category", None):
+            return ""
+        return _localized_value(obj.category, "title", context=self.context)
+
+    def get_images(self, obj):
+        request = self.context.get("request")
+        images_list = []
+        for img_field in [obj.image, obj.image_2, obj.image_3]:
+            if img_field:
+                images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        return images_list
+
+
+# ============================
+# ComboCategory
+# ============================
+
+class ComboCategoryWithCombosSerializer(serializers.ModelSerializer):
+    combos = serializers.SerializerMethodField()
+    icon = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ComboCategory
+        fields = ["id", "title", "description", "icon", "combos"]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
+    def get_description(self, obj):
+        return _localized_value(obj, "description", context=self.context)
+
+    def get_icon(self, obj):
+        if not obj.icon:
+            return None
+        request = self.context.get("request")
+        return request.build_absolute_uri(obj.icon.url) if request else obj.icon.url
+
+    def get_combos(self, obj):
+        active_combos = obj.combos.filter(is_active=True).order_by("order")
+        ctx = dict(self.context or {})
+        if self.context and self.context.get("request"):
+            ctx["request"] = self.context.get("request")
+        return ComboListSerializer(active_combos, many=True, context=ctx).data
+========== END FILE: backend/core/serializers.py ==========
+
+
+========== START FILE: backend/core/apps.py ==========
+from django.apps import AppConfig
+
+
+class CoreConfig(AppConfig):
+    name = 'core'
+
+========== END FILE: backend/core/apps.py ==========
+
+
+========== START FILE: backend/core/translation.py ==========
+# backend/core/translation.py
+from modeltranslation.translator import register, TranslationOptions
+from .models import Category, Dish, ComboCategory, Combo
+
+@register(Category)
+class CategoryTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(Dish)
+class DishTranslationOptions(TranslationOptions):
+    # Добавили short_description в кортеж
+    fields = ('title', 'short_description', 'description')
+
+@register(ComboCategory)
+class ComboCategoryTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(Combo)
+class ComboTranslationOptions(TranslationOptions):
+    fields = ('title', 'short_description', 'description')
+========== END FILE: backend/core/translation.py ==========
+
+
+========== START FILE: backend/core/admin.py ==========
+# backend/core/admin.py
+from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
+from .models import Category, Dish, ComboCategory, Combo
+
+@admin.register(Category)
+class CategoryAdmin(TranslationAdmin):
+    list_display = ('title', 'order')
+    list_editable = ('order',)
+
+@admin.register(Dish)
+class DishAdmin(TranslationAdmin):
+    list_display = ('title', 'category', 'price', 'is_active', 'order')
+    list_filter = ('category', 'is_active')
+    list_editable = ('price', 'is_active', 'order')
+    # Добавили поиск по short_description
+    search_fields = ('title', 'short_description', 'description')
+
+@admin.register(ComboCategory)
+class ComboCategoryAdmin(TranslationAdmin):
+    list_display = ('title', 'order')
+    list_editable = ('order',)
+
+@admin.register(Combo)
+class ComboAdmin(TranslationAdmin):
+    list_display = ('title', 'category', 'price', 'is_active', 'order')
+    list_filter = ('category', 'is_active')
+    list_editable = ('price', 'is_active', 'order')
+    search_fields = ('title', 'short_description', 'description')
+    filter_horizontal = ('dishes',)  # Удобный интерфейс для выбора блюд
+========== END FILE: backend/core/admin.py ==========
+
+
+========== START FILE: backend/core/models.py ==========
+# backend/core/models.py
+from django.db import models
+from django.core.validators import FileExtensionValidator # Импортируем валидатор расширений
+
+class Category(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Название категории")
+    description = models.TextField(blank=True, verbose_name="Описание категории")
+    
+    # НОВОЕ ПОЛЕ: Иконка SVG
+    icon = models.FileField(
+        upload_to='categories/icons/', 
+        validators=[FileExtensionValidator(['svg'])], # Разрешаем только SVG
+        blank=True, 
+        null=True, 
+        verbose_name="Иконка (SVG)",
+        help_text="Загрузите иконку категории в формате .svg"
+    )
+    
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок вывода")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Категория меню"
+        verbose_name_plural = "Категории меню"
+        ordering = ['order']
+
+
+class Dish(models.Model):
+    category = models.ForeignKey(
+        Category, 
+        related_name='dishes', 
+        on_delete=models.CASCADE, 
+        verbose_name="Категория"
+    )
+    title = models.CharField(max_length=255, verbose_name="Название блюда")
+    short_description = models.CharField(
+        max_length=255, 
+        verbose_name="Краткое описание", 
+        help_text="Отображается в общем списке меню (до 255 символов)"
+    )
+    description = models.TextField(verbose_name="Полное описание", help_text="Отображается на отдельной странице блюда")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена (KGS)")
+    
+    # ФОТОГРАФИИ БЛЮДА (1 обязательная, 2 дополнительные)
+    image = models.ImageField(upload_to='dishes/', verbose_name="Главное фото")
+    image_2 = models.ImageField(upload_to='dishes/', blank=True, null=True, verbose_name="Фото 2 (необязательно)")
+    image_3 = models.ImageField(upload_to='dishes/', blank=True, null=True, verbose_name="Фото 3 (необязательно)")
+    
+    is_active = models.BooleanField(default=True, verbose_name="Показывать в меню")
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок вывода")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Блюдо"
+        verbose_name_plural = "Блюда"
+        ordering = ['category', 'order']
+
+
+class ComboCategory(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Название категории сборки")
+    description = models.TextField(blank=True, verbose_name="Описание категории")
+    
+    # Иконка SVG для категории сборок
+    icon = models.FileField(
+        upload_to='combo_categories/icons/', 
+        validators=[FileExtensionValidator(['svg'])],
+        blank=True, 
+        null=True, 
+        verbose_name="Иконка (SVG)",
+        help_text="Загрузите иконку категории сборок в формате .svg"
+    )
+    
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок вывода")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Категория сборки"
+        verbose_name_plural = "Категории сборок"
+        ordering = ['order']
+
+
+class Combo(models.Model):
+    category = models.ForeignKey(
+        ComboCategory, 
+        related_name='combos', 
+        on_delete=models.CASCADE, 
+        verbose_name="Категория сборки"
+    )
+    title = models.CharField(max_length=255, verbose_name="Название сборки")
+    short_description = models.CharField(
+        max_length=255, 
+        verbose_name="Краткое описание", 
+        help_text="Отображается в общем списке сборок (до 255 символов)"
+    )
+    description = models.TextField(verbose_name="Полное описание", help_text="Отображается на отдельной странице сборки")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена сборки (KGS)")
+    
+    # Связь многие-ко-многим с блюдами
+    dishes = models.ManyToManyField(Dish, related_name='combos', verbose_name="Блюда в сборке")
+    
+    # ФОТОГРАФИИ СБОРКИ (1 обязательная, 2 дополнительные)
+    image = models.ImageField(upload_to='combos/', verbose_name="Главное фото")
+    image_2 = models.ImageField(upload_to='combos/', blank=True, null=True, verbose_name="Фото 2 (необязательно)")
+    image_3 = models.ImageField(upload_to='combos/', blank=True, null=True, verbose_name="Фото 3 (необязательно)")
+    
+    is_active = models.BooleanField(default=True, verbose_name="Показывать в меню")
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок вывода")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Сборка"
+        verbose_name_plural = "Сборки"
+        ordering = ['category', 'order']
+========== END FILE: backend/core/models.py ==========

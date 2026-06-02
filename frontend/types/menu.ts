@@ -1,0 +1,65 @@
+//
+// TYPES FOR DISHES
+//
+export interface Dish {
+  id: number;
+  title: string;
+  short_description: string;
+  description: string;
+  price: number;
+
+  // Django отдаёт image, image_2, image_3
+  image: string;
+  image_2?: string | null;
+  image_3?: string | null;
+
+  category: number;
+}
+
+//
+// TYPES FOR CATEGORIES
+//
+export interface Category {
+  id: number;
+  title: string;
+  description: string | null;
+
+  // Django сериализатор возвращает icon как абсолютный URL или null
+  icon: string | null;
+
+  // CategoryWithDishesSerializer → dishes: Dish[]
+  dishes: Dish[];
+}
+
+//
+// TYPES FOR COMBO ITEMS
+//
+export interface Combo {
+  id: number;
+  title: string;
+  short_description: string;
+  description: string;
+  price: number;
+
+  // ComboListSerializer / ComboDetailSerializer → images: string[]
+  images: string[];
+
+  // ComboDetailSerializer → dishes: Dish[]
+  dishes?: Dish[];
+
+  // ComboDetailSerializer → category_name
+  category_name?: string;
+}
+
+//
+// TYPES FOR COMBO CATEGORIES
+//
+export interface ComboCategory {
+  id: number;
+  title: string;
+  description: string | null;
+  icon: string | null;
+
+  // ComboCategoryWithCombosSerializer → combos: Combo[]
+  combos: Combo[];
+}

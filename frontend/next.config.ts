@@ -1,9 +1,19 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import type { NextConfig } from "next";
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-const nextConfig = {
-  // твои настройки Next.js, если есть
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/media/**",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);
