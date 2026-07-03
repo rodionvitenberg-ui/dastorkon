@@ -1,6 +1,77 @@
 # backend/core/models.py
 from django.db import models
+from django.utils.html import format_html
 from django.core.validators import FileExtensionValidator # Импортируем валидатор расширений
+
+class Tag(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Название")
+
+    show_on_card = models.BooleanField(default=False, verbose_name="Показывать на карточке блюда")
+
+    color_text = models.CharField(
+        max_length=20,
+        default="#2B1E17",
+        verbose_name="Цвет текста (HEX)"
+    )
+
+    # Новый HEX для выбора цвета
+    color_bg_hex = models.CharField(
+        max_length=20,
+        default="#B8860B",
+        verbose_name="Цвет фона (HEX)"
+    )
+
+    # Старое RGBA — генерируется автоматически
+    color_bg = models.CharField(
+        max_length=50,
+        default="rgba(184,134,11,1)",
+        verbose_name="Цвет фона (RGBA)"
+    )
+
+    opacity = models.FloatField(default=1.0, verbose_name="Прозрачность фона (0–1)")
+
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Характеристика"
+        verbose_name_plural = "Характеристики"
+
+    def get_contrast_color(self):
+        hex_color = self.color_bg_hex.lstrip("#")
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+
+        # Формула контраста (W3C)
+        brightness = (r * 299 + g * 587 + b * 114) / 1000
+
+        return "#000000" if brightness > 150 else "#FFFFFF"
+
+
+    def save(self, *args, **kwargs):
+        # Генерируем RGBA из HEX
+        hex_color = self.color_bg_hex.lstrip("#")
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        self.color_bg = f"rgba({r},{g},{b},{self.opacity})"
+        self.color_text = self.get_contrast_color()
+        super().save(*args, **kwargs)
+
+    def preview(self):
+        return format_html(
+            '<span style="padding:4px 8px; border-radius:4px; '
+            'background:{}; color:{}; font-weight:600;">{}</span>',
+            self.color_bg,
+            self.color_text,
+            self.title,
+        )
+    preview.short_description = "Превью"
+
+    def __str__(self):
+        return self.title
+
 
 class Category(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название категории")
@@ -34,6 +105,7 @@ class Dish(models.Model):
         on_delete=models.CASCADE, 
         verbose_name="Категория"
     )
+    tags = models.ManyToManyField(Tag, blank=True, related_name="dishes", verbose_name="Теги")
     title = models.CharField(max_length=255, verbose_name="Название блюда")
     short_description = models.CharField(
         max_length=255, 
@@ -119,3 +191,4 @@ class Combo(models.Model):
         verbose_name = "Сборка"
         verbose_name_plural = "Сборки"
         ordering = ['category', 'order']
+

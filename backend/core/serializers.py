@@ -1,7 +1,7 @@
 # backend/core/serializers.py
 from rest_framework import serializers
 from django.utils import translation
-from .models import Category, Dish, ComboCategory, Combo
+from .models import Category, Dish, ComboCategory, Combo, Tag
 
 
 # ============================
@@ -73,14 +73,25 @@ def _localized_value(obj, field: str, context: dict | None = None, default_lang:
 # Dish (список)
 # ============================
 
+class TagSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Tag
+        fields = ["id", "title", "show_on_card", "color_text", "color_bg"]
+
+    def get_title(self, obj):
+        return _localized_value(obj, "title", context=self.context)
+
 class DishListSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
     short_description = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Dish
-        fields = ["id", "title", "short_description", "price", "images"]
+        fields = ["id", "title", "short_description", "price", "images", "tags"]
 
     def get_title(self, obj):
         return _localized_value(obj, "title", context=self.context)
@@ -107,6 +118,7 @@ class DishDetailSerializer(serializers.ModelSerializer):
     short_description = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Dish
@@ -118,6 +130,7 @@ class DishDetailSerializer(serializers.ModelSerializer):
             "price",
             "images",
             "category_name",
+            "tags"
         ]
 
     def get_title(self, obj):
@@ -213,6 +226,7 @@ class ComboListSerializer(serializers.ModelSerializer):
 class ComboDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     dishes = DishListSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
     title = serializers.SerializerMethodField()
     short_description = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
@@ -229,6 +243,7 @@ class ComboDetailSerializer(serializers.ModelSerializer):
             "images",
             "category_name",
             "dishes",
+            "tags"
         ]
 
     def get_title(self, obj):

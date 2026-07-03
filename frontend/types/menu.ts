@@ -1,19 +1,28 @@
 //
 // TYPES FOR DISHES
 //
+
+
+export interface Tag {
+  id: number;
+  title: string;
+  show_on_card: boolean;
+  color_text: string;
+  color_bg: string;
+  order: number;
+}
+
 export interface Dish {
   id: number;
   title: string;
   short_description: string;
-  description: string;
+  description?: string;
   price: number;
+  tags: Tag[];
 
-  // Django отдаёт image, image_2, image_3
-  image: string;
-  image_2?: string | null;
-  image_3?: string | null;
+  images: string[]; // ← главное поле
 
-  category: number;
+  category_name?: string;
 }
 
 //

@@ -30,21 +30,24 @@
     "description": "The interior of Dastorkon embodies the patterns of history, daily life, and traditions of nomadic peoples. Every detail — from the carved tyundyuk on the ceiling to the authentic antler lamps — showcases tribal kinship, nomadic hospitality, and the great spirit of freedom."
   },
   "contacts": {
-    "subtitle": "Contacts",
-    "title": "We Look Forward to Your Visit",
+    "subtitle": "Our doors are open",
+    "title": "We look forward to welcoming you",
+    "description": "Dastorkon is the warmth of a mountain home, tradition, and love for our guests. Come and share a piece of Karakol's soul with us, feeling the comfort where every guest is the closest one.",
     "address_label": "Address",
-    "address_value": "123 Abdrakhmanov St, Bishkek",
-    "phones_label": "Phones",
-    "hours_label": "Opening Hours",
-    "hours_value": "Sun - Thu:\n12:00 – 00:00\n\nFri - Sat:\n12:00 – 02:00",
-    "route_cta": "Get Directions"
+    "address_value": "Karakol, Przhevalsky str. 107",
+    "hours_label": "Opening hours",
+    "hours_value": "Daily\nfrom 10:00 to 23:00",
+    "phones_label": "Phones / WhatsApp",
+    "route_cta": "Get directions"
   },
   "footer": {
-    "address": "Przhevalsky / Zhanylyk St, Karakol",
-    "phone": "+996 (555) 123-456",
-    "phone2": "+996 (700) 654-321",
-    "copyright": "© 2026 Dastorkon, Inc. All rights reserved.",
-    "sitemap": "Sitemap"
+    "address": "Karakol, Przhevalsky str. 107",
+    "phones": {
+      "p1": "0555 400 270",
+      "p2": "0998 400 270",
+      "p3": "0707 400 270"
+    },
+    "copyright": "© 2026 Dastorkon. All rights reserved."
   },
   "menuPage": {
     "category_title": "Exquisite Dishes",

@@ -40,42 +40,42 @@ export default function Hero() {
         <nav className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-y-4 w-full max-w-[290px] mx-auto sm:flex sm:flex-row sm:items-center sm:justify-center sm:gap-x-5 sm:max-w-none mb-16 text-xs md:text-sm font-sans tracking-[0.15em] uppercase">
           
           {/* 1. ГЛАВНАЯ (вместо Меню) */}
-          <Link href="/" className="text-left sm:text-center hover:text-brand-gold transition-colors">
+          <Link href="/" className="font-bold text-left sm:text-center hover:text-brand-gold transition-colors">
             {tNav("home")}
           </Link>
           
           <span className="hidden sm:inline text-white/60 font-light">|</span>
           
           {/* 2. МЕНЮ (вместо Галереи) */}
-          <Link href="/menu" className="text-left sm:text-center hover:text-brand-gold transition-colors">
+          <Link href="/menu" className="font-bold text-left sm:text-center hover:text-brand-gold transition-colors">
             {tNav("menu")}
           </Link>
           
           <span className="hidden sm:inline text-white/60 font-light">|</span>
           
           {/* 3. МЕРОПРИЯТИЯ */}
-          <Link href="/events" className="text-right sm:text-center hover:text-brand-gold transition-colors">
+          <Link href="/events" className="font-bold text-right sm:text-center hover:text-brand-gold transition-colors">
             {tNav("events")}
           </Link>
           
           <span className="hidden sm:inline text-white/60 font-light">|</span>
           
           {/* 4. КОНТАКТЫ */}
-          <Link href="/contacts" className="text-right sm:text-center hover:text-brand-gold transition-colors">
+          <Link href="/contacts" className="font-bold text-right sm:text-center hover:text-brand-gold transition-colors">
             {tNav("contacts")}
           </Link>
 
         </nav>
 
         {/* Заголовок */}
-        <h1 className="text-3xl md:text-5xl lg:text-[56px] font-serif text-center mb-12 leading-[1.2] uppercase tracking-wide">
+        <h1 className="font-bold text-3xl md:text-5xl lg:text-[56px] font-serif text-center mb-12 leading-[1.2] uppercase tracking-wide">
           {t("title")}
         </h1>
 
         {/* Кнопка-Ссылка ЗАБРОНИРОВАТЬ */}
         <Link 
           href="/book" 
-          className="inline-block bg-white text-[#5a1212] px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] rounded-sm hover:bg-gray-100 transition-colors shadow-lg cursor-pointer text-center select-none"
+          className="inline-block bg-white text-[#5a1212] px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] rounded-sm hover:bg-accent-foreground hover:text-white transition-colors shadow-lg cursor-pointer text-center select-none"
         >
           {t("cta")}
         </Link>

@@ -3,13 +3,14 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .models import Category, Dish, ComboCategory, Combo
+from .models import Category, Dish, ComboCategory, Combo, Tag
 from .serializers import (
     CategoryWithDishesSerializer, 
     DishDetailSerializer,
     ComboCategoryWithCombosSerializer,
     ComboDetailSerializer,
-    ComboListSerializer
+    ComboListSerializer,
+    TagSerializer
 )
 
 
@@ -75,3 +76,7 @@ class ComboViewSet(viewsets.ReadOnlyModelViewSet):
         dishes = combo.dishes.filter(is_active=True).order_by('order')
         serializer = DishDetailSerializer(dishes, many=True, context={'request': request})
         return Response(serializer.data)
+    
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer

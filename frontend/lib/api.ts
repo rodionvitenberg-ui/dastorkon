@@ -1,5 +1,5 @@
 // lib/api.ts
-import type { Category, ComboCategory } from "@/types/menu";
+import type { Category, ComboCategory, Dish } from "@/types/menu";
 
 const API_URL = process.env.API_URL!;
 
@@ -53,13 +53,13 @@ export async function getComboCategories(locale?: string): Promise<ComboCategory
 /**
  * Получить детальную информацию о блюде. Передаём locale.
  */
-export async function getDish(id: string, locale?: string) {
+export async function getDish(id: string, locale?: string): Promise<Dish> {
   const headers: Record<string, string> = {};
   if (locale) headers["Accept-Language"] = locale;
 
   const res = await fetch(`${API_URL}/dishes/${id}/`, {
     headers,
-    cache: "no-store", // ← Отключаем кэш для мгновенного обновления карточки блюда
+    cache: "no-store",
   });
 
   if (!res.ok) throw new Error("Failed to load dish");

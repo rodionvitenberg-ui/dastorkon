@@ -1,14 +1,13 @@
 // app/[locale]/menu/page.tsx
 import Image from "next/image";
 import { getCategories } from "@/lib/api";
-import DishGrid from "@/components/menu/DishGrid";
+import MenuContent from "@/components/menu/MenuContent";
 
 export default async function MenuPage(props: { params: Promise<{ locale: string }> }) {
-  const { locale } = await props.params;   // ← Ключевой фикс для Next.js 15+
+  const { locale } = await props.params;
 
   const categories = await getCategories(locale);
 
-  // Локализация сообщения об ошибке без привязки к внешним JSON-файлам
   const errorMessages: Record<string, string> = {
     ru: "Меню временно недоступно",
     en: "Menu is temporarily unavailable",
@@ -42,7 +41,7 @@ export default async function MenuPage(props: { params: Promise<{ locale: string
       </div>
 
       <div className="w-full max-w-[1024px] mx-auto px-6 sm:px-12 md:px-16">
-        {/* Заголовок страницы с узором */}
+        {/* Заголовок страницы */}
         <div className="flex flex-col items-center justify-center mb-16">
           <div className="relative h-16 sm:h-20 w-48 sm:w-64 mb-3">
             <Image src="/menu.png" alt="Menu" fill className="object-contain object-center" priority />
@@ -57,29 +56,8 @@ export default async function MenuPage(props: { params: Promise<{ locale: string
           </div>
         </div>
 
-        {/* Список категорий меню */}
-        {categories.map(category => (
-          <section key={category.id} className="mb-20">
-            <h2 className="font-serif text-3xl sm:text-4xl text-brand-dark mb-4 tracking-wide">
-              {category.title}
-            </h2>
-
-            {category.description && (
-              <p className="font-sans text-sm font-light leading-relaxed text-brand-dark/80 max-w-2xl mb-8">
-                {category.description}
-              </p>
-            )}
-
-            {/* Сетка блюд с поддержкой пагинации */}
-            <DishGrid
-              categoryId={category.id}
-              initialDishes={category.dishes}
-              initialPage={1}
-              pageSize={8}
-              locale={locale as any}
-            />
-          </section>
-        ))}
+        {/* 🔥 Клиентский компонент с категориями, тегами и блюдами */}
+        <MenuContent categories={categories} locale={locale} />
       </div>
     </main>
   );

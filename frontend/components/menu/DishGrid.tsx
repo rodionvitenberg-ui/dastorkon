@@ -11,7 +11,8 @@ type Props = {
   initialDishes: Dish[];
   initialPage?: number;
   pageSize?: number;
-  locale: 'ru' | 'en' | 'ky';
+  locale: "ru" | "en" | "ky";
+  activeTag: number | null; // 🔥 добавили
 };
 
 export default function DishGrid({
@@ -19,24 +20,32 @@ export default function DishGrid({
   initialDishes,
   initialPage = 1,
   pageSize = 8,
-  locale
+  locale,
+  activeTag
 }: Props) {
-
   const [dishes, setDishes] = useState<Dish[]>(initialDishes || []);
-  
   const [page, setPage] = useState<number>(
     initialDishes && initialDishes.length > 0 ? initialPage : 0
   );
-  
   const [loading, setLoading] = useState(false);
-  
-  // УМНЫЙ ФИКС: Если сервер сразу прислал меньше блюд, чем размер страницы,
-  // значит дальше искать нечего — сразу отключаем бесконечный скролл для этой категории.
+
   const [hasMore, setHasMore] = useState(
     initialDishes ? initialDishes.length >= pageSize : true
   );
 
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // 🔥 Сброс блюд при смене категории или тега
+  useEffect(() => {
+    setDishes(initialDishes || []);
+    setPage(initialPage);
+    setHasMore(initialDishes.length >= pageSize);
+  }, [categoryId, activeTag, initialDishes, initialPage, pageSize]);
+
+  // 🔥 Фильтрация блюд по тегу
+  const filteredDishes = activeTag
+    ? dishes.filter((d) => d.tags?.some((t) => t.id === activeTag))
+    : dishes;
 
   const loadNext = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -59,7 +68,11 @@ export default function DishGrid({
       }
 
       const data = await res.json();
-      const nextItems = Array.isArray(data.results) ? data.results : Array.isArray(data) ? data : [];
+      const nextItems = Array.isArray(data.results)
+        ? data.results
+        : Array.isArray(data)
+        ? data
+        : [];
 
       if (nextItems.length === 0) {
         setHasMore(false);
@@ -67,11 +80,11 @@ export default function DishGrid({
       }
 
       const itemsWithAnimation = nextItems.map((item: any) => ({
-  ...item,
-  _fadeIn: true
-}));
+        ...item,
+        _fadeIn: true
+      }));
 
-      setDishes(prev => [...prev, ...itemsWithAnimation]);
+      setDishes((prev) => [...prev, ...itemsWithAnimation]);
       setPage(nextPage);
 
       if (data.next === null || nextItems.length < pageSize) {
@@ -91,8 +104,8 @@ export default function DishGrid({
     const el = observerRef.current;
 
     const io = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting && hasMore && !loading) {
             loadNext();
           }
@@ -108,24 +121,29 @@ export default function DishGrid({
 
   return (
     <>
-      {/* КЛЮЧЕВОЙ ФИКС: добавили items-start, чтобы элементы не растягивали сетку в пустоту */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-12 items-start">
-        {dishes.map(d => (
+        {filteredDishes.map((d) => (
           <div
             key={`${categoryId}-${d.id}`}
             className={`transition-opacity duration-700 ${
               (d as any)._fadeIn ? "opacity-0 animate-fadeIn" : "opacity-100"
             }`}
           >
-            <DishCard dish={d} />
+            <DishCard dish={d} locale={locale} />
           </div>
         ))}
       </div>
 
-      {/* Теперь этот блок не рендерится вообще, если блюд мало */}
       {hasMore && (
-        <div ref={observerRef} className="h-10 w-full flex items-center justify-center mt-8">
-          {loading && <span className="text-sm text-brand-dark/50 font-sans">Загрузка...</span>}
+        <div
+          ref={observerRef}
+          className="h-10 w-full flex items-center justify-center mt-8"
+        >
+          {loading && (
+            <span className="text-sm text-brand-dark/50 font-sans">
+              Загрузка...
+            </span>
+          )}
         </div>
       )}
     </>
