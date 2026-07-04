@@ -43,7 +43,7 @@ export default function MapSection() {
             </span>
           </div>
           
-          <h2 className="font-serif text-3xl md:text-4xl uppercase tracking-wide mb-8 md:mb-10">
+          <h2 className="font-heading text-3xl md:text-4xl uppercase tracking-wide mb-8 md:mb-10">
             {t("title")}
           </h2>
 

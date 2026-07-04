@@ -3,7 +3,7 @@
     "about": "About Us",
     "home": "Home",
     "menu": "Menu",
-    "booking": "Book a Table",
+    "booking": "Reserve",
     "contacts": "Contacts",
     "events": "Events",
     "gallery": "Gallery"
@@ -98,6 +98,23 @@
     "success_title": "Thank You!",
     "success_desc": "Your request has been successfully sent. We will contact you shortly.",
     "error_msg": "An error occurred. Please try again later."
+  },
+  "aboutCards": {
+    "menu": {
+      "title": "Our Menu",
+      "description": "Discover the rich tastes of Central Asia — from fragrant plov to delicate manti, every dish tells a story of nomadic tradition.",
+      "cta": "Explore Menu"
+    },
+    "book": {
+      "title": "Reserve a Table",
+      "description": "Secure your place at Dastorkon. Whether an intimate dinner or a family celebration, we'll make it unforgettable.",
+      "cta": "Book Now"
+    },
+    "events": {
+      "title": "Events & Banquets",
+      "description": "Host your special occasion in our authentic ethno-interiors. Weddings, anniversaries, and corporate events with first-class service.",
+      "cta": "View Events"
+    }
   },
   "eventsHub": {
     "banquetsSub": "Banquet Halls",

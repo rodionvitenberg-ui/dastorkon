@@ -29,7 +29,7 @@ export default function ContactPage() {
           <span className="font-sans text-xs tracking-[0.2em] uppercase text-brand-gold font-bold mb-4 block">
             {t("subtitle")}
           </span>
-          <h1 className="font-serif text-3xl md:text-5xl uppercase tracking-wide text-brand-dark mb-6">
+          <h1 className="font-heading text-3xl md:text-5xl uppercase tracking-wide text-brand-dark mb-6">
             {t("title")}
           </h1>
           {/* Душевный текст */}
@@ -43,17 +43,17 @@ export default function ContactPage() {
           
           <div className="flex flex-col gap-10">
             <div>
-              <h3 className="font-serif text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("address_label")}</h3>
+              <h3 className="font-heading text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("address_label")}</h3>
               <p className="font-sans text-lg text-brand-dark">{t("address_value")}</p>
             </div>
 
             <div>
-              <h3 className="font-serif text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("hours_label")}</h3>
+              <h3 className="font-heading text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("hours_label")}</h3>
               <p className="font-sans text-lg text-brand-dark whitespace-pre-line">{t("hours_value")}</p>
             </div>
 
             <div>
-              <h3 className="font-serif text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("phones_label")}</h3>
+              <h3 className="font-heading text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">{t("phones_label")}</h3>
               <div className="flex flex-col gap-2">
                 {["0555 400 270", "0998 400 270", "0707 400 270"].map((phone) => (
                   <a 
@@ -68,7 +68,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <h3 className="font-serif text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">Instagram</h3>
+              <h3 className="font-heading text-xs uppercase mb-3 text-brand-dark/60 tracking-widest">Instagram</h3>
               <a 
                 href="https://www.instagram.com/dastorkon_ethno" 
                 target="_blank" 

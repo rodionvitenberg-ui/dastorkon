@@ -1,13 +1,21 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent, useSpring } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
+import { useHeroScroll } from "../ui/HeroScrollContext";
 
 export default function Hero() {
   const t = useTranslations("hero");
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setHeroExpanded, setHasHero } = useHeroScroll();
+
+  // Сообщаем Header'у, что Hero присутствует на этой странице
+  useEffect(() => {
+    setHasHero(true);
+    return () => setHasHero(false);
+  }, [setHasHero]);
 
   // Определяем, десктоп или мобильное устройство
   const [isDesktop, setIsDesktop] = useState(false);
@@ -19,14 +27,24 @@ export default function Hero() {
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: rawScrollProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+  });
+  const scrollYProgress = useSpring(rawScrollProgress, {
+    stiffness: 80,
+    damping: 25,
+    restDelta: 0.001,
   });
 
   // Видео раскрывается (без скруглений)
   const imageScale = useTransform(scrollYProgress, [0, 0.85], [0.65, 1], { clamp: true });
   const shadowOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0], { clamp: true });
+
+  // Сообщаем Header'у, раскрылось ли видео
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setHeroExpanded(latest >= 0.85);
+  });
 
   // Цитата: исчезает и больше не возвращается
   const quoteOpacity = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 0, 0], { clamp: false });
@@ -134,24 +152,32 @@ export default function Hero() {
           <span className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#d4af37] md:mb-6 md:text-xs">
             {t("subtitle2")}
           </span>
-          <h1 className="font-serif text-4xl uppercase leading-[1.1] tracking-[0.1em] text-[#fffdf9] md:text-6xl md:tracking-[0.15em] lg:text-[72px]">
+          <h1 className="font-heading text-4xl uppercase leading-[1.1] tracking-[0.1em] text-[#fffdf9] md:text-6xl md:tracking-[0.15em] lg:text-[72px]">
             {t("headline")}
           </h1>
         </motion.div>
 
-        {/* Кнопки */}
+        {/* Кнопки (стиль из events) */}
         <div className="absolute bottom-8 z-20 flex flex-row items-center gap-4 md:bottom-12 md:gap-6">
           <Link
             href="/menu"
-            className="flex h-[44px] min-w-[130px] items-center justify-center rounded-sm border border-[#fffdf9]/40 bg-black/20 px-6 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#fffdf9] backdrop-blur-sm transition-all duration-500 hover:bg-[#fffdf9] hover:text-[#0a1128] md:min-w-[160px] md:text-xs"
+            className="group relative overflow-hidden px-10 py-4 transition-all duration-300 flex-shrink-0 flex items-center justify-center rounded-sm"
           >
-            {t("btnMenu")}
+            <div className="absolute inset-0 bg-brand-gold opacity-100 lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100" />
+            <div className="absolute inset-0 border border-white/20 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0" />
+            <span className="relative z-10 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-[#5a1212] lg:text-white transition-colors duration-300 lg:group-hover:text-[#5a1212]">
+              {t("btnMenu")}
+            </span>
           </Link>
           <Link
             href="/book"
-            className="flex h-[44px] min-w-[130px] items-center justify-center rounded-sm border border-[#fffdf9]/40 bg-black/20 px-6 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#fffdf9] backdrop-blur-sm transition-all duration-500 hover:bg-[#fffdf9] hover:text-[#0a1128] md:min-w-[160px] md:text-xs"
+            className="group relative overflow-hidden px-10 py-4 transition-all duration-300 flex-shrink-0 flex items-center justify-center rounded-sm"
           >
-            {t("btnBook")}
+            <div className="absolute inset-0 bg-brand-gold opacity-100 lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100" />
+            <div className="absolute inset-0 border border-white/20 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0" />
+            <span className="relative z-10 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-[#5a1212] lg:text-white transition-colors duration-300 lg:group-hover:text-[#5a1212]">
+              {t("btnBook")}
+            </span>
           </Link>
         </div>
       </div>

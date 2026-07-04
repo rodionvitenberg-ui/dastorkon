@@ -45,7 +45,7 @@ export default function EventsHub() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-serif text-3xl lg:text-5xl font-bold text-white uppercase tracking-wide mb-6 leading-[1.2] transition-colors"
+            className="font-heading text-3xl lg:text-5xl font-bold text-white uppercase tracking-wide mb-6 leading-[1.2] transition-colors"
           >
             {t("banquetsTitle1")}<br/>{t("banquetsTitle2")}
           </motion.h2>
@@ -97,7 +97,7 @@ export default function EventsHub() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-serif text-3xl lg:text-5xl font-bold text-white uppercase tracking-wide mb-6 leading-[1.2] transition-colors"
+            className="font-heading text-3xl lg:text-5xl font-bold text-white uppercase tracking-wide mb-6 leading-[1.2] transition-colors"
           >
             {t("cateringTitle1")}<br/>{t("cateringTitle2")}
           </motion.h2>

@@ -103,7 +103,7 @@ export default function MenuContent({
         // Если категория не выбрана — показываем все категории
         categories.map((category) => (
           <section key={category.id} className="mb-20">
-            <h2 className="font-serif text-3xl sm:text-4xl text-brand-dark mb-4 tracking-wide">
+            <h2 className="font-heading text-3xl sm:text-4xl text-brand-dark mb-4 tracking-wide">
               {category.title}
             </h2>
 

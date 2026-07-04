@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito_Sans, Tenor_Sans } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import "../globals.css";
@@ -8,9 +8,11 @@ import { Locale } from "../../i18n-config";
 
 // Автоматический синхронизатор швов
 import OrnamentSyncer from "../../components/ui/OrnamentSyncer";
+import { HeroScrollProvider } from "../../components/ui/HeroScrollContext";
 
 // Глобальные компоненты
 import Hero from "../../components/home/Hero";
+import Header from "../../components/home/Header";
 import Footer from "../../components/home/Footer";
 
 const sansFont = Nunito_Sans({
@@ -19,11 +21,6 @@ const sansFont = Nunito_Sans({
   weight: ["400", "600", "700", "800", "900"]
 });
 
-const serifFont = Tenor_Sans({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-serif",
-  weight: ["400"]
-});
 
 export const metadata: Metadata = {
   title: "Dastorkon Etno-Cafe",
@@ -48,7 +45,6 @@ export default async function RootLayout({ children, params }: Props) {
       <body
         className={`
           ${sansFont.variable}
-          ${serifFont.variable}
           antialiased
           min-h-screen
           flex flex-col
@@ -59,9 +55,11 @@ export default async function RootLayout({ children, params }: Props) {
           {/* Наш невидимый хелпер, который склеит швы между компонентами */}
           <OrnamentSyncer />
           
+          <HeroScrollProvider>
           <div className="w-full min-h-screen flex flex-col relative overflow-x-clip">
             
-            {/* Глобальная шапка (ей внутри файла задан класс ornament-burgundy) */}
+            {/* Глобальная шапка */}
+            <Header />
 
             {/* Контейнер страниц */}
             <div className="flex-grow flex flex-col w-full relative">
@@ -72,6 +70,7 @@ export default async function RootLayout({ children, params }: Props) {
             <Footer />
             
           </div>
+          </HeroScrollProvider>
 
         </NextIntlClientProvider>
       </body>

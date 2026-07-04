@@ -64,7 +64,7 @@ export default async function DishPage({ params }: Props) {
         <DishGallery images={normalizedImages} title={dish.title} />
 
         {/* === НАЗВАНИЕ === */}
-        <h1 className="font-serif text-4xl text-brand-dark mb-4 tracking-wide">
+        <h1 className="font-heading text-4xl text-brand-dark mb-4 tracking-wide">
           {dish.title}
         </h1>
 

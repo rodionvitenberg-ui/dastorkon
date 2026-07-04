@@ -2,6 +2,17 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* ========================================================= */
+/* ЛОКАЛЬНЫЙ ШРИФТ SKIFF (ЗАГОЛОВКИ)                          */
+/* ========================================================= */
+@font-face {
+  font-family: "Skiff";
+  src: url("/fonts/Skiff-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -17,6 +28,7 @@
   /* Подключение шрифтов из next/font (настроено в layout.tsx) */
   --font-serif: var(--font-serif), serif;
   --font-sans: var(--font-sans), sans-serif;
+  --font-heading: "Skiff", serif;
 
   @keyframes fade-in {
     from {
@@ -49,7 +61,7 @@
 }
 
 @theme inline {
-  --font-heading: var(--font-sans);
+  --font-heading: "Skiff", serif;
   --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

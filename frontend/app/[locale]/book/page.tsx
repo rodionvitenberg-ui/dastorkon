@@ -76,7 +76,7 @@ export default function BookPage() {
           <span className="font-sans text-xs tracking-[0.2em] uppercase text-brand-gold font-medium mb-3">
             {t("subtitle")}
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl uppercase tracking-wide text-brand-dark mb-4">
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-wide text-brand-dark mb-4">
             {t("title")}
           </h1>
           {status !== "success" && (
@@ -92,7 +92,7 @@ export default function BookPage() {
             <svg className="w-16 h-16 text-brand-gold mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="font-serif text-2xl text-brand-dark uppercase tracking-wide mb-3">{t("success_title")}</h3>
+            <h3 className="font-heading text-2xl text-brand-dark uppercase tracking-wide mb-3">{t("success_title")}</h3>
             <p className="font-sans font-light text-brand-dark/80">{t("success_desc")}</p>
           </div>
         ) : (

@@ -81,7 +81,7 @@ export default function DishCard({
       </div>
 
       <div className="flex justify-between items-baseline mb-2 gap-4">
-        <h3 className="font-serif text-xl text-brand-dark leading-tight group-hover:text-brand-dark/80 transition-colors">
+        <h3 className="font-heading text-xl text-brand-dark leading-tight group-hover:text-brand-dark/80 transition-colors">
           {dish.title}
         </h3>
         <span className="font-sans text-lg font-medium text-brand-dark whitespace-nowrap">
