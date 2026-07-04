@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Link } from "../../i18n/routing";
 import { useTranslations } from "next-intl";
+import OrnamentLines from "../ui/OrnamentLines";
 
 export default function About() {
   const tAbout = useTranslations("about");
@@ -51,8 +52,9 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="relative z-0 w-full overflow-hidden bg-[#F5F2EB]">
+    <section id="about" className="ornament-parchment relative z-0 w-full overflow-hidden bg-[#F5F2EB]">
       {/* СЛОЙ 1: Текстура фона */}
+      <OrnamentLines type="parchment" />
       <div className="absolute inset-0 -z-10 w-full h-full pointer-events-none" aria-hidden="true">
         <Image
           src="/parchment-bg.jpg"

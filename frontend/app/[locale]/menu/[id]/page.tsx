@@ -2,6 +2,7 @@ import Image from "next/image";
 import BackButton from "@/components/BackButton";
 import { getDish } from "@/lib/api";
 import DishGallery from "@/components/menu/DishGallery";
+import OrnamentLines from "@/components/ui/OrnamentLines";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
@@ -38,6 +39,7 @@ export default async function DishPage({ params }: Props) {
 
   return (
     <main className="relative min-h-screen w-full pt-24 pb-32">
+      <OrnamentLines type="parchment" />
       
       {/* === АТМОСФЕРНЫЙ ПЕРГАМЕНТНЫЙ ФОН === */}
       <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">

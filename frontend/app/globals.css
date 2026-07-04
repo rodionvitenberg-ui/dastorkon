@@ -173,3 +173,56 @@
     animation: shine 5s linear infinite;
   }
 }
+
+/* ========================================================= */
+/* БАЗОВЫЕ КЛАССЫ ДЛЯ ЛИНИЙ ОРНАМЕНТА (АДАПТИВНЫЕ)           */
+/* ========================================================= */
+
+.ornament-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-image: url('/ornament-v.png');
+  background-repeat: repeat-y;
+  z-index: 30; 
+  pointer-events: none; 
+
+  /* 📱 МОБИЛЬНЫЙ РАЗМЕР (По дефолту) */
+  width: 18px;
+  background-size: 18px auto;
+  
+  /* Плавный переход толщины при ресайзе экрана */
+  transition: width 0.2s ease, background-size 0.2s ease;
+}
+
+/* 💻 ДЕСКТОПНЫЙ РАЗМЕР (Срабатывает от 768px и выше) */
+@media (min-width: 768px) {
+  .ornament-line {
+    width: 35px;          /* Увеличиваем толщину линии на десктопе */
+    background-size: 35px auto; /* Масштабируем сам узор пропорционально */
+  }
+}
+
+/* Позиционирование сторон (остается неизменным) */
+.ornament-line-left {
+  left: 0;
+}
+
+.ornament-line-right {
+  right: 0;
+  transform: scaleX(-1); 
+}
+
+/* --------------------------------------------------- */
+/* ТВОИ ОРИГИНАЛЬНЫЕ ЦВЕТА И ФИЛЬТРЫ (БЕЗ ИЗМЕНЕНИЙ)   */
+/* --------------------------------------------------- */
+
+.ornament-style-burgundy {
+  filter: brightness(1.2) sepia(0) saturate(1.1);
+  mix-blend-mode: screen;
+}
+
+.ornament-style-parchment {
+  filter: contrast(1.5) brightness(0.6) sepia(0.4) saturate(1.2);
+  mix-blend-mode: multiply;
+}

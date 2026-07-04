@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { getCategories } from "@/lib/api";
 import MenuContent from "@/components/menu/MenuContent";
+import OrnamentLines from "@/components/ui/OrnamentLines";
 
 export default async function MenuPage(props: { params: Promise<{ locale: string }> }) {
   const { locale } = await props.params;
@@ -28,6 +29,7 @@ export default async function MenuPage(props: { params: Promise<{ locale: string
 
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center pt-24 pb-32">
+      <OrnamentLines type="parchment" />
       {/* Атмосферный пергаментный фон */}
       <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">
         <Image 

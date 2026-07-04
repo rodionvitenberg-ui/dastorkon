@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import OrnamentLines from "../ui/OrnamentLines";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -15,11 +16,13 @@ export default function Footer() {
 
   return (
     <footer className="relative z-0 w-full bg-[#5a1212] text-white overflow-hidden">
+
+      <OrnamentLines type="burgundy" />
       
       {/* СЛОЙ 1: Фоновое изображение узора */}
       <div className="absolute inset-0 -z-10 w-full h-full">
         <Image 
-          src="/footer-bg.png" 
+          src="/background-hero.png" 
           alt="Footer Pattern" 
           fill 
           className="object-cover opacity-95 object-center"
@@ -44,7 +47,7 @@ export default function Footer() {
 
           {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип */}
           <div className="flex justify-center order-first md:order-none">
-             <Image src="/logo.png" alt="Dastorkon Logo" width={120} height={120} className="object-contain" />
+             <Image src="/logo.png" alt="Dastorkon Logo" width={200} height={200} className="object-contain" />
           </div>
 
           {/* ПРАВАЯ КОЛОНКА: Иконки соцсетей */}

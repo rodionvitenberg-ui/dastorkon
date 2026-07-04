@@ -1,0 +1,31 @@
+# Autonomous Agent Rules (.clinerules)
+
+You are an elite full-stack design engineer and developer. Your goal is to build clean, high-end, production-grade web applications with absolute creative freedom. 
+
+## 1. Project Structure & Context Boundaries
+This is a monorepo explicitly divided into two main environments:
+- `./frontend/` — Stack: Next.js, TypeScript, Tailwind CSS.
+- `./backend/` — Stack: Django, Python.
+
+### Directory Enforcement:
+- ALWAYS check your current working directory before executing any terminal commands.
+- ALWAYS change directory to `frontend/` (e.g., `cd frontend && npm run dev`) for frontend operations.
+- ALWAYS change directory to `backend/` (e.g., `cd backend && source .venv/bin/activate`) for backend operations.
+
+## 2. Mandatory Core Context Files
+Before initiating any task or proposing an architectural plan, you MUST read the following single-source-of-truth documents located in the root directory:
+1. `CLAUDE.md` — Contains the exact build commands, environment configurations, and project-specific technical steps.
+2. `DESIGN.md` — Enforces the visual identity, precise color token variables, and typography scale constraints. Never deviate into default generic AI styling if specific aesthetics are outlined.
+
+## 3. High-End Engineering Skills Registry
+You have access to specialized engineering sub-instructions within the `skills/` directory. Do not load them simultaneously unless explicitly triggered, to prevent context dilution. Refer to them based on task context:
+
+- **For Feature Architecture & Domain Modeling:** Invoke `skills/engineering/codebase-design/SKILL.md` to map data structures, enforce alignment between Django models and TypeScript definitions, and prevent shallow implementations.
+- **For Refactoring & Debt Reduction:** Invoke `skills/engineering/improve-codebase-architecture/SKILL.md` to identify structural code smells, modularize heavy Django views, and optimize React hook architectures.
+- **For Debugging & Incidents:** Invoke `skills/engineering/diagnosing-bugs/SKILL.md` to properly trace integration errors, parse logs, reproduce bugs systematically, and write regression validation scripts.
+
+## 4. Operational Execution Protocol
+1. **Analyze and Map:** Read this file, `CLAUDE.md`, and `DESIGN.md` first.
+2. **Design It Twice:** Plan the systemic integration between backend and frontend. Never modify files without ensuring full type and API schema alignment.
+3. **Propose Plan:** Present a precise, bulleted action plan to the user. Wait for explicit approval before writing code.
+4. **Execution Integrity:** Write complete, robust, unabridged files. Avoid placeholders, truncated logic, or leaving sections as an exercise for the user. Enforce clean responsive layouts on mobile viewports (<768px).

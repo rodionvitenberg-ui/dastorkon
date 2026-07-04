@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import OrnamentLines from "@/components/ui/OrnamentLines";
 
 export default function ContactPage() {
   const t = useTranslations("contacts");
@@ -11,6 +12,7 @@ export default function ContactPage() {
 
   return (
     <main className="relative min-h-screen pt-24 pb-16 bg-[#F5F2EB]">
+      <OrnamentLines type="parchment" />
       {/* Текстура фона */}
       <div className="absolute inset-0 -z-0 w-full h-full pointer-events-none" aria-hidden="true">
         <Image

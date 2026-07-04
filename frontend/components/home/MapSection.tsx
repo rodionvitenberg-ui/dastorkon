@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import OrnamentLines from "../ui/OrnamentLines";
 
 export default function MapSection() {
   const t = useTranslations("contacts");
@@ -16,8 +18,22 @@ export default function MapSection() {
   ];
 
   return (
-    <section id="contacts" className="w-full bg-[#5a1212] text-white overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[450px] md:min-h-[550px]">
+    <section id="contacts" className="relative z-0 w-full bg-[#5a1212] text-white overflow-hidden">
+
+      <OrnamentLines type="burgundy" />
+      
+      {/* СЛОЙ 1: Фоновое изображение узора (такое же, как в футере) */}
+      <div className="absolute inset-0 -z-10 w-full h-full">
+        <Image 
+          src="/background-hero.png" 
+          alt="Map Pattern" 
+          fill 
+          className="object-cover opacity-95 object-center"
+        />
+      </div>
+
+      {/* СЛОЙ 2: Основной контент */}
+      <div className="relative border-b border-brand-dark/10 z-10 grid grid-cols-1 md:grid-cols-2 w-full min-h-[450px] md:min-h-[550px]">
         
         <div className="flex flex-col justify-center px-6 py-16 sm:px-12 md:pl-20 md:pr-4 lg:pl-48 lg:pr-4 text-white max-w-3xl justify-self-end w-full">
           
@@ -86,15 +102,19 @@ export default function MapSection() {
           </a>
         </div>
 
-        <div className="relative w-full h-[350px] sm:h-[400px] md:h-auto min-h-[350px] bg-white/5 grayscale invert-[0.92] contrast-[1.15] opacity-75 hover:grayscale-0 hover:invert-0 hover:opacity-100 transition-all duration-700">
-          <iframe
-            src={iframeSrc}
-            width="100%"
-            height="100%"
-            className="border-0 w-full h-full"
-            loading="lazy" 
-            title="Dastorkon Location"
-          />
+        {/* Изменено: добавлен md:pl-11 для сдвига карты на 44px вправо */}
+        <div className="relative w-full h-[350px] sm:h-[400px] md:h-auto min-h-[350px] md:pl-12">
+          {/* Стили фильтров перенесены во внутренний контейнер, чтобы отступ оставался прозрачным */}
+          <div className="w-full h-full bg-white/5 grayscale invert-[0.92] contrast-[1.15] opacity-75 hover:grayscale-0 hover:invert-0 hover:opacity-100 transition-all duration-700">
+            <iframe
+              src={iframeSrc}
+              width="100%"
+              height="100%"
+              className="border-0 w-full h-full"
+              loading="lazy" 
+              title="Dastorkon Location"
+            />
+          </div>
         </div>
       </div>
     </section>

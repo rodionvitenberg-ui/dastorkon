@@ -6,18 +6,19 @@ import "../globals.css";
 import { routing } from "../../i18n/routing";
 import { Locale } from "../../i18n-config";
 
+// Автоматический синхронизатор швов
+import OrnamentSyncer from "../../components/ui/OrnamentSyncer";
+
 // Глобальные компоненты
 import Hero from "../../components/home/Hero";
 import Footer from "../../components/home/Footer";
 
-// 🔥 Мягкий, округлый, премиальный sans-serif
 const sansFont = Nunito_Sans({
   subsets: ["latin", "cyrillic"],
   variable: "--font-sans",
   weight: ["400", "600", "700", "800", "900"]
 });
 
-// 🔥 Строгий этно‑премиальный заголовочный шрифт
 const serifFont = Tenor_Sans({
   subsets: ["latin", "cyrillic"],
   variable: "--font-serif",
@@ -35,7 +36,7 @@ export async function generateStaticParams() {
 
 type Props = {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 };
 
 export default async function RootLayout({ children, params }: Props) {
@@ -55,16 +56,22 @@ export default async function RootLayout({ children, params }: Props) {
       >
         <NextIntlClientProvider messages={messages}>
           
-          {/* Глобальная шапка */}
-          <Hero />
+          {/* Наш невидимый хелпер, который склеит швы между компонентами */}
+          <OrnamentSyncer />
+          
+          <div className="w-full min-h-screen flex flex-col relative overflow-x-clip">
+            
+            {/* Глобальная шапка (ей внутри файла задан класс ornament-burgundy) */}
 
-          {/* Контейнер страниц */}
-          <div className="flex-grow flex flex-col w-full relative">
-            {children}
+            {/* Контейнер страниц */}
+            <div className="flex-grow flex flex-col w-full relative">
+              {children}
+            </div>
+
+            {/* Глобальный подвал (ему внутри файла задан класс ornament-burgundy) */}
+            <Footer />
+            
           </div>
-
-          {/* Глобальный подвал */}
-          <Footer />
 
         </NextIntlClientProvider>
       </body>

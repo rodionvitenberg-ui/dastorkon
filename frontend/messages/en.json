@@ -98,5 +98,17 @@
     "success_title": "Thank You!",
     "success_desc": "Your request has been successfully sent. We will contact you shortly.",
     "error_msg": "An error occurred. Please try again later."
+  },
+  "eventsHub": {
+    "banquetsSub": "Banquet Halls",
+    "banquetsTitle1": "Banquets &",
+    "banquetsTitle2": "Celebrations",
+    "banquetsDesc": "Host an unforgettable celebration in our luxurious halls. The perfect atmosphere, authentic ethno‑interior, and first‑class service for weddings, anniversaries, and family gatherings.",
+    "banquetsBtn": "Learn more",
+    "cateringSub": "Off-site Catering",
+    "cateringTitle1": "Ethno‑",
+    "cateringTitle2": "Catering",
+    "cateringDesc": "High-quality national cuisine wherever you wish. Professional off-site catering for events of any scale, preserving premium presentation and service.",
+    "cateringBtn": "Learn more"
   }
 }
