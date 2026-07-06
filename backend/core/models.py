@@ -114,9 +114,11 @@ class Dish(models.Model):
     )
     description = models.TextField(verbose_name="Полное описание", help_text="Отображается на отдельной странице блюда")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена (KGS)")
+
+    weight = models.CharField(max_length=50, blank=True, null=True, verbose_name="Вес/Объем")
     
     # ФОТОГРАФИИ БЛЮДА (1 обязательная, 2 дополнительные)
-    image = models.ImageField(upload_to='dishes/', verbose_name="Главное фото")
+    image = models.ImageField(upload_to='dishes/', blank=True, null=True, verbose_name="Главное фото")
     image_2 = models.ImageField(upload_to='dishes/', blank=True, null=True, verbose_name="Фото 2 (необязательно)")
     image_3 = models.ImageField(upload_to='dishes/', blank=True, null=True, verbose_name="Фото 3 (необязательно)")
     

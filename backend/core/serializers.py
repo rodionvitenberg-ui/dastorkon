@@ -1,4 +1,6 @@
 # backend/core/serializers.py
+from django.templatetags.static import static
+
 from rest_framework import serializers
 from django.utils import translation
 from .models import Category, Dish, ComboCategory, Combo, Tag
@@ -91,7 +93,7 @@ class DishListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dish
-        fields = ["id", "title", "short_description", "price", "images", "tags"]
+        fields = ["id", "title", "short_description", "price", "weight", "images", "tags"]
 
     def get_title(self, obj):
         return _localized_value(obj, "title", context=self.context)
@@ -105,6 +107,14 @@ class DishListSerializer(serializers.ModelSerializer):
         for img_field in [obj.image, obj.image_2, obj.image_3]:
             if img_field:
                 images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        
+        if not images_list:
+            placeholder_url = static('images/placeholder.webp')
+            if request:
+                images_list.append(request.build_absolute_uri(placeholder_url))
+            else:
+                images_list.append(placeholder_url)
+            
         return images_list
 
 
@@ -128,6 +138,7 @@ class DishDetailSerializer(serializers.ModelSerializer):
             "short_description",
             "description",
             "price",
+            "weight",
             "images",
             "category_name",
             "tags"
@@ -153,6 +164,14 @@ class DishDetailSerializer(serializers.ModelSerializer):
         for img_field in [obj.image, obj.image_2, obj.image_3]:
             if img_field:
                 images_list.append(request.build_absolute_uri(img_field.url) if request else img_field.url)
+        
+        if not images_list:
+            placeholder_url = static('images/placeholder.webp')
+            if request:
+                images_list.append(request.build_absolute_uri(placeholder_url))
+            else:
+                images_list.append(placeholder_url)
+            
         return images_list
 
 

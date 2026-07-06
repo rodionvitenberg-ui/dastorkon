@@ -12,7 +12,7 @@ class CategoryAdmin(TranslationAdmin):
 
 @admin.register(Dish)
 class DishAdmin(TranslationAdmin):
-    list_display = ('title', 'category', 'price', 'is_active', 'order')
+    list_display = ('title', 'category', 'price', 'weight', 'is_active', 'order')
     list_filter = ('category', 'is_active')
     list_editable = ('price', 'is_active', 'order')
     # Добавили поиск по short_description
