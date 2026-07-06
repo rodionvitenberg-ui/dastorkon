@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useSpring } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
@@ -31,11 +31,14 @@ export default function Hero() {
     target: containerRef,
     offset: ["start start", "end end"],
   });
-  const scrollYProgress = useSpring(rawScrollProgress, {
-    stiffness: 80,
-    damping: 25,
-    restDelta: 0.001,
-  });
+  const springConfig = useMemo(() => {
+    if (!isDesktop) {
+      return { stiffness: 40, damping: 22, mass: 1.2, restDelta: 0.001 };
+    }
+    return { stiffness: 80, damping: 25, restDelta: 0.001 };
+  }, [isDesktop]);
+
+  const scrollYProgress = useSpring(rawScrollProgress, springConfig);
 
   // Видео раскрывается (без скруглений в конце)
   // Начальный масштаб видео — чем меньше число, тем сильнее "сжат" экран при старте.
@@ -156,22 +159,22 @@ export default function Hero() {
         </motion.div>
 
         {/* Кнопки (стиль из events) */}
-        <div className="absolute bottom-8 z-20 flex flex-row items-center gap-3 md:bottom-12 md:gap-6 md:-translate-x-1">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-row items-center gap-3 md:bottom-12 md:gap-6 w-full max-w-md px-4">
           <Link
             href="/menu"
-            className="group relative overflow-hidden px-4 py-2 md:px-8 md:py-3.5 transition-all duration-300 flex-shrink-0 flex items-center justify-center outline outline-1 outline-white/10 outline-offset-[3px] border-[1.5px] border-white/20 hover:border-[#d4af37]/60"
+            className="group relative overflow-hidden px-4 py-2 md:px-8 md:py-3.5 transition-all duration-300 flex-1 min-w-0 flex items-center justify-center outline outline-1 outline-white/10 outline-offset-[3px] border-[1.5px] border-white/20 hover:border-[#d4af37]/60"
           >
             <div className="absolute inset-0 border border-white/10 group-hover:border-[#d4af37]/30" />
-            <span className="relative z-10 font-sans text-[11px] md:text-xs font-semibold uppercase tracking-[0.15em] text-white group-hover:text-[#d4af37] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] transition-colors duration-300">
+            <span className="relative z-10 font-sans text-[11px] md:text-xs font-semibold uppercase tracking-[0.15em] text-white group-hover:text-[#d4af37] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] transition-colors duration-300 whitespace-nowrap">
               {t("btnMenu")}
             </span>
           </Link>
           <Link
             href="/book"
-            className="group relative overflow-hidden px-4 py-2 md:px-8 md:py-3.5 transition-all duration-300 flex-shrink-0 flex items-center justify-center outline outline-1 outline-white/10 outline-offset-[3px] border-[1.5px] border-white/20 hover:border-[#d4af37]/60"
+            className="group relative overflow-hidden px-4 py-2 md:px-8 md:py-3.5 transition-all duration-300 flex-1 min-w-0 flex items-center justify-center outline outline-1 outline-white/10 outline-offset-[3px] border-[1.5px] border-white/20 hover:border-[#d4af37]/60"
           >
             <div className="absolute inset-0 border border-white/10 group-hover:border-[#d4af37]/30" />
-            <span className="relative z-10 font-sans text-[11px] md:text-xs font-semibold uppercase tracking-[0.15em] text-white group-hover:text-[#d4af37] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] transition-colors duration-300">
+            <span className="relative z-10 font-sans text-[11px] md:text-xs font-semibold uppercase tracking-[0.15em] text-white group-hover:text-[#d4af37] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] transition-colors duration-300 whitespace-nowrap">
               {t("btnBook")}
             </span>
           </Link>
