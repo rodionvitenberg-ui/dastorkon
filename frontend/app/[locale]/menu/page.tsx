@@ -1,13 +1,19 @@
 // app/[locale]/menu/page.tsx
 import Image from "next/image";
 import { getCategories } from "@/lib/api";
-import MenuContent from "@/components/menu/MenuContent";
+import GalleryMasonry from "@/components/menu/gallery/GalleryMasonry";
 import OrnamentLines from "@/components/ui/OrnamentLines";
 
-export default async function MenuPage(props: { params: Promise<{ locale: string }> }) {
+export default async function MenuPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { locale } = await props.params;
+  const sp = await props.searchParams;
 
   const categories = await getCategories(locale);
+
+  void sp; // searchParams consumed by GalleryMasonry via useSearchParams
 
   const errorMessages: Record<string, string> = {
     ru: "Меню временно недоступно",
@@ -42,7 +48,7 @@ export default async function MenuPage(props: { params: Promise<{ locale: string
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(43,30,23,0.015)_100%)]" />
       </div>
 
-      <div className="w-full max-w-[1024px] mx-auto px-6 sm:px-12 md:px-16">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16">
         {/* Заголовок страницы */}
         <div className="flex flex-col items-center justify-center mb-16">
           <div className="relative h-16 sm:h-20 w-48 sm:w-64 mb-3">
@@ -58,8 +64,11 @@ export default async function MenuPage(props: { params: Promise<{ locale: string
           </div>
         </div>
 
-        {/* 🔥 Клиентский компонент с категориями, тегами и блюдами */}
-        <MenuContent categories={categories} locale={locale} />
+        {/* Гастрономическая галерея */}
+        <GalleryMasonry
+          categories={categories}
+          locale={locale}
+        />
       </div>
     </main>
   );

@@ -8,7 +8,7 @@ import { Locale } from "../../i18n-config";
 
 // Автоматический синхронизатор швов
 import OrnamentSyncer from "../../components/ui/OrnamentSyncer";
-import { HeroScrollProvider } from "../../components/ui/HeroScrollContext";
+import { AppShellProvider } from "../../components/ui/AppShellContext";
 
 // Глобальные компоненты
 import Hero from "../../components/home/Hero";
@@ -55,7 +55,7 @@ export default async function RootLayout({ children, params }: Props) {
           {/* Наш невидимый хелпер, который склеит швы между компонентами */}
           <OrnamentSyncer />
           
-          <HeroScrollProvider>
+          <AppShellProvider>
           <div className="w-full min-h-screen flex flex-col relative overflow-x-clip">
             
             {/* Глобальная шапка */}
@@ -70,7 +70,7 @@ export default async function RootLayout({ children, params }: Props) {
             <Footer />
             
           </div>
-          </HeroScrollProvider>
+          </AppShellProvider>
 
         </NextIntlClientProvider>
       </body>

@@ -9,14 +9,20 @@
     "gallery": "Gallery"
   },
   "hero": {
-    "title": "DASTORKON — A STORY WE TELL THROUGH FOOD",
-    "cta": "Book a Table"
+    "subtitle1": "Spirit of the Nomads",
+    "quote": "By the end of the evening, we hope you'll feel the taste of our traditions.",
+    "subtitle2": "Welcome",
+    "headline": "With Love from Bishkek",
+    "btnMenu": "View Menu",
+    "btnBook": "Reserve"
   },
   "about": {
     "subtitle": "Our Philosophy",
     "title": "The Spirit of Nomadic Hospitality",
     "description": "Dastarkhan is not just a table with food. It is a centuries-old tradition of respect, the center of the home, and a place where the history of the great nomads of Central Asia unfolds through an open heart and authentic flavors. Every dish at Dastorkon is prepared according to carefully preserved recipes, conveying the true mosaic of our ancestors' flavors.",
-    "cta": "Discover the Story"
+    "cta": "Discover the Story",
+    "cardsSubtitle": "Treasured guest",
+    "cardsTitle": "PERUSE MENUS, BOOK TABLES, EXPLORE GIFTS AND SUNDRIES"
   },
   "menuPreview": {
     "subtitle": "Cuisine",
@@ -41,13 +47,45 @@
     "route_cta": "Get directions"
   },
   "footer": {
-    "address": "Karakol, Przhevalsky str. 107",
-    "phones": {
-      "p1": "0555 400 270",
-      "p2": "0998 400 270",
-      "p3": "0707 400 270"
-    },
-    "copyright": "© 2026 Dastorkon. All rights reserved."
+    "followUs": "Follow us",
+    "bCorp": "Happily, we are B-Corp certified.",
+    "privacyPolicy": "Privacy policy",
+    "cookiePolicy": "Cookie policy"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: July 2026",
+    "intro": "Dastorkon Etno-Cafe (\"we\", \"our\", or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information when you visit our website or use our services.",
+    "whatWeCollect": "Information We Collect",
+    "whatWeCollectText": "We may collect the following types of information: name, phone number, email address, reservation details (date, time, number of guests), and any messages or special requests you provide through our booking form.",
+    "howWeUse": "How We Use Your Information",
+    "howWeUseText": "We use your information to process and confirm reservations, communicate with you about your bookings, respond to your inquiries, improve our services, and send you relevant updates if you have opted in.",
+    "sharing": "Information Sharing",
+    "sharingText": "We do not sell, trade, or rent your personal information to third parties. We may share your data with trusted service providers who assist us in operating our website or business, provided they agree to keep your information confidential.",
+    "cookies": "Cookies",
+    "cookiesText": "Our website uses cookies to enhance your browsing experience. You can control cookie settings through your browser preferences. For more details, please see our Cookie Policy.",
+    "yourRights": "Your Rights",
+    "yourRightsText": "You have the right to access, update, or delete your personal information at any time. To exercise these rights, please contact us using the details provided in the Contacts section of our website.",
+    "contact": "Contact Us",
+    "contactText": "If you have any questions about this Privacy Policy, please contact us by phone or through our website."
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "lastUpdated": "Last updated: July 2026",
+    "intro": "This Cookie Policy explains how Dastorkon Etno-Cafe uses cookies and similar technologies on our website.",
+    "whatAreCookies": "What Are Cookies",
+    "whatAreCookiesText": "Cookies are small text files placed on your device when you visit a website. They are widely used to make websites work more efficiently, as well as to provide information to the site owners.",
+    "howWeUseCookies": "How We Use Cookies",
+    "howWeUseCookiesText": "We use essential cookies to ensure the proper functioning of our website, including session management, language preferences, and reservation form functionality. We also use analytics cookies to understand how visitors interact with our site, which helps us improve your experience.",
+    "typesOfCookies": "Types of Cookies We Use",
+    "essential": "Essential Cookies",
+    "essentialText": "These cookies are necessary for the website to function and cannot be switched off in our systems. They are usually only set in response to actions you make such as setting your language preferences or filling in forms.",
+    "analytics": "Analytics Cookies",
+    "analyticsText": "These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. All information these cookies collect is aggregated and anonymous.",
+    "managing": "Managing Cookies",
+    "managingText": "Most web browsers allow you to control cookies through their settings preferences. You can set your browser to block or alert you about these cookies, but some parts of the site may not work as a result. For more information, visit your browser's help pages.",
+    "contact": "Contact Us",
+    "contactText": "If you have any questions about our use of cookies, please contact us through our website."
   },
   "menuPage": {
     "category_title": "Exquisite Dishes",
@@ -102,17 +140,17 @@
   "aboutCards": {
     "menu": {
       "title": "Our Menu",
-      "description": "Discover the rich tastes of Central Asia — from fragrant plov to delicate manti, every dish tells a story of nomadic tradition.",
+      "description": "From fragrant plov to delicate manti — authentic tastes of Central Asia.",
       "cta": "Explore Menu"
     },
     "book": {
       "title": "Reserve a Table",
-      "description": "Secure your place at Dastorkon. Whether an intimate dinner or a family celebration, we'll make it unforgettable.",
+      "description": "Reserve your table for an intimate dinner or a grand family celebration.",
       "cta": "Book Now"
     },
     "events": {
       "title": "Events & Banquets",
-      "description": "Host your special occasion in our authentic ethno-interiors. Weddings, anniversaries, and corporate events with first-class service.",
+      "description": "Catering and banquets — off-site or in our authentic ethno-interiors.",
       "cta": "View Events"
     }
   },

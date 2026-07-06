@@ -2,10 +2,12 @@ import Image from "next/image";
 import BackButton from "@/components/BackButton";
 import { getDish } from "@/lib/api";
 import DishGallery from "@/components/menu/DishGallery";
+import GalleryLightbox from "@/components/menu/gallery/GalleryLightbox";
 import OrnamentLines from "@/components/ui/OrnamentLines";
 
 type Props = {
   params: Promise<{ id: string; locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 function normalizeSrc(src: string | null): string | null {
@@ -25,10 +27,19 @@ function normalizeSrc(src: string | null): string | null {
   return `${backendBase}/${src}`;
 }
 
-export default async function DishPage({ params }: Props) {
+export default async function DishPage({ params, searchParams }: Props) {
   const { id, locale } = await params;
+  const sp = await searchParams;
+  const from = sp.from;
+
   const dish = await getDish(id, locale);
 
+  // === LIGHTBOX MODE (из галереи) ===
+  if (from === "gallery") {
+    return <GalleryLightbox dish={dish} locale={locale} />;
+  }
+
+  // === ОБЫЧНЫЙ ВИД ===
   const images: string[] = Array.isArray(dish.images) ? dish.images : [];
 
   const normalizedImages = images

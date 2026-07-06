@@ -2,24 +2,15 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import OrnamentLines from "../ui/OrnamentLines";
+import { Link } from "../../i18n/routing";
 
 export default function Footer() {
   const t = useTranslations("footer");
 
-  // Актуальные номера телефонов для ссылок
-  const phoneList = [
-    { display: t("phones.p1"), href: "tel:+996555400270" },
-    { display: t("phones.p2"), href: "tel:+996998400270" },
-    { display: t("phones.p3"), href: "tel:+996707400270" },
-  ];
-
   return (
     <footer className="relative z-0 w-full bg-[#5a1212] text-white overflow-hidden">
-
-      <OrnamentLines type="burgundy" />
       
-      {/* СЛОЙ 1: Фоновое изображение узора */}
+      {/* BACKGROUND PATTERN */}
       <div className="absolute inset-0 -z-10 w-full h-full">
         <Image 
           src="/background-hero.png" 
@@ -29,32 +20,16 @@ export default function Footer() {
         />
       </div>
 
-      {/* СЛОЙ 2: Основной контент */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 py-12 sm:px-12 md:px-20 lg:px-28 xl:px-36">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 items-center w-full">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 py-10 sm:px-12 md:px-20 lg:px-28 xl:px-36">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-center w-full">
           
-          {/* ЛЕВАЯ КОЛОНКА: Телефоны и адрес */}
-          <div className="flex flex-col gap-4 text-sm font-sans font-light tracking-wide text-center md:text-left items-center md:items-start">
-            <div className="flex flex-col gap-1">
-              {phoneList.map((phone) => (
-                <a key={phone.display} href={phone.href} className="hover:text-brand-gold transition-colors">
-                  {phone.display}
-                </a>
-              ))}
-            </div>
-            <p className="text-white/70">{t("address")}</p>
-          </div>
-
-          {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип */}
-          <div className="flex justify-center order-first md:order-none">
-             <Image src="/logo.png" alt="Dastorkon Logo" width={200} height={200} className="object-contain" />
-          </div>
-
-          {/* ПРАВАЯ КОЛОНКА: Иконки соцсетей */}
-          <div className="flex flex-col items-center md:items-end gap-4 order-3 w-full">
+          {/* ЛЕВАЯ КОЛОНКА: Social links */}
+          <div className="flex flex-col items-center md:items-start gap-3">
+            <span className="font-sans text-[11px] tracking-[0.2em] uppercase text-white/60 font-medium">
+              {t("followUs")}
+            </span>
             <div className="flex items-center gap-3">
-              
-              {/* WhatsApp — прямая ссылка на номер 0707 400 270 */}
+              {/* WhatsApp */}
               <a 
                 href="https://wa.me/996707400270" 
                 target="_blank" 
@@ -76,7 +51,33 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
-            <span className="text-xs text-white/50">{t("copyright")}</span>
+          </div>
+
+          {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип */}
+          <div className="flex justify-center">
+             <Image src="/logo.png" alt="Dastorkon Logo" width={140} height={140} className="object-contain" />
+          </div>
+
+          {/* ПРАВАЯ КОЛОНКА: B-Corp + policy links */}
+          <div className="flex flex-col items-center md:items-end gap-3">
+            <p className="font-serif italic text-sm md:text-base text-white/80 tracking-wide leading-relaxed text-center md:text-right">
+              {t("bCorp")}
+            </p>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/privacy"
+                className="font-sans text-[11px] tracking-[0.12em] uppercase text-white/50 hover:text-brand-gold transition-colors"
+              >
+                {t("privacyPolicy")}
+              </Link>
+              <span className="text-white/20">|</span>
+              <Link
+                href="/cookie"
+                className="font-sans text-[11px] tracking-[0.12em] uppercase text-white/50 hover:text-brand-gold transition-colors"
+              >
+                {t("cookiePolicy")}
+              </Link>
+            </div>
           </div>
 
         </div>

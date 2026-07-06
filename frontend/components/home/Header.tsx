@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "../../i18n/routing";
-import { useHeroScroll } from "../ui/HeroScrollContext";
+import { useAppShell } from "../ui/AppShellContext";
 
 const locales = [
   { code: "ru", label: "РУС" },
@@ -23,7 +23,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = useLocale();
-  const { heroExpanded, hasHero } = useHeroScroll();
+  const { headerCompact } = useAppShell();
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Close mobile menu on route change
@@ -35,26 +35,43 @@ export default function Header() {
     router.replace(pathname, { locale: locale as "ru" | "en" | "ky" });
   }
 
-  // Бэкграунд хедера:
-  // - На главной странице (с Hero): прозрачный, пока герой не раскроется
-  // - На всех остальных: сразу тёмный
   const isHomePage = pathname === "/";
-  const showBackground = !isHomePage || heroExpanded;
+
+  // Компактный режим хедера:
+  // - Всегда на не-главных страницах (menu, events, contacts, book...)
+  // - На главной — когда About вошёл в зону видимости (IntersectionObserver)
+  const compact = !isHomePage || headerCompact;
+
+  // Размеры контейнера логотипа — зависят от режима и экрана
+  const logoContainerClasses = compact
+    ? "h-[56px] md:h-[68px] w-[56px] md:w-[68px]"
+    : "h-[85px] md:h-[120px] w-[200px] md:w-[320px] -translate-y-[5px] md:mt-[8px] -ml-6 md:ml-0";
 
   return (
     <>
       <header
         className={`
           fixed top-0 left-0 right-0 z-50 w-full
-          transition-all duration-500
-          ${showBackground
-            ? "bg-[#121212]/95 backdrop-blur-sm"
-            : "bg-transparent"
+          transition-all duration-[1000ms]
+          ${
+            compact
+              ? "bg-[#7e2424]/95 backdrop-blur-sm"
+              : "bg-transparent"
           }
         `}
       >
         <div className="max-w-[1800px] mx-auto px-6 sm:px-12 md:px-20 lg:px-28 xl:px-36">
-          <div className="flex items-center justify-between h-[88px] md:h-[100px] pt-2 md:pt-6">
+          <div
+            className={`
+              flex items-center justify-between
+              transition-all duration-[1000ms]
+              ${
+                compact
+                  ? "h-[64px] md:h-[72px] pt-0 md:pt-0"
+                  : "h-[88px] md:h-[100px] pt-2 md:pt-6"
+              }
+            `}
+          >
             {/* ─── Left: Desktop Navigation ─── */}
             <nav className="hidden md:flex items-center gap-8 lg:gap-10 flex-1 justify-start">
               {navLinks.map((link) => {
@@ -68,7 +85,7 @@ export default function Header() {
                       transition-colors duration-200
                       ${isActive
                         ? "text-[#fffdf9]"
-                        : "text-[#d0d0d0] hover:text-[#fffdf9]"
+                        : "text-[#d0d0d0] hover:text-[#c9a96e]"
                       }
                     `}
                   >
@@ -78,20 +95,54 @@ export default function Header() {
               })}
             </nav>
 
-            {/* ─── Center: Logo ─── */}
-            <a href="/" className="flex-shrink-0 flex items-center justify-center -translate-y-[5px] md:-translate-y-[10px]">
-              <Image
-                src="/logo.png"
-                alt="Dastorkon"
-                width={280}
-                height={120}
-                className="object-contain w-auto h-[75px] md:h-[95px]"
-                priority
-              />
+            {/* ─── Center: Logo — кроссфейд через opacity + absolute-absolute ─── */}
+            <a
+              href="/"
+              className={`
+                flex-shrink-0 relative
+                transition-all duration-500
+                ${logoContainerClasses}
+              `}
+            >
+              {/* Большой логотип — видим когда НЕ compact */}
+              <div
+                className={`
+                  absolute inset-0 flex items-center justify-start
+                  transition-opacity duration-[1000ms]
+                  ${compact ? "opacity-0 pointer-events-none" : "opacity-100"}
+                `}
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Dastorkon"
+                  width={300}
+                  height={120}
+                  className="object-contain object-left md:object-center w-full h-full"
+                  priority
+                />
+              </div>
+
+              {/* Компактный логотип (тюндюк) — видим когда compact */}
+              <div
+                className={`
+                  absolute inset-0 flex items-center justify-center
+                  transition-opacity duration-[1000ms]
+                  ${compact ? "opacity-100" : "opacity-0 pointer-events-none"}
+                `}
+              >
+                <Image
+                  src="/logo-2.png"
+                  alt="Dastorkon"
+                  width={80}
+                  height={80}
+                  className="object-contain h-full w-auto"
+                  priority
+                />
+              </div>
             </a>
 
             {/* ─── Right: Language Switcher + Cart + Reserve ─── */}
-            <div className="flex-1 flex items-center justify-end gap-3 md:gap-5">
+            <div className="flex items-center justify-end gap-3 md:gap-5 ml-auto md:flex-1">
               {/* Language Switcher — Desktop */}
               <div className="hidden md:flex items-center gap-1.5">
                 {locales.map((locale) => {
@@ -120,8 +171,8 @@ export default function Header() {
                 className="
                   hidden md:flex items-center justify-center
                   w-10 h-10 rounded-full
-                  border border-[#374151] text-[#d0d0d0]
-                  hover:border-[#fffdf9] hover:text-[#fffdf9]
+                  border border-[#fffdf9] text-[#d0d0d0]
+                  hover:border-[#c9a96e] hover:text-[#c9a96e]
                   transition-all duration-200
                 "
                 aria-label="Cart"
@@ -157,7 +208,7 @@ export default function Header() {
                   rounded-full
                   text-[11px] font-sans font-bold uppercase tracking-[1.5px]
                   border border-[#c9a96e] text-[#c9a96e]
-                  hover:bg-[#c9a96e] hover:text-[#121212]
+                  hover:bg-[#c9a96e]/20 hover:text-[#fffdf9]
                   transition-all duration-200
                 "
               >
@@ -192,14 +243,14 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}
           />
 
-          {/* Slide-out panel */}
-          <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#1a1a1a] border-l border-[#374151] shadow-2xl">
+          {/* Slide-out panel — фон как в About: #ffefcb */}
+          <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#ffefcb] border-l border-[#d4af37]/30 shadow-2xl">
             <div className="flex flex-col h-full px-6 py-8">
               {/* Close button */}
               <div className="flex justify-end mb-10">
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center text-[#d0d0d0] hover:text-[#fffdf9]"
+                  className="w-10 h-10 flex items-center justify-center text-[#121212] hover:text-[#7e2424]"
                   aria-label="Close menu"
                 >
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -219,7 +270,10 @@ export default function Header() {
                       className={`
                         text-[15px] font-sans font-semibold uppercase tracking-[2px]
                         transition-colors duration-200
-                        ${isActive ? "text-[#fffdf9]" : "text-[#d0d0d0] hover:text-[#fffdf9]"}
+                        ${isActive
+                          ? "text-[#7e2424]"
+                          : "text-[#121212]/80 hover:text-[#7e2424]"
+                        }
                       `}
                     >
                       {t(link.key)}
@@ -229,7 +283,7 @@ export default function Header() {
               </nav>
 
               {/* Divider */}
-              <div className="h-px w-full bg-[#374151] mb-8" />
+              <div className="h-px w-full bg-[#d4af37]/30 mb-8" />
 
               {/* Language switcher — mobile */}
               <div className="flex items-center gap-3 mb-6">
@@ -243,8 +297,8 @@ export default function Header() {
                         text-[12px] font-sans font-bold uppercase tracking-[1.2px]
                         px-3 py-1.5 rounded-full border transition-all duration-200
                         ${isActive
-                          ? "border-[#fffdf9] text-[#fffdf9] bg-[#fffdf9]/10"
-                          : "border-[#374151] text-[#d0d0d0] hover:text-[#fffdf9] hover:border-[#d0d0d0]/30"
+                          ? "border-[#7e2424] text-[#7e2424] bg-[#7e2424]/10"
+                          : "border-[#d4af37]/40 text-[#121212]/60 hover:text-[#7e2424] hover:border-[#7e2424]/40"
                         }
                       `}
                     >
@@ -259,8 +313,8 @@ export default function Header() {
                 className="
                   flex items-center justify-center gap-2
                   w-full py-3 rounded-full
-                  border border-[#374151] text-[#d0d0d0]
-                  hover:border-[#fffdf9] hover:text-[#fffdf9]
+                  border border-[#d4af37]/40 text-[#121212]/80
+                  hover:border-[#7e2424] hover:text-[#7e2424]
                   transition-all duration-200
                   text-[13px] font-sans font-bold uppercase tracking-[1.5px]
                 "

@@ -29,3 +29,9 @@ You have access to specialized engineering sub-instructions within the `skills/`
 2. **Design It Twice:** Plan the systemic integration between backend and frontend. Never modify files without ensuring full type and API schema alignment.
 3. **Propose Plan:** Present a precise, bulleted action plan to the user. Wait for explicit approval before writing code.
 4. **Execution Integrity:** Write complete, robust, unabridged files. Avoid placeholders, truncated logic, or leaving sections as an exercise for the user. Enforce clean responsive layouts on mobile viewports (<768px).
+
+## 🏷️ Skill Shortcuts (Mentions)
+When I reference these short terms in my prompts, you must contextually interpret them as a command to read the corresponding file:
+- "using [full-output]" -> Read and apply `skills/agent-workflow/full-output-enforcement/SKILL.md`
+- "using [design-polish]" -> Read and apply `skills/creative-direction/impeccable-design-polish/SKILL.md`
+- "using [code-design]" -> Read and apply `skills/engineering/codebase-design/SKILL.md`

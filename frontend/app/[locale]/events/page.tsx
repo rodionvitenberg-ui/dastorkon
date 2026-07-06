@@ -31,7 +31,7 @@ export default function EventsHub() {
         </div>
 
         {/* Контентная зона */}
-        <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-16 items-start">
+        <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-16 items-start pt-24 lg:pt-16">
           <motion.span 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -58,6 +58,7 @@ export default function EventsHub() {
           <div className="relative overflow-hidden px-10 py-4 transition-all duration-300 flex-shrink-0 flex items-center justify-center rounded-sm">
             <div className="absolute inset-0 bg-brand-gold opacity-100 lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100" />
             <div className="absolute inset-0 border border-white/20 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0" />
+            <div className="absolute inset-[3px] border border-white/10 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0 rounded-[1px]" />
             <span className="relative z-10 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-[#5a1212] lg:text-white transition-colors duration-300 lg:group-hover:text-[#5a1212]">
               {t("banquetsBtn")}
             </span>
@@ -83,7 +84,7 @@ export default function EventsHub() {
         </div>
 
         {/* Контентная зона */}
-        <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-16 items-end text-right">
+        <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-16 items-end text-right pt-24 lg:pt-16">
           <motion.span 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -110,6 +111,7 @@ export default function EventsHub() {
           <div className="relative overflow-hidden px-10 py-4 transition-all duration-300 flex-shrink-0 flex items-center justify-center rounded-sm">
             <div className="absolute inset-0 bg-brand-gold opacity-100 lg:opacity-0 transition-opacity duration-500 lg:group-hover:opacity-100" />
             <div className="absolute inset-0 border border-white/20 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0" />
+            <div className="absolute inset-[3px] border border-white/10 opacity-0 lg:opacity-100 transition-opacity duration-300 lg:group-hover:opacity-0 rounded-[1px]" />
             <span className="relative z-10 font-sans text-xs font-semibold uppercase tracking-[0.15em] text-[#5a1212] lg:text-white transition-colors duration-300 lg:group-hover:text-[#5a1212]">
               {t("cateringBtn")}
             </span>
