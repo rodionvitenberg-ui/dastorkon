@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "../../i18n/routing";
 import { useAppShell } from "../ui/AppShellContext";
+import { useCartStore } from "@/store/useCartStore";
+import { useCartUIStore } from "@/store/useCartUIStore";
 
 const locales = [
   { code: "ru", label: "РУС" },
@@ -25,6 +27,9 @@ export default function Header() {
   const currentLocale = useLocale();
   const { headerCompact } = useAppShell();
   const [menuOpen, setMenuOpen] = useState(false);
+  const items = useCartStore((s) => s.items);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const openCart = useCartUIStore((s) => s.openCart);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -168,8 +173,9 @@ export default function Header() {
 
               {/* Cart — ethno-themed basket icon (woven / shirdak style) */}
               <button
+                onClick={openCart}
                 className="
-                  hidden md:flex items-center justify-center
+                  hidden md:flex items-center justify-center relative
                   w-10 h-10 rounded-full
                   border border-[#fffdf9] text-[#d0d0d0]
                   hover:border-[#c9a96e] hover:text-[#c9a96e]
@@ -177,6 +183,12 @@ export default function Header() {
                 "
                 aria-label="Cart"
               >
+                {/* Badge */}
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-[#c9a96e] text-[#121212] text-[10px] font-bold leading-none">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
                 <svg
                   className="w-[18px] h-[18px]"
                   viewBox="0 0 24 24"
@@ -310,8 +322,9 @@ export default function Header() {
 
               {/* Cart placeholder — mobile */}
               <button
+                onClick={openCart}
                 className="
-                  flex items-center justify-center gap-2
+                  flex items-center justify-center gap-2 relative
                   w-full py-3 rounded-full
                   border border-[#d4af37]/40 text-[#121212]/80
                   hover:border-[#7e2424] hover:text-[#7e2424]
@@ -319,6 +332,11 @@ export default function Header() {
                   text-[13px] font-sans font-bold uppercase tracking-[1.5px]
                 "
               >
+                {totalItems > 0 && (
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-[#7e2424] text-[#ffefcb] text-[10px] font-bold leading-none">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
                 <svg
                   className="w-[18px] h-[18px]"
                   viewBox="0 0 24 24"

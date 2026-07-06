@@ -14,6 +14,7 @@ import { AppShellProvider } from "../../components/ui/AppShellContext";
 import Hero from "../../components/home/Hero";
 import Header from "../../components/home/Header";
 import Footer from "../../components/home/Footer";
+import CartDrawerWrapper from "../../components/cart/CartDrawerWrapper";
 
 const sansFont = Nunito_Sans({
   subsets: ["latin", "cyrillic"],
@@ -68,6 +69,9 @@ export default async function RootLayout({ children, params }: Props) {
 
             {/* Глобальный подвал (ему внутри файла задан класс ornament-burgundy) */}
             <Footer />
+
+            {/* Корзина (slide-out) */}
+            <CartDrawerWrapper />
             
           </div>
           </AppShellProvider>

@@ -12,7 +12,7 @@
     "subtitle1": "Spirit of the Nomads",
     "quote": "By the end of the evening, we hope you'll feel the taste of our traditions.",
     "subtitle2": "Welcome",
-    "headline": "With Love from Bishkek",
+    "headline": "From Karakol with Love",
     "btnMenu": "View Menu",
     "btnBook": "Reserve"
   },
@@ -154,6 +154,38 @@
       "cta": "View Events"
     }
   },
+  "cart": {
+    "addToCart": "Add to cart",
+    "added": "Added",
+    "orderDelivery": "Order delivery",
+    "yourCart": "Your cart",
+    "emptyCart": "Cart is empty",
+    "backToMenu": "Back to menu",
+    "total": "Total",
+    "checkout": "Checkout",
+    "deliveryDetails": "Delivery details",
+    "backToCart": "Back to cart",
+    "nameLabel": "Your name",
+    "namePlaceholder": "e.g., Ermek",
+    "phoneLabel": "Phone",
+    "addressLabel": "Delivery address",
+    "addressPlaceholder": "Street, building, apartment",
+    "commentLabel": "Order comment",
+    "commentPlaceholder": "Preferences, delivery notes...",
+    "orderSummary": "Your order",
+    "submitOrder": "Submit order",
+    "submitting": "Submitting...",
+    "remove": "Remove",
+    "fillRequired": "Please fill in all required fields",
+    "orderError": "An error occurred. Please try again later.",
+    "orderSuccess": "Order placed!",
+    "successTitle": "Thank you for your order!",
+    "successDesc": "We have received your order and will contact you shortly for confirmation."
+  },
+  "menuGallery": {
+    "allMenu": "Full menu",
+    "searchPlaceholder": "Search dishes..."
+  },
   "eventsHub": {
     "banquetsSub": "Banquet Halls",
     "banquetsTitle1": "Banquets &",
@@ -165,5 +197,10 @@
     "cateringTitle2": "Catering",
     "cateringDesc": "High-quality national cuisine wherever you wish. Professional off-site catering for events of any scale, preserving premium presentation and service.",
     "cateringBtn": "Learn more"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Looks like you've wandered into the nomad steppe. This page doesn't exist.",
+    "buttonText": "Back to Home"
   }
 }

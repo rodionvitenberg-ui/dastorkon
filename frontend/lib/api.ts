@@ -66,3 +66,53 @@ export async function getDish(id: string, locale?: string): Promise<Dish> {
 
   return res.json();
 }
+
+// ─── Orders ───────────────────────────────────────────────
+
+export interface OrderItemPayload {
+  dish_id: number;
+  quantity: number;
+}
+
+export interface CreateOrderPayload {
+  customer_name: string;
+  customer_phone: string;
+  address: string;
+  comment?: string;
+  items: OrderItemPayload[];
+}
+
+export interface OrderResponse {
+  id: number;
+  customer_name: string;
+  customer_phone: string;
+  address: string;
+  comment: string;
+  total_amount: string;
+  status: string;
+  created_at: string;
+  items: {
+    id: number;
+    dish_name: string;
+    price: string;
+    quantity: number;
+  }[];
+}
+
+/**
+ * Отправить заказ на бэкенд.
+ */
+export async function submitOrder(payload: CreateOrderPayload): Promise<OrderResponse> {
+  const res = await fetch(`${API_URL}/orders/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to submit order");
+  }
+
+  return res.json();
+}

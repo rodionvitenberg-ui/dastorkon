@@ -1,8 +1,8 @@
 // app/[locale]/menu/page.tsx
 import Image from "next/image";
 import { getCategories } from "@/lib/api";
-import GalleryMasonry from "@/components/menu/gallery/GalleryMasonry";
 import OrnamentLines from "@/components/ui/OrnamentLines";
+import { MenuClient } from "./MenuClient";
 
 export default async function MenuPage(props: {
   params: Promise<{ locale: string }>;
@@ -12,13 +12,12 @@ export default async function MenuPage(props: {
   const sp = await props.searchParams;
 
   const categories = await getCategories(locale);
-
-  void sp; // searchParams consumed by GalleryMasonry via useSearchParams
+  const variant = (typeof sp.variant === "string" ? sp.variant : "A") as "A" | "D";
 
   const errorMessages: Record<string, string> = {
     ru: "Меню временно недоступно",
     en: "Menu is temporarily unavailable",
-    ky: "Меню учурда жеткиликсиз"
+    ky: "Меню учурда жеткиликсиз",
   };
 
   if (!Array.isArray(categories) || categories.length === 0) {
@@ -36,14 +35,15 @@ export default async function MenuPage(props: {
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center pt-24 pb-32">
       <OrnamentLines type="parchment" />
-      {/* Атмосферный пергаментный фон */}
+
+      {/* Пергаментный фон */}
       <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">
-        <Image 
-          src="/parchment-bg.jpg" 
-          alt="Parchment Background" 
-          fill 
-          className="object-cover mix-blend-multiply opacity-[0.45]" 
-          priority 
+        <Image
+          src="/parchment-bg.jpg"
+          alt="Parchment Background"
+          fill
+          className="object-cover mix-blend-multiply opacity-[0.45]"
+          priority
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(43,30,23,0.015)_100%)]" />
       </div>
@@ -52,7 +52,13 @@ export default async function MenuPage(props: {
         {/* Заголовок страницы */}
         <div className="flex flex-col items-center justify-center mb-16">
           <div className="relative h-16 sm:h-20 w-48 sm:w-64 mb-3">
-            <Image src="/menu.png" alt="Menu" fill className="object-contain object-center" priority />
+            <Image
+              src="/menu.png"
+              alt="Menu"
+              fill
+              className="object-contain object-center"
+              priority
+            />
           </div>
 
           <span className="font-sans text-sm sm:text-base tracking-[0.2em] uppercase text-brand-dark mb-6">
@@ -60,15 +66,17 @@ export default async function MenuPage(props: {
           </span>
 
           <div className="relative h-6 sm:h-8 w-64 sm:w-80">
-            <Image src="/divider.png" alt="Divider" fill className="object-contain object-center" />
+            <Image
+              src="/divider.png"
+              alt="Divider"
+              fill
+              className="object-contain object-center"
+            />
           </div>
         </div>
 
-        {/* Гастрономическая галерея */}
-        <GalleryMasonry
-          categories={categories}
-          locale={locale}
-        />
+        {/* Клиентский контент с переключателем вариантов */}
+        <MenuClient categories={categories} locale={locale} variant={variant} />
       </div>
     </main>
   );

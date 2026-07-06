@@ -73,18 +73,37 @@ export default function GalleryMasonry({
     return cat?.dishes || [];
   }, [activeCategoryId, categories, allDishes]);
 
-  // Фильтрация по тегу
+  // Поиск
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
+
+  // Фильтрация по тегу + поиск
   const [displayedDishes, setDisplayedDishes] = useState<Dish[]>([]);
 
-  // Синхронизация при смене категории/тега
+  // Синхронизация при смене категории/тега/поиска
   useEffect(() => {
-    const filtered = activeTagId
+    let filtered = activeTagId
       ? categoryDishes.filter((d) =>
           d.tags?.some((t) => t.id === activeTagId)
         )
       : categoryDishes;
+
+    // Поиск по названию
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (d) =>
+          d.title.toLowerCase().includes(q) ||
+          (d.short_description && d.short_description.toLowerCase().includes(q)) ||
+          (d.description && d.description.toLowerCase().includes(q))
+      );
+    }
+
     setDisplayedDishes(filtered);
-  }, [categoryDishes, activeTagId]);
+  }, [categoryDishes, activeTagId, searchQuery]);
 
   // Infinite scroll state
   const [page, setPage] = useState(1);
@@ -187,6 +206,7 @@ export default function GalleryMasonry({
         allDishes={allDishes}
         onChangeCategory={setActiveCategoryId}
         onChangeTag={setActiveTagId}
+        onSearch={handleSearch}
       />
 
       {/* Masonry-сетка через CSS columns */}
