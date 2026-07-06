@@ -13,7 +13,7 @@ type Props = {
   variant: "A" | "D";
 };
 
-export function MenuClient({ categories, locale, variant }: Props) {
+export default function MenuClient({ categories, locale, variant }: Props) {
   return (
     <>
       {variant === "A" && <VariantA categories={categories} locale={locale} />}

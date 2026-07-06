@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { getCategories } from "@/lib/api";
 import OrnamentLines from "@/components/ui/OrnamentLines";
-import { MenuClient } from "./MenuClient";
+import MenuClient from "@/components/menu/MenuClient";
 
 export default async function MenuPage(props: {
   params: Promise<{ locale: string }>;
