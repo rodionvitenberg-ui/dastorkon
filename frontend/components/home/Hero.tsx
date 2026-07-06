@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValueEvent, useSpring } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
@@ -27,6 +28,11 @@ export default function Hero() {
     return () => mql.removeEventListener("change", handler);
   }, []);
 
+  // Отслеживаем ошибки загрузки видео — показываем fallback-изображение только при реальном сбое
+  const [mobileVideoError, setMobileVideoError] = useState(false);
+  const [desktopLeftVideoError, setDesktopLeftVideoError] = useState(false);
+  const [desktopRightVideoError, setDesktopRightVideoError] = useState(false);
+
   const { scrollYProgress: rawScrollProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -43,27 +49,27 @@ export default function Hero() {
   // Видео раскрывается (без скруглений в конце)
   // Начальный масштаб видео — чем меньше число, тем сильнее "сжат" экран при старте.
   // Меняйте первый элемент массива [0.65, 1]: 0.65 → сильнее сжат, 0.85 → почти раскрыт.
-  const imageScale = useTransform(scrollYProgress, [0, 0.85], [0.65, 1], { clamp: true });
-  const shadowOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0], { clamp: true });
-  const containerBorderRadius = useTransform(scrollYProgress, [0, 0.85], ["12px", "0px"], { clamp: true });
+  const imageScale = useTransform(scrollYProgress, [0, 0.45], [0.65, 1], { clamp: true });
+  const shadowOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0], { clamp: true });
+  const containerBorderRadius = useTransform(scrollYProgress, [0, 0.45], ["12px", "0px"], { clamp: true });
 
   // Сообщаем Header'у, раскрылось ли видео
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setHeroExpanded(latest >= 0.85);
+    setHeroExpanded(latest >= 0.45);
   });
 
   // Цитата: исчезает и больше не возвращается
-  const quoteOpacity = useTransform(scrollYProgress, [0, 0.25, 0.3], [1, 0, 0], { clamp: false });
-  const quoteY = useTransform(scrollYProgress, [0, 0.25, 0.3], ["0%", "-15%", "-15%"], { clamp: false });
+  const quoteOpacity = useTransform(scrollYProgress, [0, 0.12, 0.17], [1, 0, 0], { clamp: false });
+  const quoteY = useTransform(scrollYProgress, [0, 0.12, 0.17], ["0%", "-15%", "-15%"], { clamp: false });
 
   // Заголовок: появляется и остаётся
-  const headlineOpacity = useTransform(scrollYProgress, [0.35, 0.5, 1], [0, 1, 1], { clamp: false });
-  const headlineY = useTransform(scrollYProgress, [0.35, 0.5, 1], ["15%", "0%", "0%"], { clamp: false });
+  const headlineOpacity = useTransform(scrollYProgress, [0.18, 0.28, 1], [0, 1, 1], { clamp: false });
+  const headlineY = useTransform(scrollYProgress, [0.18, 0.28, 1], ["15%", "0%", "0%"], { clamp: false });
 
   return (
     <section
       ref={containerRef}
-      className="relative h-[250vh] w-full bg-[url('/background-hero.png')] bg-cover bg-center bg-no-repeat select-none md:h-[400vh]"
+      className="relative h-[140vh] w-full bg-[url('/background-hero.png')] bg-cover bg-center bg-no-repeat select-none md:h-[140vh]"
     >
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
         {/* Карточка с видео — скругляется на старте, раскрывается без скруглений */}
@@ -77,17 +83,29 @@ export default function Hero() {
           >
             {/* Мобильное видео — одно */}
             {!isDesktop && (
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                poster="/background-hero.png"
-                className="absolute inset-0 h-full w-full object-cover"
-              >
-                <source src="/hero-video1.mp4" type="video/mp4" />
-              </video>
+              <>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={() => setMobileVideoError(true)}
+                  onLoadedData={() => setMobileVideoError(false)}
+                >
+                  <source src="/hero-video1.mp4" type="video/mp4" />
+                </video>
+                {mobileVideoError && (
+                  <Image
+                    src="/background-hero.png"
+                    alt="Hero background"
+                    fill
+                    className="absolute inset-0 h-full w-full object-cover"
+                    priority
+                  />
+                )}
+              </>
             )}
 
             {/* Десктопное видео — два вертикальных рядом */}
@@ -100,11 +118,21 @@ export default function Hero() {
                     muted
                     playsInline
                     preload="auto"
-                    poster="/hero-left-poster.png"
                     className="absolute inset-0 h-full w-full object-cover"
+                    onError={() => setDesktopLeftVideoError(true)}
+                    onLoadedData={() => setDesktopLeftVideoError(false)}
                   >
                     <source src="/hero-video1.mp4" type="video/mp4" />
                   </video>
+                  {desktopLeftVideoError && (
+                    <Image
+                      src="/background-hero.png"
+                      alt="Hero background"
+                      fill
+                      className="absolute inset-0 h-full w-full object-cover"
+                      priority
+                    />
+                  )}
                 </div>
                 <div className="relative w-1/2 h-full overflow-hidden">
                   <video
@@ -113,11 +141,21 @@ export default function Hero() {
                     muted
                     playsInline
                     preload="auto"
-                    poster="/hero-right-poster.png"
                     className="absolute inset-0 h-full w-full object-cover"
+                    onError={() => setDesktopRightVideoError(true)}
+                    onLoadedData={() => setDesktopRightVideoError(false)}
                   >
                     <source src="/hero-video1.mp4" type="video/mp4" />
                   </video>
+                  {desktopRightVideoError && (
+                    <Image
+                      src="/background-hero.png"
+                      alt="Hero background"
+                      fill
+                      className="absolute inset-0 h-full w-full object-cover"
+                      priority
+                    />
+                  )}
                 </div>
               </div>
             )}
@@ -136,7 +174,7 @@ export default function Hero() {
           style={{
             opacity: quoteOpacity,
             y: quoteY,
-            visibility: useTransform(scrollYProgress, [0, 0.3], ["visible", "hidden"]),
+            visibility: useTransform(scrollYProgress, [0, 0.17], ["visible", "hidden"]),
           }}
           className="absolute z-10 flex max-w-[14rem] md:max-w-4xl flex-col items-center px-4 text-center"
         >

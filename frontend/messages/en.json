@@ -198,6 +198,14 @@
     "cateringDesc": "High-quality national cuisine wherever you wish. Professional off-site catering for events of any scale, preserving premium presentation and service.",
     "cateringBtn": "Learn more"
   },
+  "cookieConsent": {
+    "title": "We use cookies",
+    "description": "Dastorkon uses essential cookies for the proper functioning of the website, saving language preferences, and ensuring reservation functionality. We do not store clients' personal data and do not share it with third parties.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "privacyPolicy": "Privacy",
+    "cookiePolicy": "Cookies"
+  },
   "notFound": {
     "title": "Page Not Found",
     "description": "Looks like you've wandered into the nomad steppe. This page doesn't exist.",

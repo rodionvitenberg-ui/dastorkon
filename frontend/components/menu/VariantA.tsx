@@ -192,16 +192,6 @@ function DishRow({
 export default function VariantA({ categories, locale }: Props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  const titleLabels: Record<string, string> = {
-    ru: "Меню",
-    en: "Menu",
-    ky: "Меню",
-  };
-  const subtitleLabels: Record<string, string> = {
-    ru: "Выберите категорию",
-    en: "Choose a category",
-    ky: "Категорияны тандаңыз",
-  };
   const backLabel: Record<string, string> = {
     ru: "← Назад к категориям",
     en: "← Back to categories",
@@ -272,15 +262,6 @@ export default function VariantA({ categories, locale }: Props) {
   // ── Шаг 1: Категории ──
   return (
     <div>
-      <div className="mb-16 text-center">
-        <h2 className="font-heading text-3xl sm:text-4xl text-brand-dark mb-3 tracking-wide">
-          {titleLabels[locale] || titleLabels.ru}
-        </h2>
-        <p className="font-sans text-sm tracking-[0.25em] uppercase text-brand-dark/40">
-          {subtitleLabels[locale] || subtitleLabels.ru}
-        </p>
-      </div>
-
       {/* Сетка категорий: Editorial Split — 2 колонки */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
         {categoriesWithIcons.map((cat, idx) => (

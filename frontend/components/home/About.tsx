@@ -170,7 +170,7 @@ function PhilosophyVariant1() {
   return (
     <div className="relative w-full min-h-[60vh] md:min-h-[75vh] flex flex-col md:flex-row bg-transparent">
       {/* Левая колонка с изображением — абсолютно позиционирована на десктопе, занимает ровно 50% от верха до низа */}
-      <div className="relative w-full md:absolute md:inset-y-0 md:left-0 md:w-1/2 h-[50vh] md:h-full order-1 overflow-hidden">
+      <div className="relative w-full md:absolute md:inset-y-0 md:left-0 md:w-1/2 h-[50vh] md:h-full order-1 overflow-hidden border-r border-brand-dark/10">
         <div className="relative w-full h-full">
           <Image
             src="/about-cuisine.jpg"
@@ -179,12 +179,6 @@ function PhilosophyVariant1() {
             className="object-cover"
           />
         </div>
-
-        {/* Градиент растворения справа — только на десктопе */}
-        <div className="hidden md:block absolute inset-y-0 right-0 w-[35%] bg-gradient-to-l from-[#ffefcb] via-[#ffefcb]/90 to-transparent pointer-events-none" />
-
-        {/* Градиентный засвет снизу — только на мобилке */}
-        <div className="md:hidden absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-[#ffefcb] via-[#ffefcb]/80 to-transparent pointer-events-none" />
       </div>
 
       {/* Правая колонка с текстом — на десктопе прижата к правому краю */}
@@ -252,21 +246,19 @@ export default function About() {
     <section 
       ref={sectionRef} 
       id="about" 
-      className="relative z-0 w-full"
+      className="relative z-0 w-full bg-[#F5F2EB]"
     >
-      <div className="hidden md:block">
-        <OrnamentLines type="parchment" />
-      </div>
-      {/* Пергаментный фон — как на странице меню, но absolute внутри секции */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <Image 
-          src="/parchment-bg.jpg" 
-          alt="Parchment Background" 
-          fill 
-          className="object-cover mix-blend-multiply opacity-[0.45]" 
-          priority 
+      {/* Орнамент — линии по краям, как на странице контактов */}
+      <OrnamentLines type="parchment" />
+
+      {/* Текстура пергамента */}
+      <div className="absolute inset-0 -z-0 w-full h-full pointer-events-none" aria-hidden="true">
+        <Image
+          src="/parchment-bg.jpg"
+          alt=""
+          fill
+          className="object-cover mix-blend-multiply opacity-[0.45]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(43,30,23,0.015)_100%)]" />
       </div>
 
       {/* ─── СЕКЦИЯ 1: ФИЛОСОФИЯ ─── */}

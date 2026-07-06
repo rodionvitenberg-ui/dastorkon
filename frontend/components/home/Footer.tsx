@@ -60,9 +60,6 @@ export default function Footer() {
 
           {/* ПРАВАЯ КОЛОНКА: B-Corp + policy links */}
           <div className="flex flex-col items-center md:items-end gap-3">
-            <p className="font-serif italic text-sm md:text-base text-white/80 tracking-wide leading-relaxed text-center md:text-right">
-              {t("bCorp")}
-            </p>
             <div className="flex items-center gap-4">
               <Link
                 href="/privacy"

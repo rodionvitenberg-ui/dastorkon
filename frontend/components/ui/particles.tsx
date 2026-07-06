@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 interface ParticlesProps {
@@ -10,6 +10,21 @@ interface ParticlesProps {
   className?: string;
 }
 
+/**
+ * Deterministic pseudo-random based on a seed (simple mulberry32).
+ * Produces the same sequence on server and client, avoiding hydration mismatch
+ * from Math.random().
+ */
+function seededRandom(seed: number): () => number {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 export function Particles({
   color = "#ff3366",
   particleCount = 10000,
@@ -18,8 +33,16 @@ export function Particles({
   className = "",
 }: ParticlesProps) {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Only mount canvas on client — avoids SSR/CSR canvas DOM mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+
     const container = mountRef.current;
     if (!container) return;
 
@@ -44,12 +67,13 @@ export function Particles({
 
       const geometry = new THREE.BufferGeometry();
       const vertices: number[] = [];
+      const rng = seededRandom(42); // fixed seed for deterministic positions
 
       for (let i = 0; i < particleCount; i++) {
         vertices.push(
-          2000 * Math.random() - 1000,
-          2000 * Math.random() - 1000,
-          2000 * Math.random() - 1000
+          2000 * rng() - 1000,
+          2000 * rng() - 1000,
+          2000 * rng() - 1000
         );
       }
 
@@ -130,11 +154,14 @@ export function Particles({
 
       if (material) material.dispose();
     };
-  }, [color, particleCount, particleSize, animate]);
+  }, [mounted, color, particleCount, particleSize, animate]);
 
+  // Render an empty placeholder div that matches SSR exactly;
+  // the canvas is appended inside it by the effect on client only.
   return (
     <div
       ref={mountRef}
+      suppressHydrationWarning
       className={`absolute top-0 left-0 w-full h-full pointer-events-none ${className}`}
     />
   );
