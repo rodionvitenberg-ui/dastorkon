@@ -201,7 +201,7 @@ export default function Header() {
 
               {/* Reserve Table — prominent CTA button */}
               <a
-                href="/#booking"
+                href="/book"
                 className="
                   hidden md:inline-flex items-center justify-center
                   h-10 px-5
@@ -341,7 +341,7 @@ export default function Header() {
 
               {/* Reserve Table — mobile CTA */}
               <a
-                href="/#booking"
+                href="/book"
                 onClick={() => setMenuOpen(false)}
                 className="
                   flex items-center justify-center
