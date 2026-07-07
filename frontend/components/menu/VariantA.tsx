@@ -8,7 +8,7 @@ import { useCartUIStore } from "@/store/useCartUIStore";
 
 /* ── PROTOTYPE: Variant A — Editorial Split ──
    Question: "What should the menu look like?"
-   • Step 1: Category grid with large images — editorial 2-column layout
+   • Step 1: Category grid with large images — 3-column layout
    • Step 2: Dish rows — clean text, icon buttons appear on hover
    • Double-bezel cards for categories
    • Thematic SVG icons: basket (корзина), swooping arrow (доставка)
@@ -257,8 +257,8 @@ export default function VariantA({ categories, locale }: Props) {
   // ── Шаг 1: Категории ──
   return (
     <div>
-      {/* Сетка категорий: Editorial Split — 2 колонки */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-10 sm:gap-y-14">
+      {/* Сетка категорий: 3 колонки */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 lg:gap-x-10 gap-y-10 sm:gap-y-14">
         {categoriesWithIcons.map((cat, idx) => (
           <button
             key={cat.id}
@@ -280,7 +280,7 @@ export default function VariantA({ categories, locale }: Props) {
                       alt={cat.title}
                       fill
                       className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-brand-dark/20 font-heading text-5xl">

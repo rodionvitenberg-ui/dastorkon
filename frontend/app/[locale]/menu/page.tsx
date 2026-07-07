@@ -33,7 +33,7 @@ export default async function MenuPage(props: {
   }
 
   return (
-    <main className="relative min-h-screen w-full flex flex-col items-center pt-24 pb-32">
+    <main className="relative min-h-screen w-full flex flex-col items-center pt-24 pb-10 sm:pb-14">
       <OrnamentLines type="parchment" />
 
       {/* Пергаментный фон */}
@@ -48,9 +48,9 @@ export default async function MenuPage(props: {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(43,30,23,0.015)_100%)]" />
       </div>
 
-      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16 flex-1 flex flex-col">
         {/* Заголовок страницы */}
-        <div className="flex flex-col items-center justify-center mb-16">
+        <div className="flex flex-col items-center justify-center mb-6">
           <div className="relative h-16 sm:h-20 w-48 sm:w-64 mb-3">
             <Image
               src="/menu.png"
@@ -64,15 +64,6 @@ export default async function MenuPage(props: {
           <span className="font-sans text-sm sm:text-base tracking-[0.2em] uppercase text-brand-dark mb-6">
             Dastorkon
           </span>
-
-          <div className="relative h-6 sm:h-8 w-64 sm:w-80">
-            <Image
-              src="/divider.png"
-              alt="Divider"
-              fill
-              className="object-contain object-center"
-            />
-          </div>
         </div>
 
         {/* Клиентский контент с переключателем вариантов */}

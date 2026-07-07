@@ -16,6 +16,7 @@ const navLinks = [
   { href: "/menu", key: "menu" },
   { href: "/events", key: "events" },
   { href: "/contacts", key: "contacts" },
+  { href: "/book", key: "booking" },
 ] as const;
 
 interface MobileMenuProps {
@@ -48,6 +49,15 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
     <div className="fixed inset-0 z-[60] md:hidden">
       {/* Fullscreen panel — dark editorial surface */}
       <div className="absolute inset-0 bg-[#121212] flex flex-col">
+        {/* Background image */}
+        <Image
+          src="/background-hero.png"
+          alt=""
+          fill
+          className="object-cover opacity-30 pointer-events-none"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#121212]/70 via-[#121212]/50 to-[#121212]/90 pointer-events-none" />
         {/* ─── Top bar: точная копия хедера ─── */}
         <div
           className={`
@@ -218,23 +228,6 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
             })}
           </div>
 
-          {/* Booking CTA */}
-          <a
-            href="/book"
-            onClick={onClose}
-            className="
-              inline-flex items-center justify-center
-              h-12 px-8
-              rounded-full
-              text-[13px] font-sans font-bold uppercase tracking-[1.5px]
-              border border-[#c9a96e] text-[#c9a96e]
-              hover:bg-[#c9a96e]/20 hover:text-[#fffdf9]
-              transition-all duration-200
-              self-start
-            "
-          >
-            {t("booking")}
-          </a>
         </div>
       </div>
     </div>

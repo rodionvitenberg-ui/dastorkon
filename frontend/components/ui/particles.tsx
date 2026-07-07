@@ -49,61 +49,72 @@ export function Particles({
     let camera: THREE.PerspectiveCamera;
     let scene: THREE.Scene;
     let material: THREE.PointsMaterial;
+    let renderer: THREE.WebGLRenderer | undefined;
     let animationFrameId: number;
     let mouseX = 0;
     let mouseY = 0;
 
-    const init = () => {
-      camera = new THREE.PerspectiveCamera(
-        55,
-        window.innerWidth / window.innerHeight,
-        2,
-        2000
-      );
-      camera.position.z = 1000;
-
-      scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x000000, 0.001);
-
-      const geometry = new THREE.BufferGeometry();
-      const vertices: number[] = [];
-      const rng = seededRandom(42); // fixed seed for deterministic positions
-
-      for (let i = 0; i < particleCount; i++) {
-        vertices.push(
-          2000 * rng() - 1000,
-          2000 * rng() - 1000,
-          2000 * rng() - 1000
+    const init = (): THREE.WebGLRenderer | undefined => {
+      try {
+        camera = new THREE.PerspectiveCamera(
+          55,
+          window.innerWidth / window.innerHeight,
+          2,
+          2000,
         );
+        camera.position.z = 1000;
+
+        scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.001);
+
+        const geometry = new THREE.BufferGeometry();
+        const vertices: number[] = [];
+        const rng = seededRandom(42); // fixed seed for deterministic positions
+
+        for (let i = 0; i < particleCount; i++) {
+          vertices.push(
+            2000 * rng() - 1000,
+            2000 * rng() - 1000,
+            2000 * rng() - 1000,
+          );
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3),
+        );
+
+        const sprite = new THREE.TextureLoader().load("/assets/disc.png");
+        material = new THREE.PointsMaterial({
+          size: particleSize,
+          sizeAttenuation: true,
+          map: sprite,
+          alphaTest: 0.5,
+          transparent: true,
+        });
+        material.color.setStyle(color);
+
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        const webglRenderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true,
+        });
+        webglRenderer.setPixelRatio(window.devicePixelRatio);
+        webglRenderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(webglRenderer.domElement);
+
+        return webglRenderer;
+      } catch (err) {
+        // WebGL not available (headless, software rendering, disabled driver, etc.)
+        // Fall back silently — the component renders as an empty div.
+        console.warn(
+          "[Particles] WebGL is not available — falling back to empty canvas.",
+          err,
+        );
+        return undefined;
       }
-
-      geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(vertices, 3)
-      );
-
-      const sprite = new THREE.TextureLoader().load("/assets/disc.png");
-      material = new THREE.PointsMaterial({
-        size: particleSize,
-        sizeAttenuation: true,
-        map: sprite,
-        alphaTest: 0.5,
-        transparent: true,
-      });
-      material.color.setStyle(color);
-
-      const particles = new THREE.Points(geometry, material);
-      scene.add(particles);
-
-      const renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-      });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      container.appendChild(renderer.domElement);
-
-      return renderer;
     };
 
     const handleResize = () => {
@@ -137,7 +148,7 @@ export function Particles({
       animationFrameId = requestAnimationFrame(animateScene);
     };
 
-    const renderer = init();
+    renderer = init();
     window.addEventListener("resize", handleResize);
     window.addEventListener("pointermove", handlePointerMove);
     animateScene();
@@ -149,7 +160,9 @@ export function Particles({
 
       if (renderer) {
         renderer.dispose();
-        container.removeChild(renderer.domElement);
+        if (container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
       }
 
       if (material) material.dispose();
