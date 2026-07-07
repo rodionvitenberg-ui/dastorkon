@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Link } from "../../i18n/routing";
 import { useTranslations } from "next-intl";
 import { useAppShell } from "../ui/AppShellContext";
-import OrnamentLines from "../ui/OrnamentLines";
 interface CardData {
   key: string;
   href: string;
@@ -246,22 +245,8 @@ export default function About() {
     <section 
       ref={sectionRef} 
       id="about" 
-      className="relative z-0 w-full bg-[#F5F2EB]"
+      className="relative z-0 w-full"
     >
-      {/* Орнамент — линии по краям, только на десктопе */}
-      <div className="hidden md:block">
-        <OrnamentLines type="parchment" />
-      </div>
-
-      {/* Текстура пергамента */}
-      <div className="absolute inset-0 -z-0 w-full h-full pointer-events-none" aria-hidden="true">
-        <Image
-          src="/parchment-bg.jpg"
-          alt=""
-          fill
-          className="object-cover mix-blend-multiply opacity-[0.45]"
-        />
-      </div>
 
       {/* ─── СЕКЦИЯ 1: ФИЛОСОФИЯ ─── */}
       <PhilosophyVariant1 />
@@ -291,8 +276,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Нижний разделитель секции */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-[#D4AF37]/20 to-transparent" />
     </section>
   );
 }

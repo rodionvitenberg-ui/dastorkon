@@ -137,6 +137,13 @@
     "success_desc": "Your request has been successfully sent. We will contact you shortly.",
     "error_msg": "An error occurred. Please try again later."
   },
+  "cuisine": {
+    "subtitle": "Cuisine",
+    "title": "A Taste of the Great Steppe",
+    "description": "At Dastorkon, every dish is a story told through fire, spice, and centuries-old traditions. Our chefs honor the nomadic heritage with slow-cooked meats, hand-rolled noodles, and fragrant pilafs — each plate a journey across the Kyrgyz mountains and Central Asian plains.",
+    "btnMenu": "View Menu",
+    "btnBook": "Reserve a Table"
+  },
   "aboutCards": {
     "menu": {
       "title": "Our Menu",
