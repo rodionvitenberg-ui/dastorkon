@@ -248,8 +248,10 @@ export default function About() {
       id="about" 
       className="relative z-0 w-full bg-[#F5F2EB]"
     >
-      {/* Орнамент — линии по краям, как на странице контактов */}
-      <OrnamentLines type="parchment" />
+      {/* Орнамент — линии по краям, только на десктопе */}
+      <div className="hidden md:block">
+        <OrnamentLines type="parchment" />
+      </div>
 
       {/* Текстура пергамента */}
       <div className="absolute inset-0 -z-0 w-full h-full pointer-events-none" aria-hidden="true">

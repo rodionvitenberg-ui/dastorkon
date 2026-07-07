@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "../../i18n/routing";
 import { useAppShell } from "../ui/AppShellContext";
 import { useCartStore } from "@/store/useCartStore";
 import { useCartUIStore } from "@/store/useCartUIStore";
+import MobileMenu from "./MobileMenu";
 
 const locales = [
   { code: "ru", label: "РУС" },
@@ -227,6 +228,42 @@ export default function Header() {
                 {t("booking")}
               </a>
 
+              {/* Cart icon — mobile (left of burger) */}
+              <button
+                onClick={openCart}
+                className="
+                  md:hidden flex items-center justify-center relative
+                  w-10 h-10
+                  text-[#fffdf9]
+                  hover:text-[#c9a96e]
+                  transition-all duration-200
+                "
+                aria-label="Cart"
+              >
+                {totalItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-[#c9a96e] text-[#121212] text-[10px] font-bold leading-none">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
+                <svg
+                  className="w-[20px] h-[20px]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 8l2 12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2l2-12" />
+                  <path d="M8 8V5a4 4 0 0 1 8 0v3" />
+                  <path d="M8.5 13l7 0" opacity="0.5" />
+                  <path d="M8.5 16l7 0" opacity="0.5" />
+                  <path d="M12 13l0 4" opacity="0.5" />
+                  <path d="M9.5 13l1.5 4" opacity="0.4" strokeWidth={1} />
+                  <path d="M14.5 13l-1.5 4" opacity="0.4" strokeWidth={1} />
+                </svg>
+              </button>
+
               {/* ─── Burger button (mobile) ─── */}
               <button
                 onClick={() => setMenuOpen(true)}
@@ -247,136 +284,7 @@ export default function Header() {
       </header>
 
       {/* ─── Mobile Menu Overlay ─── */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-[60] md:hidden">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMenuOpen(false)}
-          />
-
-          {/* Slide-out panel — фон как в About: #ffefcb */}
-          <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#ffefcb] border-l border-[#d4af37]/30 shadow-2xl">
-            <div className="flex flex-col h-full px-6 py-8">
-              {/* Close button */}
-              <div className="flex justify-end mb-10">
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center text-[#121212] hover:text-[#7e2424]"
-                  aria-label="Close menu"
-                >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Nav links */}
-              <nav className="flex flex-col gap-6 mb-10">
-                {navLinks.map((link) => {
-                  const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
-                  return (
-                    <a
-                      key={link.key}
-                      href={link.href}
-                      className={`
-                        text-[15px] font-sans font-semibold uppercase tracking-[2px]
-                        transition-colors duration-200
-                        ${isActive
-                          ? "text-[#7e2424]"
-                          : "text-[#121212]/80 hover:text-[#7e2424]"
-                        }
-                      `}
-                    >
-                      {t(link.key)}
-                    </a>
-                  );
-                })}
-              </nav>
-
-              {/* Divider */}
-              <div className="h-px w-full bg-[#d4af37]/30 mb-8" />
-
-              {/* Language switcher — mobile */}
-              <div className="flex items-center gap-3 mb-6">
-                {locales.map((locale) => {
-                  const isActive = currentLocale === locale.code;
-                  return (
-                    <button
-                      key={locale.code}
-                      onClick={() => switchLocale(locale.code)}
-                      className={`
-                        text-[12px] font-sans font-bold uppercase tracking-[1.2px]
-                        px-3 py-1.5 rounded-full border transition-all duration-200
-                        ${isActive
-                          ? "border-[#7e2424] text-[#7e2424] bg-[#7e2424]/10"
-                          : "border-[#d4af37]/40 text-[#121212]/60 hover:text-[#7e2424] hover:border-[#7e2424]/40"
-                        }
-                      `}
-                    >
-                      {locale.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Cart placeholder — mobile */}
-              <button
-                onClick={openCart}
-                className="
-                  flex items-center justify-center gap-2 relative
-                  w-full py-3 rounded-full
-                  border border-[#d4af37]/40 text-[#121212]/80
-                  hover:border-[#7e2424] hover:text-[#7e2424]
-                  transition-all duration-200
-                  text-[13px] font-sans font-bold uppercase tracking-[1.5px]
-                "
-              >
-                {totalItems > 0 && (
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-[#7e2424] text-[#ffefcb] text-[10px] font-bold leading-none">
-                    {totalItems > 99 ? "99+" : totalItems}
-                  </span>
-                )}
-                <svg
-                  className="w-[18px] h-[18px]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 8l2 12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2l2-12" />
-                  <path d="M8 8V5a4 4 0 0 1 8 0v3" />
-                  <path d="M8.5 13l7 0" opacity="0.5" />
-                  <path d="M8.5 16l7 0" opacity="0.5" />
-                  <path d="M12 13l0 4" opacity="0.5" />
-                  <path d="M9.5 13l1.5 4" opacity="0.4" strokeWidth={1} />
-                  <path d="M14.5 13l-1.5 4" opacity="0.4" strokeWidth={1} />
-                </svg>
-                Cart
-              </button>
-
-              {/* Reserve Table — mobile CTA */}
-              <a
-                href="/book"
-                onClick={() => setMenuOpen(false)}
-                className="
-                  flex items-center justify-center
-                  w-full py-3 mt-4
-                  rounded-full
-                  text-[13px] font-sans font-bold uppercase tracking-[1.5px]
-                  border border-[#c9a96e] text-[#c9a96e]
-                  hover:bg-[#c9a96e] hover:text-[#121212]
-                  transition-all duration-200
-                "
-              >
-                {t("booking")}
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} compact={compact} />
     </>
   );
 }

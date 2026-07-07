@@ -34,13 +34,13 @@ export default function MapSection() {
         {/* LEFT COLUMN: 25% WIDTH CONTACTS BLOCK */}
         <div className="flex flex-col justify-center px-6 py-10 sm:px-10 md:pl-10 md:pr-6 lg:pl-16 lg:pr-6 text-white w-full border-r border-white/10 md:border-b-0 border-b">
           <div className="flex items-center gap-3 mb-2">
-            <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-brand-gold font-medium">
+            <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-white font-medium">
               {t("subtitle")}
             </span>
           </div>
           
           {/* INCREASED HEADING SIZE */}
-          <h2 className="font-heading text-2xl md:text-3xl uppercase tracking-wide mb-6 text-brand-gold">
+          <h2 className="font-heading text-2xl md:text-3xl uppercase tracking-wide mb-6 text-white">
             {t("title")}
           </h2>
 
@@ -69,7 +69,7 @@ export default function MapSection() {
               </span>
               <div className="flex flex-col text-xs md:text-sm font-light gap-0.5 whitespace-nowrap">
                 {phones.map((phone) => (
-                  <a key={phone.display} href={phone.href} className="hover:text-brand-gold transition-colors w-fit">
+                  <a key={phone.display} href={phone.href} className="hover:text-white transition-colors w-fit">
                     {phone.display}
                   </a>
                 ))}
@@ -81,7 +81,7 @@ export default function MapSection() {
             href={mapDirectionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 group relative inline-flex items-center gap-2.5 border border-white/20 hover:border-brand-gold px-4 py-2 font-sans text-[10px] tracking-[0.15em] uppercase font-semibold text-white hover:text-brand-gold transition-all duration-300 w-fit rounded-sm cursor-pointer select-none outline outline-[2px] outline-white/10 outline-offset-[3px] hover:outline-brand-gold/30"
+            className="mt-6 group relative inline-flex items-center gap-2.5 border border-white/20 hover:border-white px-4 py-2 font-sans text-[10px] tracking-[0.15em] uppercase font-semibold text-white hover:text-white transition-all duration-300 w-fit rounded-sm cursor-pointer select-none outline outline-[2px] outline-white/10 outline-offset-[3px] hover:outline-white/30"
           >
             {t("route_cta")}
             <svg 

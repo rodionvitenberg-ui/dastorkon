@@ -121,15 +121,15 @@ function DishRow({
 
   return (
     <div
-      className="group relative flex items-center justify-between py-5 px-4 transition-all duration-500 border-b border-brand-dark/8 hover:bg-brand-dark/[0.03] rounded-lg"
+      className="group relative flex flex-col md:flex-row md:items-center justify-between py-5 px-3 sm:px-4 transition-all duration-500 border-b border-brand-dark/8 hover:bg-brand-dark/[0.03] rounded-lg"
       style={{
         animationDelay: `${index * 60}ms`,
         animationFillMode: "both",
       }}
     >
       {/* Левая часть: название + описание */}
-      <div className="flex-1 min-w-0 pr-6">
-        <h3 className="font-heading text-lg text-brand-dark leading-tight transition-colors duration-300 group-hover:text-brand-red">
+      <div className="flex-1 min-w-0 pr-0 md:pr-6 mb-2 md:mb-0">
+        <h3 className="font-heading text-base sm:text-lg text-brand-dark leading-tight transition-colors duration-300 group-hover:text-brand-red">
           {dish.title}
         </h3>
         {dish.short_description && (
@@ -156,14 +156,14 @@ function DishRow({
         )}
       </div>
 
-      {/* Правая часть: цена + кнопки (выезжают при hover) */}
-      <div className="flex items-center gap-4 shrink-0">
-        <span className="font-sans text-lg font-medium text-brand-dark whitespace-nowrap tabular-nums min-w-[80px] text-right">
+      {/* Правая часть: цена + кнопки */}
+      <div className="flex items-center justify-between md:justify-end gap-2 md:gap-4 shrink-0 w-full md:w-auto">
+        <span className="font-sans text-base sm:text-lg font-medium text-brand-dark whitespace-nowrap tabular-nums md:min-w-[80px]">
           {dish.price} {currency}
         </span>
 
-        {/* Icon buttons — скрыты, показываются при hover */}
-        <div className="flex items-center gap-1.5 opacity-0 -translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:opacity-100 group-hover:translate-x-0">
+        {/* Icon buttons — hover на desktop (md+), всегда видны на mobile */}
+        <div className="flex items-center gap-1.5 opacity-100 md:opacity-0 translate-x-0 md:-translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] md:group-hover:opacity-100 md:group-hover:translate-x-0">
           {/* В корзину — basket icon */}
           <button
             onClick={handleAdd}
@@ -192,12 +192,6 @@ function DishRow({
 export default function VariantA({ categories, locale }: Props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  const backLabel: Record<string, string> = {
-    ru: "← Назад к категориям",
-    en: "← Back to categories",
-    ky: "← Категорияларга кайтуу",
-  };
-
   const categoriesWithIcons = useMemo(
     () =>
       categories.map((c) => ({
@@ -221,25 +215,26 @@ export default function VariantA({ categories, locale }: Props) {
       <div>
         <button
           onClick={() => setSelectedCategoryId(null)}
-          className="font-sans text-sm text-brand-dark/60 hover:text-brand-dark uppercase tracking-[0.15em] mb-10 transition-colors duration-300 inline-block"
+          className="font-sans text-sm text-brand-dark/60 hover:text-brand-dark uppercase tracking-[0.15em] mb-10 transition-colors duration-300 inline-flex items-center gap-2"
         >
-          {backLabel[locale] || backLabel.ru}
+          <span className="inline-flex items-center justify-center leading-none text-xl sm:text-2xl relative" style={{ top: "-1px" }}>←</span>
+          {locale === "en" ? "Back" : locale === "ky" ? "Артка" : "Назад"}
         </button>
 
-        <div className="mb-12">
-          <h2 className="font-heading text-4xl sm:text-5xl text-brand-dark mb-3">
+        <div className="mb-8 sm:mb-12">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-brand-dark mb-3">
             {selectedCategory.title}
           </h2>
           {selectedCategory.description && (
-            <p className="font-sans text-base text-brand-dark/60 leading-relaxed max-w-xl">
+            <p className="font-sans text-sm sm:text-base text-brand-dark/60 leading-relaxed max-w-xl">
               {selectedCategory.description}
             </p>
           )}
         </div>
 
-        {/* Double-bezel shell */}
-        <div className="rounded-[2rem] p-[2px] bg-brand-dark/[0.04] ring-1 ring-brand-dark/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-          <div className="rounded-[calc(2rem-2px)] bg-brand-cream/60 backdrop-blur-sm p-6 sm:p-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+        {/* Double-bezel shell — фон #ffefcb на мобильных тоже */}
+        <div className="rounded-2xl sm:rounded-[2rem] p-[2px] bg-brand-dark/[0.04] ring-1 ring-brand-dark/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          <div className="rounded-[calc(1rem-2px)] sm:rounded-[calc(2rem-2px)] bg-[#ffefcb] p-4 sm:p-6 md:p-10">
             {dishes.length > 0 ? (
               dishes.map((dish, i) => (
                 <DishRow key={dish.id} dish={dish} locale={locale} index={i} />
@@ -263,7 +258,7 @@ export default function VariantA({ categories, locale }: Props) {
   return (
     <div>
       {/* Сетка категорий: Editorial Split — 2 колонки */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-16 gap-y-10 sm:gap-y-14">
         {categoriesWithIcons.map((cat, idx) => (
           <button
             key={cat.id}
@@ -275,8 +270,8 @@ export default function VariantA({ categories, locale }: Props) {
             }}
           >
             {/* Double-bezel card */}
-            <div className="rounded-[2rem] p-1.5 bg-brand-dark/[0.03] ring-1 ring-brand-dark/[0.05] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-dark/[0.06] group-hover:ring-brand-dark/[0.1] shadow-[0_1px_3px_rgba(0,0,0,0.03)] group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-              <div className="rounded-[calc(2rem-0.375rem)] overflow-hidden bg-brand-cream/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)]">
+            <div className="rounded-2xl sm:rounded-[2rem] p-1 sm:p-1.5 bg-brand-dark/[0.03] ring-1 ring-brand-dark/[0.05] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-dark/[0.06] group-hover:ring-brand-dark/[0.1] shadow-[0_1px_3px_rgba(0,0,0,0.03)] group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+              <div className="rounded-[calc(1rem-0.25rem)] sm:rounded-[calc(2rem-0.375rem)] overflow-hidden bg-[#ffefcb] shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)]">
                 {/* Изображение категории */}
                 <div className="relative w-full aspect-[16/10] overflow-hidden bg-brand-dark/[0.03]">
                   {cat.normalizedIcon ? (
@@ -297,8 +292,8 @@ export default function VariantA({ categories, locale }: Props) {
                 </div>
 
                 {/* Название категории */}
-                <div className="px-6 py-5">
-                  <h3 className="font-heading text-2xl sm:text-3xl text-brand-dark group-hover:text-brand-red transition-colors duration-300">
+                <div className="px-4 sm:px-6 py-4 sm:py-5">
+                  <h3 className="font-heading text-xl sm:text-2xl md:text-3xl text-brand-dark group-hover:text-brand-red transition-colors duration-300">
                     {cat.title}
                   </h3>
                   {cat.description && (
@@ -306,19 +301,7 @@ export default function VariantA({ categories, locale }: Props) {
                       {cat.description}
                     </p>
                   )}
-                  <div className="mt-4 flex items-center gap-2 text-brand-red/60 group-hover:text-brand-red transition-colors duration-300">
-                    <span className="font-sans text-xs uppercase tracking-[0.2em] font-bold">
-                      {cat.dishes.length}{" "}
-                      {locale === "en"
-                        ? "dishes"
-                        : locale === "ky"
-                          ? "тамак"
-                          : "блюд"}
-                    </span>
-                    <span className="text-lg leading-none transition-transform duration-300 group-hover:translate-x-1">
-                      →
-                    </span>
-                  </div>
+                  <div className="mt-3 sm:mt-4" />
                 </div>
               </div>
             </div>
