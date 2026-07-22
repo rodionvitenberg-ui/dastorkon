@@ -1,389 +1,226 @@
 "use client";
 
-import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import OrnamentLines from "@/components/ui/OrnamentLines";
+import { HeroBezelLink, LightBezelLink } from "./StoryButtons";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import OrnamentLines from "@/components/ui/OrnamentLines";
-import { HeroBezelLink, LightBezelLink } from "./StoryButtons";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BENTO = [
-  {
-    key: "dastarkhan",
-    span: "md:col-span-7 md:row-span-2 md:aspect-auto min-h-[320px] md:min-h-[460px]",
-    image: "/about-cuisine.jpg",
-    dark: true,
-  },
-  {
-    key: "fire",
-    span: "md:col-span-5 min-h-[220px]",
-    image: "/banq.jpg",
-    dark: true,
-  },
-  { key: "karakol", span: "md:col-span-5 min-h-[220px]", dark: false },
-  {
-    key: "craft",
-    span: "md:col-span-6 min-h-[220px]",
-    image: "/about-interior.jpg",
-    dark: true,
-  },
-  { key: "table", span: "md:col-span-6 min-h-[220px]", dark: false },
-] as const;
+// Секции журнального разворота — каждая split: изображение + текст
+const SECTIONS = [
+  { key: "roots", image: "/about-cuisine.jpg", align: "left" as const },
+  { key: "kitchen", image: "/banq.jpg", align: "right" as const },
+  { key: "house", image: "/about-interior.jpg", align: "left" as const },
+  { key: "guest", image: "/background-hero.png", align: "right" as const },
+];
 
-const CHAPTERS = ["roots", "kitchen", "house", "guest"] as const;
-const PIN = ["recipe", "local", "ritual", "feast"] as const;
-const QUOTES = ["q1", "q2", "q3"] as const;
+function FadeInSection({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) return;
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 85%", end: "top 60%", toggleActions: "play none none reverse" },
+        }
+      );
+    },
+    { scope: ref }
+  );
+  return <div ref={ref}>{children}</div>;
+}
 
 export default function StoryContent() {
   const t = useTranslations("storyPage");
-  const pinRef = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState<(typeof CHAPTERS)[number] | null>("roots");
-
-  useGSAP(
-    () => {
-      const section = pinRef.current;
-      if (!section) return;
-      const items = gsap.utils.toArray<HTMLElement>(
-        section.querySelectorAll("[data-pin-item]")
-      );
-      const mm = gsap.matchMedia();
-      mm.add(
-        {
-          desktop: "(min-width: 768px)",
-          reduce: "(prefers-reduced-motion: reduce)",
-        },
-        (ctx) => {
-          const { desktop, reduce } = ctx.conditions as {
-            desktop: boolean;
-            reduce: boolean;
-          };
-          if (!desktop || reduce) {
-            gsap.set(items, { clearProps: "all" });
-            return;
-          }
-          items.forEach((item) => {
-            gsap.fromTo(
-              item,
-              { opacity: 0.6, y: 16 },
-              {
-                opacity: 1,
-                y: 0,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: item,
-                  start: "top 85%",
-                  end: "top 45%",
-                  scrub: true,
-                },
-              }
-            );
-          });
-        }
-      );
-      return () => mm.revert();
-    },
-    { scope: pinRef }
-  );
 
   return (
     <main className="w-full">
-      {/* ═══ HERO ═══ */}
-      <section className="relative min-h-[90vh] md:min-h-screen w-full bg-[#121212] overflow-hidden flex flex-col justify-end p-5">
+      {/* ═══ HERO — тёмная, кинематографичная ═══ */}
+      <section className="relative min-h-screen w-full bg-[#121212] overflow-hidden flex items-center">
         <div className="absolute inset-0">
           <Image
-            src="/about-interior.jpg"
+            src="/background-hero.png"
             alt=""
             fill
+            className="object-cover opacity-60 object-center"
             priority
-            sizes="100vw"
-            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-[#121212]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
         </div>
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto text-center pb-10 md:pb-16 pt-32 p-5">
-          <div className="flex items-center justify-center gap-3 mb-6 animate-fade-in">
-            <span className="h-[1px] w-8 bg-[#D4AF37]/60" />
-            <span className="font-sans text-[11px] tracking-[0.35em] uppercase text-[#D4AF37] font-bold">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-12 md:px-20 w-full">
+          <div className="max-w-2xl">
+            <span className="font-sans text-[11px] tracking-[0.35em] uppercase text-[#D4AF37] font-bold block mb-6">
               Dastorkon
             </span>
-            <span className="h-[1px] w-8 bg-[#D4AF37]/60" />
+            <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-[80px] uppercase leading-[1.05] tracking-[0.08em] text-[#fffdf9] mb-6">
+              {t("heroTitle")}
+            </h1>
+            <p className="font-sans font-light text-[#fffdf9]/70 text-base md:text-lg leading-[1.8] max-w-lg mb-10">
+              {t("heroLead")}
+            </p>
+            <div className="flex gap-4">
+              <HeroBezelLink href="/menu">{t("ctaMenu")}</HeroBezelLink>
+              <HeroBezelLink href="/book">{t("ctaBook")}</HeroBezelLink>
+            </div>
           </div>
+        </div>
 
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[68px] uppercase leading-[1.08] tracking-[0.08em] text-[#fffdf9] [text-shadow:0_4px_24px_rgba(0,0,0,0.8)] mb-6 max-w-4xl mx-auto animate-fade-in">
-            {t("heroTitle")}
-          </h1>
-          <p className="font-sans font-light text-[#fffdf9]/80 text-base md:text-lg leading-[1.8] max-w-xl mx-auto mb-10 animate-fade-in">
-            {t("heroLead")}
-          </p>
-
-          <div className="flex flex-row items-center gap-4 md:gap-6 w-full max-w-md mx-auto animate-fade-in">
-            <HeroBezelLink href="/menu" className="flex-1 min-w-0">
-              {t("ctaMenu")}
-            </HeroBezelLink>
-            <HeroBezelLink href="/book" className="flex-1 min-w-0">
-              {t("ctaBook")}
-            </HeroBezelLink>
-          </div>
+        {/* Декоративный угол */}
+        <div className="absolute bottom-0 right-0 w-48 h-48 md:w-72 md:h-72 pointer-events-none">
+          <Image src="/ornament-corner.png" alt="" fill className="object-contain opacity-20" />
         </div>
       </section>
 
-      {/* ═══ CREAM BODY ═══ */}
+      {/* ═══ PARCHMENT BODY ═══ */}
       <div className="relative bg-[#F5F2EB]">
-        <div className="hidden md:block">
-          <OrnamentLines type="parchment" />
-        </div>
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <Image
-            src="/parchment-bg.jpg"
-            alt=""
-            fill
-            unoptimized
-            sizes="100vw"
-            priority
-            quality={100}
-            className="object-cover mix-blend-multiply opacity-[0.35]"
-          />
+        <div className="hidden md:block"><OrnamentLines type="parchment" /></div>
+        <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none" aria-hidden>
+          <Image src="/parchment-bg.jpg" alt="" fill unoptimized sizes="100vw" priority quality={100} className="object-cover mix-blend-multiply opacity-[0.45]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(43,30,23,0.015)_100%)]" />
         </div>
 
         <div className="relative z-10">
-          {/* Manifesto */}
-          <section className="py-20 md:py-28 p-5">
-            <div className="max-w-4xl mx-auto border-y border-[#D4AF37]/30 py-10 md:py-14 text-center">
-              <p className="font-heading text-2xl sm:text-3xl md:text-4xl uppercase tracking-[0.06em] text-[#121212] leading-[1.4]">
-                <span className="font-light">{t("inlineBefore")} </span>
-                <span className="inline-flex items-center align-middle mx-2 gap-2">
-                  <span className="relative w-14 h-8 md:w-20 md:h-10 rounded-full overflow-hidden border border-[#D4AF37] shadow-sm shrink-0">
+          {/* ═══ Философия — крупная цитата на всю ширину ═══ */}
+          <FadeInSection>
+            <section className="py-24 md:py-32 px-6 sm:px-12 md:px-20 lg:px-28">
+              <div className="max-w-5xl mx-auto text-center">
+                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-6">
+                  Философия
+                </span>
+                <blockquote className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[0.04em] text-[#121212] leading-[1.2]">
+                  <span className="font-light">{t("inlineBefore")} </span>
+                  <span className="text-[#D4AF37] font-normal">{t("inlineHighlight")}</span>
+                  <span className="font-light"> {t("inlineAfter")}</span>
+                </blockquote>
+              </div>
+            </section>
+          </FadeInSection>
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
+
+          {/* ═══ Split-секции — журнальный разворот ═══ */}
+          {SECTIONS.map((sec) => (
+            <FadeInSection key={sec.key}>
+              <section className="w-full">
+                <div className="flex flex-col md:flex-row min-h-[60vh] md:min-h-[70vh]">
+                  {/* Изображение */}
+                  <div
+                    className={`relative w-full md:w-1/2 min-h-[40vh] md:min-h-[70vh] overflow-hidden bg-[#121212] ${
+                      sec.align === "right" ? "md:order-2" : ""
+                    }`}
+                  >
                     <Image
-                      src="/about-cuisine.jpg"
-                      alt=""
+                      src={sec.image}
+                      alt={t(`accordions.${sec.key}.title`)}
                       fill
-                      sizes="80px"
-                      className="object-cover"
+                      sizes="50vw"
+                      className="object-cover scale-105 transition-transform duration-700 group-hover:scale-110"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
+                  </div>
+
+                  {/* Текст */}
+                  <div
+                    className={`relative w-full md:w-1/2 flex items-center p-8 sm:p-12 md:p-16 lg:p-20 ${
+                      sec.align === "right" ? "md:order-1" : ""
+                    }`}
+                  >
+                    <div className="max-w-lg">
+                      <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-6">
+                        {t(`accordions.${sec.key}.title`)}
+                      </h2>
+                      <p className="font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8]">
+                        {t(`accordions.${sec.key}.text`)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </FadeInSection>
+          ))}
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
+
+          {/* ═══ Столпы традиций — 2×2 сетка с изображениями ═══ */}
+          <FadeInSection>
+            <section className="py-20 md:py-28 px-6 sm:px-12 md:px-20 lg:px-28">
+              <div className="max-w-[1440px] mx-auto">
+                <div className="text-center mb-16">
+                  <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-4">
+                    Традиции
                   </span>
-                  <span className="text-[#D4AF37] font-normal">dastarkhan</span>
-                </span>
-                <span className="font-light"> {t("inlineAfter")}</span>
-              </p>
-            </div>
-          </section>
+                  <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4">
+                    {t("pinTitle")}
+                  </h2>
+                  <p className="font-sans font-light text-[#121212]/70 text-base md:text-lg leading-[1.8] max-w-xl mx-auto">
+                    {t("pinLead")}
+                  </p>
+                </div>
 
-          {/* Bento */}
-          <section className="p-5 pb-20 md:pb-28">
-            <div className="max-w-[1440px] mx-auto">
-              <div className="max-w-2xl mb-12 md:mb-16">
-                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-3">
-                  Dastorkon
-                </span>
-                <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-5">
-                  {t("bentoTitle")}
-                </h2>
-                <p className="font-sans text-base md:text-lg leading-[1.8] text-[#121212]/75 font-light max-w-md">
-                  {t("bentoLead")}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                {BENTO.map((item) => {
-                  const dark = item.dark;
-                  return (
-                    <article
-                      key={item.key}
-                      className={`group relative overflow-hidden transition-all duration-300 hover:ring-1 hover:ring-[#D4AF37]/40 ${item.span} ${
-                        dark
-                          ? "bg-[#121212] text-[#fffdf9]"
-                          : "bg-[#ffefcb] text-[#121212] border border-[#121212]/15 shadow-sm"
-                      }`}
-                    >
-                      {"image" in item && item.image && (
-                        <>
-                          <div className="absolute inset-0">
-                            <Image
-                              src={item.image}
-                              alt=""
-                              fill
-                              sizes="(max-width:768px) 100vw, 55vw"
-                              className="object-cover transition-opacity duration-500 ease-out"
-                            />
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ease-out ${
-                                dark
-                                  ? "bg-gradient-to-t from-[#121212] via-[#121212]/40 to-transparent"
-                                  : "bg-gradient-to-t from-[#F5F2EB]/80 via-[#F5F2EB]/30 to-transparent"
-                              }`}
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-[#121212]/10 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" />
-                        </>
-                      )}
-
-                      <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-8">
-                        <h3
-                          className={`font-heading text-lg md:text-xl uppercase tracking-[0.12em] mb-2 ${
-                            dark ? "text-[#D4AF37]" : "text-[#121212]"
-                          }`}
-                        >
-                          {t(`bento.${item.key}.title`)}
-                        </h3>
-                        <p
-                          className={`font-sans font-light text-sm md:text-base leading-[1.7] max-w-md ${
-                            dark ? "text-white/80" : "text-[#121212]/75"
-                          }`}
-                        >
-                          {t(`bento.${item.key}.text`)}
-                        </p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-
-          {/* Accordions */}
-          <section className="p-5 pb-20 md:pb-28">
-            <div className="max-w-3xl mx-auto">
-              <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-3 text-center">
-                Dastorkon
-              </span>
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] text-center leading-tight mb-10 md:mb-12">
-                {t("accordionsTitle")}
-              </h2>
-
-              <div className="border-y border-[#121212]/20 divide-y divide-[#121212]/15">
-                {CHAPTERS.map((key) => {
-                  const isOpen = open === key;
-                  return (
-                    <div key={key} className="transition-colors duration-200 hover:bg-[#D4AF37]/5">
-                      <h3>
-                        <button
-                          type="button"
-                          aria-expanded={isOpen}
-                          aria-controls={`story-panel-${key}`}
-                          id={`story-btn-${key}`}
-                          onClick={() => setOpen(isOpen ? null : key)}
-                          className="w-full flex items-center justify-between gap-4 p-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
-                        >
-                          <span className="font-heading text-base md:text-lg uppercase tracking-[0.1em] text-[#121212]">
-                            {t(`accordions.${key}.title`)}
-                          </span>
-                          <span
-                            className={`shrink-0 w-8 h-8 rounded-full border border-[#121212]/30 flex items-center justify-center text-[#121212]/70 transition-transform duration-300 ${
-                              isOpen ? "rotate-45 border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/10" : ""
-                            }`}
-                            aria-hidden
-                          >
-                            +
-                          </span>
-                        </button>
-                      </h3>
-                      <div
-                        id={`story-panel-${key}`}
-                        role="region"
-                        aria-labelledby={`story-btn-${key}`}
-                        className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <p className="px-5 pb-5 font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8] max-w-2xl">
-                            {t(`accordions.${key}.text`)}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                  {(["recipe", "local", "ritual", "feast"] as const).map((key, idx) => {
+                    const images = ["/about-cuisine.jpg", "/banq.jpg", "/about-interior.jpg", "/background-hero.png"];
+                    return (
+                      <div key={key} className="group relative overflow-hidden bg-[#121212] aspect-[16/9] md:aspect-[2/1]">
+                        <Image
+                          src={images[idx]}
+                          alt={t(`pinItems.${key}.title`)}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+                          <h3 className="font-heading text-xl md:text-2xl uppercase tracking-[0.1em] text-[#fffdf9] mb-2">
+                            {t(`pinItems.${key}.title`)}
+                          </h3>
+                          <p className="font-sans font-light text-[#fffdf9]/70 text-sm md:text-base leading-[1.7] max-w-lg">
+                            {t(`pinItems.${key}.text`)}
                           </p>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </FadeInSection>
 
-          {/* Pin */}
-          <section ref={pinRef} className="p-5 pb-20 md:pb-28">
-            <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
-              <div className="md:col-span-5 md:sticky md:top-24">
-                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-3">
-                  Dastorkon
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
+
+          {/* ═══ Финальный CTA ═══ */}
+          <FadeInSection>
+            <section className="py-24 md:py-32 px-6 sm:px-12 md:px-20">
+              <div className="max-w-3xl mx-auto text-center">
+                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-4">
+                  Добро пожаловать
                 </span>
-                <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4">
-                  {t("pinTitle")}
+                <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4 max-w-xl mx-auto">
+                  {t("ctaTitle")}
                 </h2>
-                <p className="font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8] max-w-sm">
-                  {t("pinLead")}
+                <p className="font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8] max-w-md mx-auto mb-10">
+                  {t("ctaText")}
                 </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <LightBezelLink href="/book">{t("ctaPrimary")}</LightBezelLink>
+                  <LightBezelLink href="/menu">{t("ctaSecondary")}</LightBezelLink>
+                </div>
               </div>
-
-              <div className="md:col-span-7 flex flex-col gap-8">
-                {PIN.map((key) => (
-                  <article
-                    key={key}
-                    data-pin-item
-                    className="relative bg-[#F5F2EB] border border-[#121212]/15 p-5 md:p-6 shadow-sm transition-all duration-300 hover:border-[#D4AF37]/60"
-                  >
-                    <h3 className="font-heading text-base md:text-lg uppercase tracking-[0.1em] text-[#121212] mb-2">
-                      {t(`pinItems.${key}.title`)}
-                    </h3>
-                    <p className="font-sans font-light text-[#121212]/75 text-base leading-[1.75] max-w-lg">
-                      {t(`pinItems.${key}.text`)}
-                    </p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Quotes */}
-          <section className="p-5 py-20 md:py-28">
-            <div className="max-w-[1440px] mx-auto">
-              <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-3 text-center">
-                Dastorkon
-              </span>
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] text-center leading-tight mb-12">
-                {t("quotesTitle")}
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {QUOTES.map((key) => (
-                  <blockquote
-                    key={key}
-                    className="flex flex-col bg-[#F5F2EB] border border-[#121212]/15 p-5 transition-all duration-300 hover:border-[#D4AF37]/40 shadow-sm"
-                  >
-                    <div className="flex flex-col flex-1 justify-between">
-                      <p className="font-sans font-light italic text-[#121212]/85 text-base leading-relaxed mb-6">
-                        «{t(`quotes.${key}.text`)}»
-                      </p>
-                      <footer className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-semibold border-t border-[#121212]/10 pt-3">
-                        — {t(`quotes.${key}.author`)}
-                      </footer>
-                    </div>
-                  </blockquote>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Final CTA */}
-          <section className="p-5 pb-24 md:pb-32">
-            <div className="max-w-3xl mx-auto text-center border border-[#121212]/15 bg-[#ffefcb]/60 p-5 sm:p-10 md:p-14 shadow-sm">
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4 max-w-xl mx-auto">
-                {t("ctaTitle")}
-              </h2>
-              <p className="font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8] max-w-md mx-auto mb-8">
-                {t("ctaText")}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
-                <LightBezelLink href="/book">{t("ctaPrimary")}</LightBezelLink>
-                <LightBezelLink href="/menu">
-                  {t("ctaSecondary")}
-                </LightBezelLink>
-              </div>
-            </div>
-          </section>
+            </section>
+          </FadeInSection>
         </div>
       </div>
     </main>

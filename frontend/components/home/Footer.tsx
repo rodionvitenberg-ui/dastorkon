@@ -3,9 +3,13 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
+import { useAppShell } from "../ui/AppShellContext";
 
 export default function Footer() {
   const t = useTranslations("footer");
+  const { chromeHidden } = useAppShell();
+
+  if (chromeHidden) return null;
 
   return (
     <footer className="relative z-0 w-full bg-[#5a1212] text-white overflow-hidden">

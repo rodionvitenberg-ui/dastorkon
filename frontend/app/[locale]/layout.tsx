@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
 import "../globals.css";
 import { routing } from "../../i18n/routing";
-import { Locale } from "../../i18n-config";
 
 // Автоматический синхронизатор швов
 import OrnamentSyncer from "../../components/ui/OrnamentSyncer";
 import { AppShellProvider } from "../../components/ui/AppShellContext";
 
 // Глобальные компоненты
-import Hero from "../../components/home/Hero";
 import Header from "../../components/home/Header";
 import Footer from "../../components/home/Footer";
 import CartDrawerWrapper from "../../components/cart/CartDrawerWrapper";
@@ -40,6 +39,11 @@ type Props = {
 
 export default async function RootLayout({ children, params }: Props) {
   const resolvedParams = await params;
+
+  if (!hasLocale(routing.locales, resolvedParams.locale)) {
+    notFound();
+  }
+
   const messages = await getMessages();
 
   return (

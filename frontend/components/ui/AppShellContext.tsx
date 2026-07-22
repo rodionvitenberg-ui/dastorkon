@@ -12,6 +12,9 @@ type AppShellContextValue = {
   /** True if Hero is mounted on this page */
   hasHero: boolean;
   setHasHero: (value: boolean) => void;
+  /** Hide global Header/Footer (e.g. fullscreen 404) */
+  chromeHidden: boolean;
+  setChromeHidden: (value: boolean) => void;
 };
 
 const AppShellContext = createContext<AppShellContextValue>({
@@ -21,12 +24,15 @@ const AppShellContext = createContext<AppShellContextValue>({
   setHeroExpanded: () => {},
   hasHero: false,
   setHasHero: () => {},
+  chromeHidden: false,
+  setChromeHidden: () => {},
 });
 
 export function AppShellProvider({ children }: { children: ReactNode }) {
   const [headerCompact, setHeaderCompact] = useState(false);
   const [heroExpanded, setHeroExpanded] = useState(false);
   const [hasHero, setHasHero] = useState(false);
+  const [chromeHidden, setChromeHidden] = useState(false);
 
   return (
     <AppShellContext.Provider
@@ -37,6 +43,8 @@ export function AppShellProvider({ children }: { children: ReactNode }) {
         setHeroExpanded,
         hasHero,
         setHasHero,
+        chromeHidden,
+        setChromeHidden,
       }}
     >
       {children}

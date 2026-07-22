@@ -10,6 +10,8 @@ export default async function NotFoundPage() {
       descriptionText={t('description')}
       buttonText={t('buttonText')}
       buttonHref="/"
+      animate={false}
+      particleCount={4000}
     />
   );
 }

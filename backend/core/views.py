@@ -18,6 +18,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """API для категорий блюд со всеми активными блюдами"""
     queryset = Category.objects.prefetch_related('dishes').all()
     serializer_class = CategoryWithDishesSerializer
+    pagination_class = None
     
     @action(detail=True, methods=['get'])
     def dishes(self, request, pk=None):

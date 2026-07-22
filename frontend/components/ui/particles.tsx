@@ -25,6 +25,27 @@ function seededRandom(seed: number): () => number {
   };
 }
 
+/** Soft circular sprite generated in-memory so we don't depend on public assets. */
+function createDiscTexture(): THREE.Texture {
+  const size = 64;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    const half = size / 2;
+    const gradient = ctx.createRadialGradient(half, half, 0, half, half, half);
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+    gradient.addColorStop(0.4, "rgba(255,255,255,0.8)");
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
 export function Particles({
   color = "#ff3366",
   particleCount = 10000,
@@ -49,6 +70,8 @@ export function Particles({
     let camera: THREE.PerspectiveCamera;
     let scene: THREE.Scene;
     let material: THREE.PointsMaterial;
+    let geometry: THREE.BufferGeometry | undefined;
+    let sprite: THREE.Texture | undefined;
     let renderer: THREE.WebGLRenderer | undefined;
     let animationFrameId: number;
     let mouseX = 0;
@@ -67,7 +90,7 @@ export function Particles({
         scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x000000, 0.001);
 
-        const geometry = new THREE.BufferGeometry();
+        geometry = new THREE.BufferGeometry();
         const vertices: number[] = [];
         const rng = seededRandom(42); // fixed seed for deterministic positions
 
@@ -84,13 +107,15 @@ export function Particles({
           new THREE.Float32BufferAttribute(vertices, 3),
         );
 
-        const sprite = new THREE.TextureLoader().load("/assets/disc.png");
+        // In-memory disc — no dependency on /assets/disc.png
+        sprite = createDiscTexture();
         material = new THREE.PointsMaterial({
           size: particleSize,
           sizeAttenuation: true,
           map: sprite,
-          alphaTest: 0.5,
+          alphaTest: 0.1,
           transparent: true,
+          depthWrite: false,
         });
         material.color.setStyle(color);
 
@@ -101,8 +126,9 @@ export function Particles({
           antialias: true,
           alpha: true,
         });
-        webglRenderer.setPixelRatio(window.devicePixelRatio);
+        webglRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         webglRenderer.setSize(window.innerWidth, window.innerHeight);
+        webglRenderer.setClearColor(0x000000, 0);
         container.appendChild(webglRenderer.domElement);
 
         return webglRenderer;
@@ -137,7 +163,7 @@ export function Particles({
       if (animate) {
         const time = Date.now() * 0.00005;
         const h = ((360 * (1.0 + time)) % 360) / 360;
-        material.color.setHSL(h, 0.5, 0.5);
+        material.color.setHSL(h, 0.45, 0.45);
       }
 
       camera.position.x += (mouseX - camera.position.x) * 0.05;
@@ -166,6 +192,8 @@ export function Particles({
       }
 
       if (material) material.dispose();
+      if (geometry) geometry.dispose();
+      if (sprite) sprite.dispose();
     };
   }, [mounted, color, particleCount, particleSize, animate]);
 

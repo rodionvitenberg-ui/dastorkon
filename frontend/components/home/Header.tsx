@@ -16,7 +16,6 @@ const locales = [
 ] as const;
 
 const navLinks = [
-  { href: "/story", key: "story" },
   { href: "/menu", key: "menu" },
   { href: "/events", key: "events" },
   { href: "/contacts", key: "contacts" },
@@ -27,7 +26,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = useLocale();
-  const { headerCompact } = useAppShell();
+  const { headerCompact, chromeHidden } = useAppShell();
   const [menuOpen, setMenuOpen] = useState(false);
   const items = useCartStore((s) => s.items);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -37,6 +36,8 @@ export default function Header() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  if (chromeHidden) return null;
 
   function switchLocale(locale: string) {
     router.replace(pathname, { locale: locale as "ru" | "en" | "ky" });

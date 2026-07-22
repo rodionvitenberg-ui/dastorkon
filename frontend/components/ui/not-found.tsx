@@ -5,12 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Particles } from '@/components/ui/particles';
 import { Button } from '@/components/ui/button';
+import { useAppShell } from '@/components/ui/AppShellContext';
 
 interface NotFoundProps {
   particleCount?: number;
   particleSize?: number;
+  /** HSL color cycle — keep false to preserve white particles */
   animate?: boolean;
+  /** Optional illustration for light theme. Omit to use typography-only hero. */
   imageLight?: string;
+  /** Optional illustration for dark theme. Omit to use typography-only hero. */
   imageDark?: string;
   titleText?: string;
   descriptionText?: string;
@@ -21,11 +25,11 @@ interface NotFoundProps {
 }
 
 export default function NotFound({
-  particleCount = 12500,
-  particleSize = 5,
+  particleCount = 4000,
+  particleSize = 4,
   animate = false,
-  imageLight = '/images/404-lightc.png',
-  imageDark = '/images/404-darkc.png',
+  imageLight,
+  imageDark,
   titleText = 'Page Not Found',
   descriptionText = "Looks like you've wandered into the nomad steppe. This page doesn't exist.",
   buttonText = 'Back to Home',
@@ -35,24 +39,19 @@ export default function NotFound({
 }: NotFoundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const [isDark, setIsDark] = useState(false);
+  const { setChromeHidden } = useAppShell();
+  const hasImages = Boolean(imageLight || imageDark);
 
+  // Fullscreen 404: hide global Header/Footer for this page only
   useEffect(() => {
-    const observer = () => {
-      const html = document.documentElement;
-      setIsDark(html.classList.contains('dark'));
+    setChromeHidden(true);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      setChromeHidden(false);
+      document.body.style.overflow = prevOverflow;
     };
-
-    observer();
-
-    const mutationObserver = new MutationObserver(observer);
-    mutationObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => mutationObserver.disconnect();
-  }, []);
+  }, [setChromeHidden]);
 
   const handleMouseMove = (e: MouseEvent) => {
     const container = containerRef.current;
@@ -78,59 +77,70 @@ export default function NotFound({
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`relative h-96 md:h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black ${className}`}
+      onMouseMove={hasImages ? handleMouseMove : undefined}
+      onMouseLeave={hasImages ? handleMouseLeave : undefined}
+      className={`fixed inset-0 z-[60] h-dvh w-full flex items-center justify-center overflow-hidden bg-black ${className}`}
       style={{ perspective: '1000px' }}
     >
       <Particles
-        color={isDark ? '#ffffff' : '#000000'}
+        color="#ffffff"
         particleCount={particleCount}
         particleSize={particleSize}
         animate={animate}
-        className='absolute inset-0 z-0'
+        className="absolute inset-0 z-0"
       />
 
-      <div
-        ref={imageRef}
-        className='absolute inset-0 w-full h-full transition-transform duration-300 ease-out will-change-transform pointer-events-none z-10'
-      >
-        <Image
-          src={imageLight}
-          alt='404 Light'
-          fill
-          className='object-contain dark:hidden'
-          priority
-        />
-        <Image
-          src={imageDark}
-          alt='404 Dark'
-          fill
-          className='object-contain hidden dark:block'
-          priority
-        />
-      </div>
+      {hasImages && (
+        <div
+          ref={imageRef}
+          className="absolute inset-0 w-full h-full transition-transform duration-300 ease-out will-change-transform pointer-events-none z-10"
+        >
+          {imageLight && (
+            <Image
+              src={imageLight}
+              alt=""
+              fill
+              className="object-contain dark:hidden"
+              priority
+            />
+          )}
+          {imageDark && (
+            <Image
+              src={imageDark}
+              alt=""
+              fill
+              className="object-contain hidden dark:block"
+              priority
+            />
+          )}
+        </div>
+      )}
 
       <Particles
-        color={isDark ? '#ffffff' : '#000000'}
-        particleCount={particleCount}
+        color="#ffffff"
+        particleCount={Math.floor(particleCount / 2)}
         particleSize={particleSize}
         animate={animate}
-        className='absolute inset-0 z-20 pointer-events-none'
+        className="absolute inset-0 z-20 pointer-events-none"
       />
 
-      <div className='relative z-30 mt-16 md:mt-0 flex flex-col items-center gap-4 px-4 text-center'>
-        <h1 className='text-6xl md:text-8xl font-black text-foreground/20 select-none'>
+      <div className="relative z-30 flex flex-col items-center gap-4 px-4 text-center">
+        <h1 className="font-heading text-7xl md:text-9xl font-black text-white/20 select-none tracking-tight">
           404
         </h1>
-        <p className='text-lg md:text-xl font-semibold text-foreground/80'>
+        <p className="text-lg md:text-xl font-semibold text-white/90">
           {titleText}
         </p>
-        <p className='text-sm md:text-base text-foreground/50 max-w-md'>
+        <p className="text-sm md:text-base text-white/50 max-w-md">
           {descriptionText}
         </p>
-        <Link href={buttonHref} onClick={onButtonClick} className='mt-4'>
-          <Button variant='default'>{buttonText}</Button>
+        <Link href={buttonHref} onClick={onButtonClick} className="mt-4">
+          <Button
+            variant="outline"
+            className="border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white"
+          >
+            {buttonText}
+          </Button>
         </Link>
       </div>
     </div>

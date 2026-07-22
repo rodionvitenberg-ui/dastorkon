@@ -260,6 +260,7 @@
     "ctaMenu": "Open the menu",
     "ctaBook": "Reserve a table",
     "inlineBefore": "We set the",
+    "inlineHighlight": "dastorkon",
     "inlineAfter": "for everyone who arrives with an open heart.",
     "bentoTitle": "What we are woven from",
     "bentoLead": "Not decor, not a legend on the wall — the living rhythm of a house that calls its own.",
@@ -305,7 +306,7 @@
       }
     },
     "pinTitle": "What we protect",
-    "pinLead": "As you scroll, the right side carries what would make Dastorkon just another restaurant without them.",
+    "pinLead": "Four pillars Dastorkon stands on — without them it would be just another restaurant.",
     "pinItems": {
       "recipe": {
         "title": "Recipe as inheritance",
@@ -321,7 +322,7 @@
       },
       "feast": {
         "title": "Celebration without falsehood",
-        "text": "Banquet, catering, family table — different scale, one essence: a true dastarkhan."
+        "text": "Banquet, catering, family table — different scale, one essence: a true dastorkon."
       }
     },
     "stackTitle": "An evening in four breaths",
@@ -358,7 +359,7 @@
         "author": "The Zhumabekov family, Karakol"
       }
     },
-    "ctaTitle": "Your place at the dastarkhan is waiting",
+    "ctaTitle": "Your place at the dastorkon is waiting",
     "ctaText": "Come share the table — on a weekday, a celebration, after a mountain day. Karakol tastes better when you sit with us.",
     "ctaPrimary": "Reserve",
     "ctaSecondary": "View menu"
