@@ -1,9 +1,5 @@
 "use client";
 
-/**
- * Story page — parchment chapters.
- * Brand: Hero/Cuisine double-bezel buttons, home type scale, cream body.
- */
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -18,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 const BENTO = [
   {
     key: "dastarkhan",
-    span: "md:col-span-7 md:row-span-2 min-h-[320px] md:min-h-[460px]",
+    span: "md:col-span-7 md:row-span-2 md:aspect-auto min-h-[320px] md:min-h-[460px]",
     image: "/about-cuisine.jpg",
     dark: true,
   },
@@ -72,7 +68,7 @@ export default function StoryContent() {
           items.forEach((item) => {
             gsap.fromTo(
               item,
-              { opacity: 0.35, y: 28 },
+              { opacity: 0.6, y: 16 },
               {
                 opacity: 1,
                 y: 0,
@@ -94,7 +90,7 @@ export default function StoryContent() {
   );
 
   return (
-    <main className="overflow-x-hidden w-full max-w-full">
+    <main className="w-full">
       {/* ═══ HERO ═══ */}
       <section className="relative min-h-[90vh] md:min-h-screen w-full bg-[#121212] overflow-hidden flex flex-col justify-end p-5">
         <div className="absolute inset-0">
@@ -104,13 +100,13 @@ export default function StoryContent() {
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-40 scale-105 transition-transform duration-1000"
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#121212]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-[#121212]" />
         </div>
 
         <div className="relative z-10 w-full max-w-5xl mx-auto text-center pb-10 md:pb-16 pt-32 p-5">
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-6 animate-fade-in">
             <span className="h-[1px] w-8 bg-[#D4AF37]/60" />
             <span className="font-sans text-[11px] tracking-[0.35em] uppercase text-[#D4AF37] font-bold">
               Dastorkon
@@ -118,14 +114,14 @@ export default function StoryContent() {
             <span className="h-[1px] w-8 bg-[#D4AF37]/60" />
           </div>
 
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[68px] uppercase leading-[1.08] tracking-[0.08em] text-[#fffdf9] [text-shadow:0_4px_24px_rgba(0,0,0,0.8)] mb-6 max-w-4xl mx-auto">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[68px] uppercase leading-[1.08] tracking-[0.08em] text-[#fffdf9] [text-shadow:0_4px_24px_rgba(0,0,0,0.8)] mb-6 max-w-4xl mx-auto animate-fade-in">
             {t("heroTitle")}
           </h1>
-          <p className="font-sans font-light text-[#fffdf9]/80 text-base md:text-lg leading-[1.8] max-w-xl mx-auto mb-10">
+          <p className="font-sans font-light text-[#fffdf9]/80 text-base md:text-lg leading-[1.8] max-w-xl mx-auto mb-10 animate-fade-in">
             {t("heroLead")}
           </p>
 
-          <div className="flex flex-row items-center gap-4 md:gap-6 w-full max-w-md mx-auto">
+          <div className="flex flex-row items-center gap-4 md:gap-6 w-full max-w-md mx-auto animate-fade-in">
             <HeroBezelLink href="/menu" className="flex-1 min-w-0">
               {t("ctaMenu")}
             </HeroBezelLink>
@@ -192,39 +188,45 @@ export default function StoryContent() {
                 </p>
               </div>
 
-              {/* Расстояние между элементами Bento: gap-5 (20px) */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                 {BENTO.map((item) => {
                   const dark = item.dark;
                   return (
                     <article
                       key={item.key}
-                      className={`group relative overflow-hidden transition-all duration-300 hover:shadow-xl ${item.span} ${
+                      className={`group relative overflow-hidden transition-all duration-300 hover:ring-1 hover:ring-[#D4AF37]/40 ${item.span} ${
                         dark
                           ? "bg-[#121212] text-[#fffdf9]"
-                          : "bg-[#FDFBF7] text-[#121212] border border-[#121212]/15 shadow-sm"
+                          : "bg-[#ffefcb] text-[#121212] border border-[#121212]/15 shadow-sm"
                       }`}
                     >
                       {"image" in item && item.image && (
-                        <div className="absolute inset-0">
-                          <Image
-                            src={item.image}
-                            alt=""
-                            fill
-                            sizes="(max-width:768px) 100vw, 55vw"
-                            className="object-cover opacity-50 transition-transform duration-700 ease-out group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/40 to-transparent" />
-                        </div>
+                        <>
+                          <div className="absolute inset-0">
+                            <Image
+                              src={item.image}
+                              alt=""
+                              fill
+                              sizes="(max-width:768px) 100vw, 55vw"
+                              className="object-cover transition-opacity duration-500 ease-out"
+                            />
+                            <div
+                              className={`absolute inset-0 transition-opacity duration-500 ease-out ${
+                                dark
+                                  ? "bg-gradient-to-t from-[#121212] via-[#121212]/40 to-transparent"
+                                  : "bg-gradient-to-t from-[#F5F2EB]/80 via-[#F5F2EB]/30 to-transparent"
+                              }`}
+                            />
+                          </div>
+                          <div className="absolute inset-0 bg-[#121212]/10 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" />
+                        </>
                       )}
 
-                      {/* Отступ от контента до внутренних границ: p-5 (20px) / md:p-8 */}
                       <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-8">
                         <h3
-                          className={`font-heading uppercase tracking-[0.12em] mb-2 ${
+                          className={`font-heading text-lg md:text-xl uppercase tracking-[0.12em] mb-2 ${
                             dark ? "text-[#D4AF37]" : "text-[#121212]"
                           }`}
-                          style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.4rem)" }}
                         >
                           {t(`bento.${item.key}.title`)}
                         </h3>
@@ -257,7 +259,7 @@ export default function StoryContent() {
                 {CHAPTERS.map((key) => {
                   const isOpen = open === key;
                   return (
-                    <div key={key} className="transition-colors duration-200 hover:bg-[#121212]/[0.02]">
+                    <div key={key} className="transition-colors duration-200 hover:bg-[#D4AF37]/5">
                       <h3>
                         <button
                           type="button"
@@ -265,7 +267,6 @@ export default function StoryContent() {
                           aria-controls={`story-panel-${key}`}
                           id={`story-btn-${key}`}
                           onClick={() => setOpen(isOpen ? null : key)}
-                          /* Отступ внутри каждой строки аккордеона p-5 */
                           className="w-full flex items-center justify-between gap-4 p-5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
                         >
                           <span className="font-heading text-base md:text-lg uppercase tracking-[0.1em] text-[#121212]">
@@ -305,7 +306,7 @@ export default function StoryContent() {
           {/* Pin */}
           <section ref={pinRef} className="p-5 pb-20 md:pb-28">
             <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
-              <div className="md:col-span-5 md:sticky md:top-28">
+              <div className="md:col-span-5 md:sticky md:top-24">
                 <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-3">
                   Dastorkon
                 </span>
@@ -317,19 +318,17 @@ export default function StoryContent() {
                 </p>
               </div>
 
-              {/* Расстояние между карточками Pin: gap-5 (20px) */}
-              <div className="md:col-span-7 flex flex-col gap-5">
+              <div className="md:col-span-7 flex flex-col gap-8">
                 {PIN.map((key) => (
                   <article
                     key={key}
                     data-pin-item
-                    /* Внутренние отступы p-5 (20px) */
-                    className="relative bg-[#FDFBF7] border border-[#121212]/15 p-5 md:p-6 shadow-sm transition-all duration-300 hover:border-[#D4AF37]/60"
+                    className="relative bg-[#F5F2EB] border border-[#121212]/15 p-5 md:p-6 shadow-sm transition-all duration-300 hover:border-[#D4AF37]/60"
                   >
                     <h3 className="font-heading text-base md:text-lg uppercase tracking-[0.1em] text-[#121212] mb-2">
                       {t(`pinItems.${key}.title`)}
                     </h3>
-                    <p className="font-sans font-light text-[#121212]/75 text-[15px] leading-[1.75] max-w-lg">
+                    <p className="font-sans font-light text-[#121212]/75 text-base leading-[1.75] max-w-lg">
                       {t(`pinItems.${key}.text`)}
                     </p>
                   </article>
@@ -348,16 +347,14 @@ export default function StoryContent() {
                 {t("quotesTitle")}
               </h2>
 
-              {/* Расстояние между элементами Quotes: gap-5 (20px) */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {QUOTES.map((key) => (
                   <blockquote
                     key={key}
-                    /* Карточка цитаты с внутренним отступом p-5 (20px) */
-                    className="flex flex-col bg-[#FDFBF7] border border-[#121212]/15 p-5 transition-transform duration-300 hover:-translate-y-1 shadow-sm"
+                    className="flex flex-col bg-[#F5F2EB] border border-[#121212]/15 p-5 transition-all duration-300 hover:border-[#D4AF37]/40 shadow-sm"
                   >
                     <div className="flex flex-col flex-1 justify-between">
-                      <p className="font-sans font-light italic text-[#121212]/85 text-[15px] leading-relaxed mb-6">
+                      <p className="font-sans font-light italic text-[#121212]/85 text-base leading-relaxed mb-6">
                         «{t(`quotes.${key}.text`)}»
                       </p>
                       <footer className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-semibold border-t border-[#121212]/10 pt-3">
@@ -372,7 +369,7 @@ export default function StoryContent() {
 
           {/* Final CTA */}
           <section className="p-5 pb-24 md:pb-32">
-            <div className="max-w-3xl mx-auto text-center border border-[#121212]/15 bg-[#FDFBF7]/60 p-5 sm:p-10 md:p-14 shadow-sm">
+            <div className="max-w-3xl mx-auto text-center border border-[#121212]/15 bg-[#ffefcb]/60 p-5 sm:p-10 md:p-14 shadow-sm">
               <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4 max-w-xl mx-auto">
                 {t("ctaTitle")}
               </h2>
