@@ -16,6 +16,7 @@ const locales = [
 ] as const;
 
 const navLinks = [
+  { href: "/story", key: "story" },
   { href: "/menu", key: "menu" },
   { href: "/events", key: "events" },
   { href: "/contacts", key: "contacts" },

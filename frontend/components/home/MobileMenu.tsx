@@ -13,6 +13,7 @@ const locales = [
 ] as const;
 
 const navLinks = [
+  { href: "/story", key: "story" },
   { href: "/menu", key: "menu" },
   { href: "/events", key: "events" },
   { href: "/contacts", key: "contacts" },
@@ -47,21 +48,22 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
 
   return (
     <div className="fixed inset-0 z-[60] md:hidden">
-      {/* Fullscreen panel — dark editorial surface */}
-      <div className="absolute inset-0 bg-[#121212] flex flex-col">
-        {/* Background image */}
-        <Image
-          src="/background-hero.png"
-          alt=""
-          fill
-          className="object-cover opacity-30 pointer-events-none"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#121212]/70 via-[#121212]/50 to-[#121212]/90 pointer-events-none" />
+      {/* Fullscreen panel — same surface as footer */}
+      <div className="absolute inset-0 bg-[#5a1212] flex flex-col overflow-hidden">
+        {/* BACKGROUND PATTERN — same as Footer */}
+        <div className="absolute inset-0 -z-0 w-full h-full pointer-events-none">
+          <Image
+            src="/background-hero.png"
+            alt=""
+            fill
+            className="object-cover opacity-95 object-center"
+            priority
+          />
+        </div>
         {/* ─── Top bar: точная копия хедера ─── */}
         <div
           className={`
-            flex-shrink-0 w-full
+            relative z-10 flex-shrink-0 w-full
             transition-all duration-[1000ms]
             ${compact ? "bg-[#7e2424]/95 backdrop-blur-sm" : "bg-transparent"}
           `}
@@ -172,10 +174,10 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
         </div>
 
         {/* Divider */}
-        <div className="h-px w-full bg-[#374151]/40" />
+        <div className="relative z-10 h-px w-full bg-white/15" />
 
         {/* ─── Body: nav links, language, booking ─── */}
-        <div className="flex-1 flex flex-col px-8 py-12 overflow-y-auto">
+        <div className="relative z-10 flex-1 flex flex-col px-8 py-12 overflow-y-auto">
           {/* Nav links — large editorial */}
           <nav className="flex flex-col gap-8 mb-14">
             {navLinks.map((link) => {
@@ -203,7 +205,7 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
           </nav>
 
           {/* Divider */}
-          <div className="h-px w-full bg-[#374151]/30 mb-10" />
+          <div className="h-px w-full bg-white/15 mb-10" />
 
           {/* Language switcher */}
           <div className="flex items-center gap-3 mb-10">

@@ -6,7 +6,8 @@
     "booking": "Reserve",
     "contacts": "Contacts",
     "events": "Events",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "story": "Story"
   },
   "hero": {
     "subtitle1": "Spirit of the Nomads",
@@ -205,6 +206,41 @@
     "cateringDesc": "High-quality national cuisine wherever you wish. Professional off-site catering for events of any scale, preserving premium presentation and service.",
     "cateringBtn": "Learn more"
   },
+  "banquetsPage": {
+    "heroSubtitle": "EVENTS",
+    "heroTitle": "Banquets & Celebrations",
+    "sections": {
+      "banquets": {
+        "title": "Banquets",
+        "desc": "Grand feasts in ethno-style. We set a dastarkhan for any number of guests. Traditional dishes, live music, national flavor."
+      },
+      "sherine": {
+        "title": "Sherine",
+        "desc": "Intimate gatherings with tasting of oriental sweets. Perfect for getting to know the culture through taste."
+      },
+      "birthdays": {
+        "title": "Birthdays",
+        "desc": "Give yourself and your guests a celebration in a unique atmosphere. Complimentary dessert from the house for the birthday person."
+      },
+      "matchmaking": {
+        "title": "Matchmaking — Sөykө saluu",
+        "desc": "Traditional ceremony of family introduction. We create an authentic setting for an important chapter of your story."
+      },
+      "parentMeeting": {
+        "title": "Parent Meeting",
+        "desc": "A cozy dinner for two families. A neutral, warm atmosphere so everyone feels at home."
+      },
+      "kidsParty": {
+        "title": "Children's Parties — Tushoo toy",
+        "desc": "A baby's first step is a big celebration. Bright emotions, national traditions, and treats for children and adults."
+      },
+      "anyEvent": {
+        "title": "Any Event",
+        "desc": "Corporate events, anniversaries, creative evenings. We'll discuss the format and create a menu for your request."
+      }
+    },
+    "cta": "Book Now"
+  },
   "cookieConsent": {
     "title": "We use cookies",
     "description": "Dastorkon uses essential cookies for the proper functioning of the website, saving language preferences, and ensuring reservation functionality. We do not store clients' personal data and do not share it with third parties.",
@@ -217,5 +253,114 @@
     "title": "Page Not Found",
     "description": "Looks like you've wandered into the nomad steppe. This page doesn't exist.",
     "buttonText": "Back to Home"
+  },
+  "storyPage": {
+    "heroTitle": "Where the mountain meets the table",
+    "heroLead": "Dastorkon was born in Karakol — a town at the foot of the Tien Shan, where hospitality is not ceremony, but the air people breathe.",
+    "ctaMenu": "Open the menu",
+    "ctaBook": "Reserve a table",
+    "inlineBefore": "We set the",
+    "inlineAfter": "for everyone who arrives with an open heart.",
+    "bentoTitle": "What we are woven from",
+    "bentoLead": "Not decor, not a legend on the wall — the living rhythm of a house that calls its own.",
+    "bento": {
+      "dastarkhan": {
+        "title": "Dastarkhan",
+        "text": "The table as a ritual of respect. A seat at the cloth means you are a welcome guest, not a passerby."
+      },
+      "fire": {
+        "title": "Fire and patience",
+        "text": "Plov, slow meat, broth — dishes that refuse haste. We cook as the mountain taught: slowly, honestly."
+      },
+      "karakol": {
+        "title": "Karakol",
+        "text": "A town of travelers, fishermen, and family feasts. Our home is at 107 Przhevalsky, in the heart of that story."
+      },
+      "craft": {
+        "title": "Hands of makers",
+        "text": "From the tyundyuk above to the pattern on the plate — every detail recalls: nomadic beauty was never accidental."
+      },
+      "table": {
+        "title": "A shared table",
+        "text": "Family, friends, a banquet, or a quiet dinner for two — one rule: the table is never empty for the soul."
+      }
+    },
+    "accordionsTitle": "Chapters we keep",
+    "accordions": {
+      "roots": {
+        "title": "Roots",
+        "text": "Dastorkon is a word that holds a culture: a laid table, generosity, respect for the guest. We took the name not as branding, but as a promise."
+      },
+      "kitchen": {
+        "title": "Kitchen",
+        "text": "Recipes travel from memory, not trends. Beshbarmak, manti, plov — flavors that remember the steppe, the fire, and the long road home."
+      },
+      "house": {
+        "title": "House",
+        "text": "The interior is not an ethno theme. It is warm light, carved ornament, mountain quiet beyond the window, and voices that return again and again."
+      },
+      "guest": {
+        "title": "Guest",
+        "text": "In tradition, the guest is sacred. We do not merely serve — we welcome. By evening's end, we want you to carry a taste, not just a bill."
+      }
+    },
+    "pinTitle": "What we protect",
+    "pinLead": "As you scroll, the right side carries what would make Dastorkon just another restaurant without them.",
+    "pinItems": {
+      "recipe": {
+        "title": "Recipe as inheritance",
+        "text": "We do not simplify dishes for fashion. If tradition needs time — we give it time."
+      },
+      "local": {
+        "title": "Local produce",
+        "text": "Mountains, pastures, season — the plate should taste of the Issyk-Kul region, not a warehouse of shortcuts."
+      },
+      "ritual": {
+        "title": "The ritual of welcome",
+        "text": "From the first greeting to the last pour of tea — the evening builds like a conversation, not a ticket queue."
+      },
+      "feast": {
+        "title": "Celebration without falsehood",
+        "text": "Banquet, catering, family table — different scale, one essence: a true dastarkhan."
+      }
+    },
+    "stackTitle": "An evening in four breaths",
+    "stack": {
+      "arrive": {
+        "title": "You enter",
+        "text": "The scent of plov, soft light, ornament on the walls. The town stays outside — another rhythm begins."
+      },
+      "share": {
+        "title": "You share the table",
+        "text": "Dishes arrive to be shared. Conversation lengthens. Time stops being a schedule."
+      },
+      "taste": {
+        "title": "You taste a story",
+        "text": "Each flavor is a road: fire, spice, hands that remember how to feed their own."
+      },
+      "leave": {
+        "title": "You leave full",
+        "text": "Not only in body. A good dastarkhan leaves warmth — and the wish to return."
+      }
+    },
+    "quotesTitle": "Voices at our table",
+    "quotes": {
+      "q1": {
+        "text": "It felt less like a restaurant and more like a house that had been waiting for us. Plov like grandmother's — only more beautiful.",
+        "author": "Aigul, Bishkek"
+      },
+      "q2": {
+        "text": "We came after the trek to Ala-Kul. Dinner at Dastorkon was the perfect end of the route — warm, honest, mountain-true.",
+        "author": "Marco, Berlin"
+      },
+      "q3": {
+        "text": "We celebrated a family anniversary. Hall, service, kitchen — everything held the feast without empty show.",
+        "author": "The Zhumabekov family, Karakol"
+      }
+    },
+    "ctaTitle": "Your place at the dastarkhan is waiting",
+    "ctaText": "Come share the table — on a weekday, a celebration, after a mountain day. Karakol tastes better when you sit with us.",
+    "ctaPrimary": "Reserve",
+    "ctaSecondary": "View menu"
   }
 }
