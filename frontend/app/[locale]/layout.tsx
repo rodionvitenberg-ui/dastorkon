@@ -72,7 +72,7 @@ export default async function RootLayout({ children, params }: Props) {
           <OrnamentSyncer />
           
           <AppShellProvider>
-          <div className="w-full min-h-screen flex flex-col relative overflow-x-clip">
+          <div className="w-full min-h-screen flex flex-col relative">
             
             {/* Глобальная шапка */}
             <Header />

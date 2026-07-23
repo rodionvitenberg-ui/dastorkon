@@ -52,10 +52,15 @@ export default function Hero() {
     };
   }, []);
 
+  // Video elements capture wheel events in Chromium. Forward them to window.
+  const handleVideoWheel = (e: React.WheelEvent) => {
+    window.scrollBy(0, e.deltaY);
+  };
+
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[#121212] overflow-hidden no-overscroll">
-      {/* Background: poster first (LCP), then video */}
-      <div className="absolute inset-0">
+    <section className="relative min-h-[100dvh] w-full bg-[#121212]">
+      {/* Background: poster first (LCP), then video — pointer-events-none prevents video from hijacking scroll wheel */}
+      <div className="absolute inset-0 pointer-events-none">
         {/* Always-on poster — priority for LCP, covers both breakpoints */}
         <Image
           src="/hero-poster.webp"
@@ -77,6 +82,8 @@ export default function Hero() {
               preload="metadata"
               poster="/hero-poster.webp"
               className="absolute inset-0 h-full w-full object-cover"
+              style={{ pointerEvents: 'none' }}
+              onWheel={handleVideoWheel}
               onError={() => setMobileVideoError(true)}
               onLoadedData={() => setMobileVideoError(false)}
             >
@@ -105,6 +112,8 @@ export default function Hero() {
                 preload="metadata"
                 poster="/hero-poster.webp"
                 className="absolute inset-0 h-full w-full object-cover"
+                style={{ pointerEvents: 'none' }}
+                onWheel={handleVideoWheel}
                 onError={() => setDesktopLeftVideoError(true)}
                 onLoadedData={() => setDesktopLeftVideoError(false)}
               >
@@ -127,6 +136,8 @@ export default function Hero() {
                 playsInline
                 preload="none"
                 className="absolute inset-0 h-full w-full object-cover"
+                style={{ pointerEvents: 'none' }}
+                onWheel={handleVideoWheel}
                 onError={() => setDesktopRightVideoError(true)}
                 onLoadedData={() => setDesktopRightVideoError(false)}
               >
