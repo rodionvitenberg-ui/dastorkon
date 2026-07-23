@@ -62,9 +62,6 @@ export default function StoryContent() {
 
         <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-12 md:px-20 w-full">
           <div className="max-w-2xl">
-            <span className="font-sans text-[11px] tracking-[0.35em] uppercase text-[#D4AF37] font-bold block mb-6">
-              Dastorkon
-            </span>
             <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-[80px] uppercase leading-[1.05] tracking-[0.08em] text-[#fffdf9] mb-6">
               {t("heroTitle")}
             </h1>
@@ -93,23 +90,21 @@ export default function StoryContent() {
         </div>
 
         <div className="relative z-10">
+          {/* Пустое пространство на пергаменте */}
+          <div className="h-24 md:h-32 w-full" />
+
           {/* ═══ Философия — крупная цитата на всю ширину ═══ */}
-          <FadeInSection>
-            <section className="py-24 md:py-32 px-6 sm:px-12 md:px-20 lg:px-28">
+          <section className="pb-24 md:pb-32 px-6 sm:px-12 md:px-20 lg:px-28">
+            <FadeInSection>
               <div className="max-w-5xl mx-auto text-center">
-                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-6">
-                  Философия
-                </span>
                 <blockquote className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-[0.04em] text-[#121212] leading-[1.2]">
-                  <span className="font-light">{t("inlineBefore")} </span>
-                  <span className="text-[#D4AF37] font-normal">{t("inlineHighlight")}</span>
-                  <span className="font-light"> {t("inlineAfter")}</span>
+                  <span className="font-light">{t("inlineQuote")}</span>
                 </blockquote>
               </div>
-            </section>
-          </FadeInSection>
+            </FadeInSection>
+          </section>
 
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
+          <div className="h-24 md:h-32 w-full" />
 
           {/* ═══ Split-секции — журнальный разворот ═══ */}
           {SECTIONS.map((sec) => (
@@ -152,16 +147,11 @@ export default function StoryContent() {
             </FadeInSection>
           ))}
 
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
-
           {/* ═══ Столпы традиций — 2×2 сетка с изображениями ═══ */}
           <FadeInSection>
             <section className="py-20 md:py-28 px-6 sm:px-12 md:px-20 lg:px-28">
               <div className="max-w-[1440px] mx-auto">
                 <div className="text-center mb-16">
-                  <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-4">
-                    Традиции
-                  </span>
                   <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4">
                     {t("pinTitle")}
                   </h2>
@@ -187,7 +177,7 @@ export default function StoryContent() {
                           <h3 className="font-heading text-xl md:text-2xl uppercase tracking-[0.1em] text-[#fffdf9] mb-2">
                             {t(`pinItems.${key}.title`)}
                           </h3>
-                          <p className="font-sans font-light text-[#fffdf9]/70 text-sm md:text-base leading-[1.7] max-w-lg">
+                          <p className="font-sans font-light text-[#fffdf9] text-sm md:text-base leading-[1.7] max-w-lg">
                             {t(`pinItems.${key}.text`)}
                           </p>
                         </div>
@@ -199,24 +189,19 @@ export default function StoryContent() {
             </section>
           </FadeInSection>
 
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
-
           {/* ═══ Финальный CTA ═══ */}
           <FadeInSection>
-            <section className="py-24 md:py-32 px-6 sm:px-12 md:px-20">
+            <section className="py-32 md:py-40 px-6 sm:px-12 md:px-20">
               <div className="max-w-3xl mx-auto text-center">
-                <span className="font-sans text-[11px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block mb-4">
-                  Добро пожаловать
-                </span>
                 <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-[#121212] leading-tight mb-4 max-w-xl mx-auto">
                   {t("ctaTitle")}
                 </h2>
                 <p className="font-sans font-light text-[#121212]/75 text-base md:text-lg leading-[1.8] max-w-md mx-auto mb-10">
                   {t("ctaText")}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <LightBezelLink href="/book">{t("ctaPrimary")}</LightBezelLink>
-                  <LightBezelLink href="/menu">{t("ctaSecondary")}</LightBezelLink>
+                <div className="flex flex-col sm:flex-row gap-5 justify-center">
+                  <LightBezelLink href="/book" className="min-w-[200px] sm:min-w-[220px]">{t("ctaPrimary")}</LightBezelLink>
+                  <LightBezelLink href="/menu" className="min-w-[200px] sm:min-w-[220px]">{t("ctaSecondary")}</LightBezelLink>
                 </div>
               </div>
             </section>

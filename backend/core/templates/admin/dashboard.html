@@ -1,0 +1,241 @@
+{% extends "admin/index.html" %}
+{% load i18n static jazzmin %}
+
+{# No title / breadcrumbs above the dashboard buttons #}
+{% block content_title %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  /* Remove header block above content buttons (title + logo area) */
+  body.dashboard .app-content-header {
+    display: none !important;
+  }
+  /* Remove sidebar brand logo + text above nav buttons */
+  .sidebar-brand,
+  .brand-link,
+  .brand-image,
+  .brand-text {
+    display: none !important;
+  }
+</style>
+{% endblock %}
+
+{# Skip Jazzmin app-content-header entirely (no title, no crumbs, no logo above buttons) #}
+{% block page_content %}
+<div class="app-content">
+    <div class="container-fluid">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="icon fa fa-check"></i> {{ message|capfirst }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="icon fa fa-ban"></i> {{ message|capfirst }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.tags == 'warning' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="icon fa fa-exclamation-triangle"></i> {{ message|capfirst }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.tags == 'info' %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="icon fa fa-info"></i> {{ message|capfirst }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+            {% block content %}
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-value">{{ orders_today }}</div>
+                    <div class="stat-label">Заказов сегодня</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ orders_new }}</div>
+                    <div class="stat-label">Новых заказов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ orders_processing }}</div>
+                    <div class="stat-label">В обработке</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ dishes_active }}</div>
+                    <div class="stat-label">Активных блюд</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ orders_total }}</div>
+                    <div class="stat-label">Всего заказов</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Управление меню -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <span class="icon">🍽️</span>
+                        <h3>Управление меню</h3>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="dashboard-links">
+                            <a href="{% url 'admin:core_dish_changelist' %}">
+                                <span class="link-icon">🥘</span>
+                                Блюда <span style="margin-left:auto;opacity:0.6;">{{ dishes_count }}</span>
+                            </a>
+                            <a href="{% url 'admin:core_category_changelist' %}">
+                                <span class="link-icon">📂</span>
+                                Категории <span style="margin-left:auto;opacity:0.6;">{{ categories_count }}</span>
+                            </a>
+                            <a href="{% url 'admin:core_combo_changelist' %}">
+                                <span class="link-icon">📦</span>
+                                Сборки <span style="margin-left:auto;opacity:0.6;">{{ combos_count }}</span>
+                            </a>
+                            <a href="{% url 'admin:core_combocategory_changelist' %}">
+                                <span class="link-icon">🗂️</span>
+                                Категории сборок <span style="margin-left:auto;opacity:0.6;">{{ combo_categories_count }}</span>
+                            </a>
+                            <a href="{% url 'admin:core_tag_changelist' %}">
+                                <span class="link-icon">🏷️</span>
+                                Характеристики <span style="margin-left:auto;opacity:0.6;">{{ tags_count }}</span>
+                            </a>
+                        </div>
+                        <div style="margin-top:16px;">
+                            <div class="dashboard-quick-add">
+                                <a href="{% url 'admin:core_dish_add' %}">➕ Добавить блюдо</a>
+                                <a href="{% url 'admin:core_category_add' %}">➕ Добавить категорию</a>
+                                <a href="{% url 'admin:core_combo_add' %}">➕ Добавить сборку</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Управление заказами -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <span class="icon">📋</span>
+                        <h3>Управление заказами</h3>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="dashboard-links">
+                            <a href="{% url 'admin:orders_order_changelist' %}?status__exact=new">
+                                <span class="link-icon">🆕</span>
+                                Новые заказы <span style="margin-left:auto;opacity:0.6;">{{ orders_new }}</span>
+                            </a>
+                            <a href="{% url 'admin:orders_order_changelist' %}?status__exact=processing">
+                                <span class="link-icon">⚙️</span>
+                                В обработке <span style="margin-left:auto;opacity:0.6;">{{ orders_processing }}</span>
+                            </a>
+                            <a href="{% url 'admin:orders_order_changelist' %}?status__exact=completed">
+                                <span class="link-icon">✅</span>
+                                Завершённые <span style="margin-left:auto;opacity:0.6;">{{ orders_completed }}</span>
+                            </a>
+                            <a href="{% url 'admin:orders_order_changelist' %}?status__exact=cancelled">
+                                <span class="link-icon">❌</span>
+                                Отменённые <span style="margin-left:auto;opacity:0.6;">{{ orders_cancelled }}</span>
+                            </a>
+                            <a href="{% url 'admin:orders_order_changelist' %}">
+                                <span class="link-icon">📋</span>
+                                Все заказы <span style="margin-left:auto;opacity:0.6;">{{ orders_total }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Последние заказы -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <span class="icon">🕐</span>
+                        <h3>Последние заказы</h3>
+                    </div>
+                    <div class="dashboard-card-body" style="padding:0;">
+                        {% if recent_orders %}
+                        <table class="dashboard-orders-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Клиент</th>
+                                    <th>Сумма</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in recent_orders %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'admin:orders_order_change' item.order.id %}" style="font-weight:700;">
+                                            #{{ item.order.id }}
+                                        </a>
+                                    </td>
+                                    <td>{{ item.order.customer_name }}</td>
+                                    <td>{{ item.order.total_amount }} KGS</td>
+                                    <td>
+                                        <span class="status-badge" style="background:{{ item.color }};">
+                                            {{ item.label }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div style="padding:24px;text-align:center;color:#999;">
+                            Пока нет заказов
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Прямые ссылки на администрирование -->
+            <div class="dashboard-grid" style="margin-top:24px;">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <span class="icon">⚡</span>
+                        <h3>Быстрые ссылки</h3>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="dashboard-links">
+                            <a href="{% url 'admin:auth_user_changelist' %}">
+                                <span class="link-icon">👥</span>
+                                Пользователи
+                            </a>
+                            <a href="{% url 'admin:auth_group_changelist' %}">
+                                <span class="link-icon">🔐</span>
+                                Группы и права
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <span class="icon">🛠️</span>
+                        <h3>Управление сайтом</h3>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="dashboard-links">
+                            <a href="/" target="_blank">
+                                <span class="link-icon">🌐</span>
+                                Открыть сайт
+                            </a>
+                            <a href="{% url 'admin:orders_order_changelist' %}">
+                                <span class="link-icon">📦</span>
+                                Все заказы
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

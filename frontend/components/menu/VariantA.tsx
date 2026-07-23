@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import Image from "next/image";
 import type { Category, Dish } from "@/types/menu";
 import { useCartStore } from "@/store/useCartStore";
 import { useCartUIStore } from "@/store/useCartUIStore";
@@ -77,15 +76,6 @@ function DeliveryIcon() {
 
 type Props = { categories: Category[]; locale: string };
 
-const API = process.env.NEXT_PUBLIC_API_URL;
-
-function normalizeSrc(src: string | null): string | null {
-  if (!src) return null;
-  if (src.startsWith("http")) return src.replace("http://localhost", "http://127.0.0.1");
-  const apiUrl = API || "http://127.0.0.1:8000";
-  const base = apiUrl.replace(/\/api\/?$/, "");
-  return src.startsWith("/") ? `${base}${src}` : `${base}/${src}`;
-}
 
 /* ──── DishRow with icon buttons ──── */
 
@@ -192,15 +182,6 @@ function DishRow({
 export default function VariantA({ categories, locale }: Props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  const categoriesWithIcons = useMemo(
-    () =>
-      categories.map((c) => ({
-        ...c,
-        normalizedIcon: normalizeSrc(c.icon),
-      })),
-    [categories],
-  );
-
   const selectedCategory = useMemo(
     () => (selectedCategoryId ? categories.find((c) => c.id === selectedCategoryId) : null),
     [selectedCategoryId, categories],
@@ -217,7 +198,11 @@ export default function VariantA({ categories, locale }: Props) {
           onClick={() => setSelectedCategoryId(null)}
           className="font-sans text-sm text-brand-dark/60 hover:text-brand-dark uppercase tracking-[0.15em] mb-10 transition-colors duration-300 inline-flex items-center gap-2"
         >
-          <span className="inline-flex items-center justify-center leading-none text-xl sm:text-2xl relative" style={{ top: "-1px" }}>←</span>
+          <span className="flex items-center justify-center w-4 h-4 text-brand-dark/60 group-hover:text-brand-dark transition-colors duration-300">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 10.5L5.5 7 9 3.5" />
+            </svg>
+          </span>
           {locale === "en" ? "Back" : locale === "ky" ? "Артка" : "Назад"}
         </button>
 
@@ -254,60 +239,45 @@ export default function VariantA({ categories, locale }: Props) {
     );
   }
 
-  // ── Шаг 1: Категории ──
+  // ── Шаг 1: Категории (вертикальный список, как DishRow) ──
   return (
-    <div>
-      {/* Сетка категорий: 3 колонки */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 lg:gap-x-10 gap-y-10 sm:gap-y-14">
-        {categoriesWithIcons.map((cat, idx) => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedCategoryId(cat.id)}
-            className="group text-left w-full"
-            style={{
-              animationDelay: `${idx * 100}ms`,
-              animationFillMode: "both",
-            }}
-          >
-            {/* Double-bezel card */}
-            <div className="rounded-2xl sm:rounded-[2rem] p-1 sm:p-1.5 bg-brand-dark/[0.03] ring-1 ring-brand-dark/[0.05] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:bg-brand-dark/[0.06] group-hover:ring-brand-dark/[0.1] shadow-[0_1px_3px_rgba(0,0,0,0.03)] group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-              <div className="rounded-[calc(1rem-0.25rem)] sm:rounded-[calc(2rem-0.375rem)] overflow-hidden bg-[#ffefcb] shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)]">
-                {/* Изображение категории */}
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-brand-dark/[0.03]">
-                  {cat.normalizedIcon ? (
-                    <Image
-                      src={cat.normalizedIcon}
-                      alt={cat.title}
-                      fill
-                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-brand-dark/20 font-heading text-5xl">
-                      {cat.title.charAt(0)}
-                    </div>
-                  )}
-                  {/* Градиент снизу */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-dark/50 to-transparent pointer-events-none" />
-                </div>
+    <div className="flex flex-col">
+      {categories.map((cat, idx) => (
+        <button
+          key={cat.id}
+          onClick={() => setSelectedCategoryId(cat.id)}
+          className="group flex items-center justify-between py-5 px-3 sm:px-4 transition-all duration-500 border-b border-brand-dark/8 hover:bg-brand-dark/[0.03] rounded-lg text-left w-full"
+          style={{
+            animationDelay: `${idx * 60}ms`,
+            animationFillMode: "both",
+          }}
+        >
+          {/* Левая часть: название + описание */}
+          <div className="flex-1 min-w-0 pr-4">
+            <h3 className="font-heading text-base sm:text-lg text-brand-dark leading-tight transition-colors duration-300 group-hover:text-brand-red">
+              {cat.title}
+            </h3>
+            {cat.description && (
+              <p className="font-sans text-sm text-brand-dark/50 leading-relaxed mt-1 line-clamp-1">
+                {cat.description}
+              </p>
+            )}
+          </div>
 
-                {/* Название категории */}
-                <div className="px-4 sm:px-6 py-4 sm:py-5">
-                  <h3 className="font-heading text-xl sm:text-2xl md:text-3xl text-brand-dark group-hover:text-brand-red transition-colors duration-300">
-                    {cat.title}
-                  </h3>
-                  {cat.description && (
-                    <p className="font-sans text-sm text-brand-dark/50 mt-2 line-clamp-2">
-                      {cat.description}
-                    </p>
-                  )}
-                  <div className="mt-3 sm:mt-4" />
-                </div>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
+          {/* Правая часть: количество блюд + стрелка */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="font-sans text-xs text-brand-dark/40 whitespace-nowrap tabular-nums">
+              {cat.dishes.length}{" "}
+              {locale === "en" ? "items" : locale === "ky" ? "тамак" : "блюд"}
+            </span>
+            <span className="flex items-center justify-center w-4 h-4 text-brand-dark/30 group-hover:text-brand-red transition-colors duration-300">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 2l4 4-4 4" />
+              </svg>
+            </span>
+          </div>
+        </button>
+      ))}
     </div>
   );
 }

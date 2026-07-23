@@ -141,9 +141,9 @@ export default function VariantC({ categories, locale }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   const backLabel: Record<string, string> = {
-    ru: "← Назад",
-    en: "← Back",
-    ky: "← Артка",
+    ru: "Назад",
+    en: "Back",
+    ky: "Артка",
   };
 
   const categoriesWithIcons = useMemo(
@@ -161,9 +161,14 @@ export default function VariantC({ categories, locale }: Props) {
       <div>
         <button
           onClick={() => setSelectedCategory(null)}
-          className="font-sans text-xs text-brand-dark/30 hover:text-brand-dark uppercase tracking-[0.2em] mb-16 transition-colors duration-300 inline-block"
+          className="font-sans text-xs text-brand-dark/30 hover:text-brand-dark uppercase tracking-[0.2em] mb-16 transition-colors duration-300 inline-flex items-center gap-2"
         >
-          {backLabel[locale] || backLabel.ru}
+          <span className="flex items-center justify-center w-4 h-4 text-brand-dark/30 group-hover:text-brand-dark transition-colors duration-300 shrink-0">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 10.5L5.5 7 9 3.5" />
+            </svg>
+          </span>
+          <span>{backLabel[locale] || backLabel.ru}</span>
         </button>
 
         {/* Название категории — огромный заголовок */}
@@ -282,7 +287,11 @@ export default function VariantC({ categories, locale }: Props) {
                             {cat.dishes.length}{" "}
                             {locale === "en" ? "dishes" : locale === "ky" ? "тамак" : "блюд"}
                           </span>
-                          <span className="text-lg leading-none transition-transform duration-300 group-hover:translate-x-1">→</span>
+                          <span className="flex items-center justify-center w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M5 3.5l3.5 3.5L5 10.5" />
+                            </svg>
+                          </span>
                         </div>
                       </div>
                     </div>

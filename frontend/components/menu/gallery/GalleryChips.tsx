@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import type { Category, Dish, Tag } from "@/types/menu";
+import HorizontalScrollbar from "@/components/ui/HorizontalScrollbar";
 
 type Props = {
   categories: Category[];
@@ -26,6 +27,7 @@ export default function GalleryChips({
   const t = useTranslations("menuGallery");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const chipsContainerRef = useRef<HTMLDivElement>(null);
 
   // Собираем теги, доступные в выбранной категории (или во всех)
   const availableTags: Tag[] = useMemo(() => {
@@ -72,7 +74,7 @@ export default function GalleryChips({
         <div className="absolute inset-0 border border-brand-dark/10 pointer-events-none" />
         {/* Inner border */}
         <div className="absolute inset-[3px] border border-brand-dark/10 pointer-events-none" />
-        <div className="relative z-10 flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+        <div className="relative z-10 flex items-center gap-1.5">
           {/* Кнопка поиска (лупа) */}
           <button
             type="button"
@@ -80,26 +82,24 @@ export default function GalleryChips({
             className={`shrink-0 w-8 h-8 flex items-center justify-center text-brand-dark/60 hover:text-brand-dark transition-colors ${
               searchOpen ? "text-brand-dark" : ""
             }`}
-            aria-label="Search"
+            aria-label={searchOpen ? "Close search" : "Search"}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+            {searchOpen ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            )}
           </button>
 
-          {/* Поле поиска — появляется/исчезает с анимацией ширины */}
+          {/* Десктопный поиск: расширяется вправо */}
           <div
-            className={`overflow-hidden transition-all duration-300 ${
+            className={`hidden md:block overflow-hidden transition-all duration-300 ${
               searchOpen ? "w-48 opacity-100" : "w-0 opacity-0"
             }`}
           >
@@ -112,73 +112,104 @@ export default function GalleryChips({
             />
           </div>
 
-          {/* Кнопка «Всё меню» */}
-          <button
-            type="button"
-            onClick={() => {
-              onChangeCategory(null);
-              onChangeTag(null);
-            }}
-            className={`shrink-0 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition-all whitespace-nowrap border border-transparent ${
-              activeCategoryId === null
-                ? "bg-brand-dark text-brand-cream shadow-md"
-                : "text-brand-dark/60 hover:text-brand-dark hover:bg-brand-dark/5"
+          {/* Мобильный поиск: при открытии заменяет чипы */}
+          <div
+            className={`md:hidden overflow-hidden transition-all duration-300 ${
+              searchOpen ? "w-auto flex-1 opacity-100" : "w-0 opacity-0"
             }`}
           >
-            {t("allMenu")}
-          </button>
+            {searchOpen && (
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder={t("searchPlaceholder")}
+                className="w-full bg-transparent border-b border-brand-dark/20 pb-0.5 text-xs font-sans text-brand-dark placeholder:text-brand-dark/30 outline-none"
+                autoFocus
+              />
+            )}
+          </div>
 
-          {/* Разделитель */}
-          <span className="w-px h-4 bg-brand-dark/15 shrink-0" />
-
-          {/* Категории */}
-          {categories.map((cat) => {
-            const isActive = activeCategoryId === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  onChangeCategory(cat.id);
-                  onChangeTag(null);
-                }}
-                className={`shrink-0 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition-all whitespace-nowrap border border-transparent ${
-                  isActive
-                    ? "bg-brand-dark text-brand-cream shadow-md"
-                    : "text-brand-dark/60 hover:text-brand-dark hover:bg-brand-dark/5"
-                }`}
-              >
-                {cat.title}
-              </button>
-            );
-          })}
-
-          {/* Разделитель для тегов (только если есть теги) */}
-          {availableTags.length > 0 && (
+          {/* Чипы: на мобилке скрываются при открытом поиске; на десктопе flex-1 + overflow-x-auto */}
+          <div
+            ref={chipsContainerRef}
+            className={`overflow-x-auto scrollbar-hide ${
+              searchOpen ? "hidden md:flex" : "flex"
+            } flex-1 min-w-0 items-center gap-1.5`}
+          >
             <span className="w-px h-4 bg-brand-dark/15 shrink-0" />
-          )}
 
-          {/* Теги */}
-          {availableTags.map((tag) => {
-            const isActive = activeTagId === tag.id;
-            return (
-              <button
-                key={tag.id}
-                type="button"
-                onClick={() => onChangeTag(isActive ? null : tag.id)}
-                className="shrink-0 px-3 py-1.5 text-[10px] font-semibold tracking-wide uppercase transition-all whitespace-nowrap border"
-                style={{
-                  backgroundColor: isActive ? tag.color_bg : "transparent",
-                  color: isActive ? tag.color_text : tag.color_bg,
-                  borderColor: tag.color_bg,
-                  opacity: isActive ? 1 : 0.7,
-                }}
-              >
-                {tag.title}
-              </button>
-            );
-          })}
+            {/* Кнопка «Всё меню» */}
+            <button
+              type="button"
+              onClick={() => {
+                onChangeCategory(null);
+                onChangeTag(null);
+              }}
+              className={`shrink-0 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition-all whitespace-nowrap border border-transparent ${
+                activeCategoryId === null
+                  ? "bg-brand-dark text-brand-cream shadow-md"
+                  : "text-brand-dark/60 hover:text-brand-dark hover:bg-brand-dark/5"
+              }`}
+            >
+              {t("allMenu")}
+            </button>
+
+            {/* Разделитель */}
+            <span className="w-px h-4 bg-brand-dark/15 shrink-0" />
+
+            {/* Категории */}
+            {categories.map((cat) => {
+              const isActive = activeCategoryId === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    onChangeCategory(cat.id);
+                    onChangeTag(null);
+                  }}
+                  className={`shrink-0 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase transition-all whitespace-nowrap border border-transparent ${
+                    isActive
+                      ? "bg-brand-dark text-brand-cream shadow-md"
+                      : "text-brand-dark/60 hover:text-brand-dark hover:bg-brand-dark/5"
+                  }`}
+                >
+                  {cat.title}
+                </button>
+              );
+            })}
+
+            {/* Разделитель для тегов */}
+            {availableTags.length > 0 && (
+              <span className="w-px h-4 bg-brand-dark/15 shrink-0" />
+            )}
+
+            {/* Теги */}
+            {availableTags.map((tag) => {
+              const isActive = activeTagId === tag.id;
+              return (
+                <button
+                  key={tag.id}
+                  type="button"
+                  onClick={() => onChangeTag(isActive ? null : tag.id)}
+                  className="shrink-0 px-3 py-1.5 text-[10px] font-semibold tracking-wide uppercase transition-all whitespace-nowrap border"
+                  style={{
+                    backgroundColor: isActive ? tag.color_bg : "transparent",
+                    color: isActive ? tag.color_text : tag.color_bg,
+                    borderColor: tag.color_bg,
+                    opacity: isActive ? 1 : 0.7,
+                  }}
+                >
+                  {tag.title}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Кастомный скроллбар (только на десктопе) */}
+        <HorizontalScrollbar containerRef={chipsContainerRef} />
       </div>
     </div>
   );

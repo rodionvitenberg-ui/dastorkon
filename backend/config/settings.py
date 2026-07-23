@@ -23,6 +23,7 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 # =========================
 
 INSTALLED_APPS = [
+    "jazzmin",
     "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -33,6 +34,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "corsheaders",
+    "adminsortable2",
 
     "core",
     "orders",
@@ -131,7 +133,11 @@ TIME_ZONE = "UTC"
 
 STATIC_URL = "/static/"
 
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -141,6 +147,79 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # =========================
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
+# =========================
+# Jazzmin (кастомная админка)
+# =========================
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Dastorkon",
+    "site_header": "Dastorkon",
+    # Non-empty so Jazzmin does not fall back to Django "Администрирование …"
+    "site_brand": "\u200b",
+    "site_logo": "admin/img/logo.png",
+    "site_logo_classes": "img-responsive d-none",
+    "site_icon": None,
+    "welcome_sign": "Добро пожаловать в админ-панель Dastorkon",
+    "copyright": "Dastorkon Etno-Cafe",
+    "search_model": ["core.Dish", "core.Category", "orders.Order"],
+    "user_avatar": None,
+    "topmenu_links": [
+        {"name": "Главная", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+    ],
+    "usermenu_links": [],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "orders",
+        "core",
+    ],
+    "custom_links": {},
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "orders.Order": "fas fa-shopping-cart",
+        "orders.OrderItem": "fas fa-box",
+        "core.Dish": "fas fa-utensils",
+        "core.Category": "fas fa-list",
+        "core.Tag": "fas fa-tags",
+        "core.Combo": "fas fa-layer-group",
+        "core.ComboCategory": "fas fa-folder-open",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": False,
+    "custom_css": "admin/css/dastorkon-admin.css",
+    "custom_js": None,
+    "use_google_fonts_cdn": False,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+        "auth.group": "vertical_tabs",
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar": "navbar-dark navbar-no-bg",
+    "theme": "flatly",
+    "sidebar": "sidebar-dark-danger",
+    "sidebar_nav_child_hide_on_collapse": True,
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-outline-warning",
+        "danger": "btn-outline-danger",
+        "success": "btn-outline-success",
+    },
+    "actions_sticky_top": False,
+}
 
 # =========================
 # DRF

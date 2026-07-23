@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getCategories } from "@/lib/api";
 import OrnamentLines from "@/components/ui/OrnamentLines";
 import MenuClient from "@/components/menu/MenuClient";
+import MenuSwitcher from "@/components/menu/MenuSwitcher";
 
 export default async function MenuPage(props: {
   params: Promise<{ locale: string }>;
@@ -50,21 +51,7 @@ export default async function MenuPage(props: {
 
       <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-12 md:px-16 flex-1 flex flex-col">
         {/* Заголовок страницы */}
-        <div className="flex flex-col items-center justify-center mb-6">
-          <div className="relative h-16 sm:h-20 w-48 sm:w-64 mb-3">
-            <Image
-              src="/menu.png"
-              alt="Menu"
-              fill
-              className="object-contain object-center"
-              priority
-            />
-          </div>
-
-          <span className="font-sans text-sm sm:text-base tracking-[0.2em] uppercase text-brand-dark mb-6">
-            Dastorkon
-          </span>
-        </div>
+        <MenuSwitcher />
 
         {/* Клиентский контент с переключателем вариантов */}
         <MenuClient categories={categories} locale={locale} variant={variant} />

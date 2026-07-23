@@ -35,7 +35,7 @@ export default function Hero() {
               loop
               muted
               playsInline
-              preload="auto"
+              preload="metadata"
               className="absolute inset-0 h-full w-full object-cover"
               onError={() => setMobileVideoError(true)}
               onLoadedData={() => setMobileVideoError(false)}
@@ -86,12 +86,12 @@ export default function Hero() {
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="none"
                 className="absolute inset-0 h-full w-full object-cover"
                 onError={() => setDesktopRightVideoError(true)}
                 onLoadedData={() => setDesktopRightVideoError(false)}
               >
-                <source src="/hero-video1.mp4" type="video/mp4" />
+                <source src="/hero-video2.mp4" type="video/mp4" />
               </video>
               {desktopRightVideoError && (
                 <Image

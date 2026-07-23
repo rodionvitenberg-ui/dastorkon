@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import type { Dish } from "@/types/menu";
 import { useCartStore } from "@/store/useCartStore";
 import { useCartUIStore } from "@/store/useCartUIStore";
+import DishPlaceholder from "@/components/ui/DishPlaceholder";
 
 type Props = {
   dish: Dish;
@@ -74,7 +75,8 @@ export default function GalleryLightbox({ dish, locale }: Props) {
     };
   }, []);
 
-  const mainImage = images[currentImageIndex] || "/images/placeholder-dish.jpg";
+  const hasImages = images.length > 0;
+  const mainImage = hasImages ? images[currentImageIndex] : null;
 
   return (
     <div
@@ -112,14 +114,18 @@ export default function GalleryLightbox({ dish, locale }: Props) {
 
         {/* Главное изображение */}
         <div className="relative w-full aspect-[4/3] bg-brand-dark/5">
-          <Image
-            src={mainImage}
-            alt={dish.title}
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 800px"
-            className="object-contain"
-          />
+          {mainImage ? (
+            <Image
+              src={mainImage}
+              alt={dish.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 800px"
+              className="object-contain"
+            />
+          ) : (
+            <DishPlaceholder />
+          )}
 
           {/* Навигация: стрелки влево/вправо */}
           {images.length > 1 && (

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Dish } from "@/types/menu";
 import { Badge } from "@/components/ui/badge";
+import DishPlaceholder from "@/components/ui/DishPlaceholder";
 
 type Props = { dish: Dish; placeholder?: string; locale?: string };
 
@@ -33,10 +34,9 @@ function getFirstImage(dish: Dish): string | null {
 
 export default function DishCard({
   dish,
-  placeholder = "/images/placeholder-dish.jpg",
   locale = "ru"
 }: Props) {
-  const src = getFirstImage(dish) ?? placeholder;
+  const src = getFirstImage(dish);
   const alt = dish.title ?? "Dish";
 
   const currency = locale === "en" ? "SOM" : "СОМ";
@@ -70,14 +70,18 @@ export default function DishCard({
           </div>
         )}
 
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          loading="lazy"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-        />
+        {src ? (
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <DishPlaceholder />
+        )}
       </div>
 
       <div className="flex justify-between items-baseline mb-2 gap-4">

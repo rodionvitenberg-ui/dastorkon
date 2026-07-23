@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useCallback } from "react";
 import type { Dish } from "@/types/menu";
+import DishPlaceholder from "@/components/ui/DishPlaceholder";
 
 type Props = {
   dish: Dish;
@@ -63,7 +64,7 @@ export default function GalleryCard({
   dish,
   locale = "ru",
 }: Props) {
-  const src = getFirstImage(dish) ?? "/images/placeholder-dish.jpg";
+  const src = getFirstImage(dish);
   const alt = dish.title ?? "Dish";
   const aspectClass = useMemo(() => getAspectRatio(dish.id), [dish.id]);
   const currency = locale === "en" ? "SOM" : "СОМ";
@@ -80,14 +81,18 @@ export default function GalleryCard({
     >
       {/* Фото */}
       <div className={`relative w-full ${aspectClass} overflow-hidden shadow-sm`}>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          loading="lazy"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-        />
+        {src ? (
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            loading="lazy"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <DishPlaceholder />
+        )}
 
         {/* Градиентная плашка снизу */}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-dark/80 via-brand-dark/40 to-transparent px-4 pt-12 pb-4">

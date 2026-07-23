@@ -57,13 +57,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип */}
-          <div className="flex justify-center">
-             <Image src="/logo.png" alt="Dastorkon Logo" width={140} height={140} className="object-contain" />
-          </div>
-
-          {/* ПРАВАЯ КОЛОНКА: B-Corp + policy links */}
-          <div className="flex flex-col items-center md:items-end gap-3">
+          {/* ПРАВАЯ КОЛОНКА: B-Corp + policy links — на мобилке перед логотипом */}
+          <div className="flex flex-col items-center md:items-end gap-3 order-2 md:order-3">
             <div className="flex items-center gap-4">
               <Link
                 href="/privacy"
@@ -79,6 +74,23 @@ export default function Footer() {
                 {t("cookiePolicy")}
               </Link>
             </div>
+          </div>
+
+          {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип + Powered by — после ссылок на мобилке */}
+          <div className="flex flex-col items-center gap-8 order-3 md:order-2">
+            <Image src="/logo.png" alt="Dastorkon Logo" width={140} height={140} className="object-contain" />
+            <p className="font-sans text-[11px] tracking-[0.12em] uppercase text-white/50">
+              Powered by{" "}
+              <a
+                href="https://busisart.space"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-brand-gold transition-colors"
+              >
+                Busisart.space
+              </a>{" "}
+              &copy; 2026
+            </p>
           </div>
 
         </div>
