@@ -4,8 +4,10 @@ import type { NextConfig } from "next";
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizeCss: true,
+  },
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "http",
@@ -43,6 +45,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/:path*.jpg",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*.woff2",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],

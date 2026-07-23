@@ -48,6 +48,10 @@ export default async function RootLayout({ children, params }: Props) {
 
   return (
     <html lang={resolvedParams.locale} className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+      </head>
       <body
         className={`
           ${sansFont.variable}

@@ -78,7 +78,7 @@ export default function Footer() {
 
           {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Логотип + Powered by — после ссылок на мобилке */}
           <div className="flex flex-col items-center gap-8 order-3 md:order-2">
-            <Image src="/logo.png" alt="Dastorkon Logo" width={140} height={140} className="object-contain" />
+            <Image src="/logo.png" alt="Dastorkon Logo" width={140} height={140} className="object-contain" priority />
             <p className="font-sans text-[11px] tracking-[0.12em] uppercase text-white/50">
               Powered by{" "}
               <a
