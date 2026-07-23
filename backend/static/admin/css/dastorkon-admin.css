@@ -3,41 +3,63 @@
    Based on DESIGN.md brand tokens
    ============================================= */
 
-/* --- CSS Custom Properties --- */
 :root {
   --dastorkon-red: #721C1C;
   --dastorkon-red-dark: #4A1010;
   --dastorkon-cream: #F5F2EB;
-  --dastorkon-gray: #e8e8e8;
   --dastorkon-dark: #2B1E17;
   --dastorkon-gold: #D4AF37;
   --dastorkon-gold-hover: #c9a96e;
   --dastorkon-white-warm: #fffdf9;
 }
 
-/* =============================================
-   Global admin overrides
-   ============================================= */
+/* ─────── Layout ─────── */
 
-body,
-.app-wrapper,
-.app-main,
-.app-content,
-.app-content-header,
 .content-wrapper,
-.main-footer,
-.app-footer {
-  background-color: var(--dastorkon-gray) !important;
-  background: var(--dastorkon-gray) !important;
+.main-footer {
+  background-color: var(--dastorkon-cream) !important;
 }
 
 .content {
-  background: var(--dastorkon-gray);
+  background: var(--dastorkon-cream);
 }
 
-.box {
-  border-top-color: var(--dastorkon-red) !important;
+/* ─────── Sidebar brand / logo ─────── */
+
+/* Hide Jazzmin's brand-text + the extra header brand area */
+.brand-text,
+.sidebar-brand,
+.navbar-brand {
+  display: none !important;
 }
+
+/* Logo in sidebar — 90% size, transparent bg */
+.brand-link {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 10px 8px 6px !important;
+  background: transparent !important;
+  border-bottom: none !important;
+}
+
+.brand-image {
+  max-height: 47px !important;  /* 52 × 0.9 */
+  width: auto !important;
+  opacity: 1 !important;
+  float: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* ─────── Hide dashboard content-header (logo + "Панель управления") ─────── */
+
+body.dashboard .content-header {
+  display: none !important;
+}
+
+/* ─────── Boxes / cards ─────── */
+
+.box { border-top-color: var(--dastorkon-red) !important; }
 
 .box.box-solid.box-primary {
   border-color: var(--dastorkon-red) !important;
@@ -47,6 +69,8 @@ body,
   background: var(--dastorkon-red) !important;
   color: var(--dastorkon-white-warm) !important;
 }
+
+/* ─────── Buttons ─────── */
 
 .btn-primary {
   background-color: var(--dastorkon-red) !important;
@@ -70,13 +94,12 @@ body,
   border-color: var(--dastorkon-gold-hover) !important;
 }
 
-a {
-  color: var(--dastorkon-red) !important;
-}
+/* ─────── Links ─────── */
 
-a:hover {
-  color: var(--dastorkon-gold-hover) !important;
-}
+a { color: var(--dastorkon-red) !important; }
+a:hover { color: var(--dastorkon-gold-hover) !important; }
+
+/* ─────── Tables ─────── */
 
 .table > thead > tr > th {
   border-bottom-color: var(--dastorkon-red) !important;
@@ -87,32 +110,36 @@ a:hover {
   background-color: rgba(114, 28, 28, 0.03) !important;
 }
 
+/* ─────── Pagination ─────── */
+
 .pagination > .active > a {
   background-color: var(--dastorkon-red) !important;
   border-color: var(--dastorkon-red) !important;
 }
 
-.pagination > li > a:hover {
-  color: var(--dastorkon-gold) !important;
-}
+.pagination > li > a:hover { color: var(--dastorkon-gold) !important; }
+
+/* ─────── Forms ─────── */
 
 .form-control:focus {
   border-color: var(--dastorkon-red) !important;
   box-shadow: none !important;
 }
 
-.info-box-icon {
-  background: var(--dastorkon-red) !important;
-}
+/* ─────── Info / small boxes ─────── */
 
-.small-box .icon {
-  color: rgba(114, 28, 28, 0.15) !important;
-}
+.info-box-icon { background: var(--dastorkon-red) !important; }
+
+.small-box .icon { color: rgba(114, 28, 28, 0.15) !important; }
+
+/* ─────── Nav tabs ─────── */
 
 .nav-tabs > li.active > a {
   border-top-color: var(--dastorkon-red) !important;
   color: var(--dastorkon-red) !important;
 }
+
+/* ─────── Select2 ─────── */
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
   background-color: var(--dastorkon-red) !important;
@@ -124,39 +151,33 @@ a:hover {
   color: var(--dastorkon-dark) !important;
 }
 
-/* Status badges */
+/* ─────── Status badges ─────── */
+
 .status-new        { background-color: #3b82f6 !important; color: white !important; padding: 4px 8px !important; border-radius: 4px !important; font-weight: 600 !important; font-size: 12px !important; }
 .status-processing { background-color: #f59e0b !important; color: white !important; padding: 4px 8px !important; border-radius: 4px !important; font-weight: 600 !important; font-size: 12px !important; }
 .status-completed  { background-color: #10b981 !important; color: white !important; padding: 4px 8px !important; border-radius: 4px !important; font-weight: 600 !important; font-size: 12px !important; }
 .status-cancelled  { background-color: #ef4444 !important; color: white !important; padding: 4px 8px !important; border-radius: 4px !important; font-weight: 600 !important; font-size: 12px !important; }
 
+/* ─────── Image previews ─────── */
+
 .admin-image-preview {
-  width: 60px; height: 60px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid rgba(0,0,0,0.1);
+  width: 60px; height: 60px; object-fit: cover;
+  border-radius: 4px; border: 1px solid rgba(0,0,0,0.1);
 }
 
 .admin-icon-preview {
   width: 32px; height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 
-.admin-icon-preview svg {
-  width: 100%; height: 100%;
-}
+.admin-icon-preview svg { width: 100%; height: 100%; }
 
-/* =============================================
-   Sidebar — Navigation text & icons → white
-   ============================================= */
+/* ─────── Sidebar nav text & icons → white ─────── */
 
 .sidebar .nav-sidebar .nav-link,
 .sidebar .nav-sidebar .nav-link p,
 .sidebar .nav-sidebar .nav-link i,
 .sidebar .nav-sidebar .nav-link .nav-icon,
-.sidebar .nav-sidebar > .nav-item > .nav-link,
 .main-sidebar .nav-link,
 .main-sidebar .nav-icon,
 .main-sidebar .nav-treeview .nav-link {
@@ -164,80 +185,48 @@ a:hover {
 }
 
 .sidebar .nav-sidebar .nav-link:hover,
-.sidebar .nav-sidebar .nav-link:hover p,
 .sidebar .nav-sidebar .nav-link:hover i,
 .sidebar .nav-sidebar .nav-link:hover .nav-icon {
   color: #ffffff !important;
 }
 
 .sidebar .nav-sidebar .nav-link.active,
-.sidebar .nav-sidebar .nav-link.active p,
 .sidebar .nav-sidebar .nav-link.active i,
 .sidebar .nav-sidebar .nav-link.active .nav-icon {
   color: #ffffff !important;
 }
 
-/* Sidebar category headers */
-.sidebar .nav-header {
-  color: rgba(255, 255, 255, 0.5) !important;
-}
+.sidebar .nav-header { color: rgba(255, 255, 255, 0.5) !important; }
 
-/* =============================================
-   Sidebar — Brand (logo + text hidden)
-   ============================================= */
-
-.sidebar-brand {
-  display: none !important;
-}
-
-.brand-link,
-.brand-image,
-.brand-text {
-  display: none !important;
-}
-
-/* Hide content header above dashboard buttons (title / crumbs / logo) */
-body.dashboard .app-content-header {
-  display: none !important;
-}
-
-/* =============================================
+/* ─────────────────────────────────────────────
    Dashboard — Welcome
-   ============================================= */
+   ───────────────────────────────────────────── */
 
-.dashboard-welcome {
-  margin-bottom: 32px;
-}
+.dashboard-welcome { margin-bottom: 32px; }
 
 .dashboard-welcome h2 {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--dastorkon-dark);
-  margin: 0 0 6px;
+  font-size: 26px; font-weight: 800;
+  color: var(--dastorkon-dark); margin: 0 0 6px;
 }
 
 .dashboard-welcome p {
-  font-size: 15px;
-  color: var(--dastorkon-dark);
-  opacity: 0.65;
-  margin: 0;
+  font-size: 15px; color: var(--dastorkon-dark);
+  opacity: 0.65; margin: 0;
 }
 
-/* =============================================
-   Dashboard — Statistics row
-   ============================================= */
+/* ─────────────────────────────────────────────
+   Dashboard — Stats row
+   ───────────────────────────────────────────── */
 
 .stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 16px; margin-bottom: 32px;
 }
 
 .stat-item {
   background: var(--dastorkon-white-warm);
-  border-radius: 4px;
-  padding: 24px 16px 20px;
+  border-radius: 4px; padding: 24px 16px 20px;
   text-align: center;
   border: 1.5px solid rgba(114, 28, 28, 0.12);
   position: relative;
@@ -246,10 +235,8 @@ body.dashboard .app-content-header {
 
 .stat-item::before {
   content: '';
-  position: absolute;
-  top: 0; left: 12px; right: 12px;
-  height: 3px;
-  background: var(--dastorkon-gold);
+  position: absolute; top: 0; left: 12px; right: 12px;
+  height: 3px; background: var(--dastorkon-gold);
   border-radius: 0 0 2px 2px;
 }
 
@@ -259,110 +246,71 @@ body.dashboard .app-content-header {
 }
 
 .stat-value {
-  font-size: 36px;
-  font-weight: 900;
-  color: var(--dastorkon-red);
+  font-size: 36px; font-weight: 900; color: var(--dastorkon-red);
   line-height: 1.1;
-  font-family: inherit;
 }
 
 .stat-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dastorkon-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 8px;
-  opacity: 0.75;
+  font-size: 12px; font-weight: 700; color: var(--dastorkon-dark);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-top: 8px; opacity: 0.75;
 }
 
-/* =============================================
-   Dashboard — Navigation grids
-   ============================================= */
+/* ─────────────────────────────────────────────
+   Dashboard — Cards
+   ───────────────────────────────────────────── */
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 24px; margin-bottom: 24px;
 }
 
 .dashboard-card {
   background: var(--dastorkon-white-warm);
-  border-radius: 4px;
-  overflow: hidden;
+  border-radius: 4px; overflow: hidden;
   border: 1.5px solid rgba(114, 28, 28, 0.10);
 }
 
 .dashboard-card-header {
   padding: 20px 24px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex; align-items: center; gap: 12px;
 }
 
 .dashboard-card-header .icon {
-  font-size: 24px;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--dastorkon-red);
-  color: var(--dastorkon-white-warm);
-  border-radius: 4px;
-  flex-shrink: 0;
+  font-size: 24px; width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--dastorkon-red); color: var(--dastorkon-white-warm);
+  border-radius: 4px; flex-shrink: 0;
 }
 
 .dashboard-card-header h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
+  margin: 0; font-size: 18px; font-weight: 800;
   color: var(--dastorkon-dark);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: uppercase; letter-spacing: 0.06em;
 }
 
-.dashboard-card-body {
-  padding: 20px 24px 24px;
-}
+.dashboard-card-body { padding: 20px 24px 24px; }
 
-/* =============================================
-   Dashboard — Big action buttons (link cards)
-   ============================================= */
+/* ─────────────────────────────────────────────
+   Dashboard — Action buttons
+   ───────────────────────────────────────────── */
 
-.dashboard-links {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.dashboard-links { display: flex; flex-direction: column; gap: 10px; }
 
 .dashboard-links a {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border-radius: 4px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 4px;
   background: var(--dastorkon-cream);
   color: var(--dastorkon-dark) !important;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-
-  /* Dastorkon-style double border for the premium feel */
+  font-size: 15px; font-weight: 700;
+  text-decoration: none; text-transform: uppercase; letter-spacing: 0.04em;
   outline: 2px solid rgba(114, 28, 28, 0.12);
   outline-offset: -1px;
   border: 1.5px solid rgba(114, 28, 28, 0.25);
-
-  transition:
-    background 200ms ease,
-    color 200ms ease,
-    outline-color 200ms ease,
-    border-color 200ms ease,
-    transform 200ms ease,
-    box-shadow 200ms ease;
+  transition: background 200ms ease, color 200ms ease,
+              outline-color 200ms ease, border-color 200ms ease,
+              transform 200ms ease, box-shadow 200ms ease;
 }
 
 .dashboard-links a:hover {
@@ -375,46 +323,32 @@ body.dashboard .app-content-header {
 }
 
 .dashboard-links a .link-icon {
-  font-size: 20px;
-  width: 32px;
-  text-align: center;
-  flex-shrink: 0;
+  font-size: 20px; width: 32px; text-align: center; flex-shrink: 0;
 }
 
 .dashboard-links a .link-badge {
-  margin-left: auto;
-  opacity: 0.55;
-  font-weight: 600;
-  font-size: 14px;
-  min-width: 32px;
-  text-align: center;
+  margin-left: auto; opacity: 0.55;
+  font-weight: 600; font-size: 14px;
+  min-width: 32px; text-align: center;
 }
 
-/* =============================================
-   Dashboard — Quick-add buttons
-   ============================================= */
+/* ─────────────────────────────────────────────
+   Dashboard — Quick-add
+   ───────────────────────────────────────────── */
 
 .dashboard-quick-add {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-  padding-top: 18px;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: 20px; padding-top: 18px;
   border-top: 1px solid rgba(114, 28, 28, 0.08);
 }
 
 .dashboard-quick-add a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  border-radius: 4px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 4px;
   background: var(--dastorkon-cream);
   color: var(--dastorkon-dark) !important;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 13px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
   text-decoration: none;
   border: 1.5px solid var(--dastorkon-gold);
   outline: 2px solid rgba(212, 175, 55, 0.2);
@@ -431,63 +365,35 @@ body.dashboard .app-content-header {
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
 }
 
-/* =============================================
-   Dashboard — Recent orders table
-   ============================================= */
+/* ─────────────────────────────────────────────
+   Dashboard — Orders table
+   ───────────────────────────────────────────── */
 
-.dashboard-orders-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
+.dashboard-orders-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
 .dashboard-orders-table th {
-  text-align: left;
-  padding: 12px 14px;
+  text-align: left; padding: 12px 14px;
   border-bottom: 2px solid var(--dastorkon-red);
-  color: var(--dastorkon-dark);
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  color: var(--dastorkon-dark); font-weight: 700;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
   background: rgba(114, 28, 28, 0.03);
 }
 
-.dashboard-orders-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-}
+.dashboard-orders-table td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.04); }
 
-.dashboard-orders-table tr:hover td {
-  background: rgba(114, 28, 28, 0.04);
-}
+.dashboard-orders-table tr:hover td { background: rgba(114, 28, 28, 0.04); }
 
-.dashboard-orders-table a {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--dastorkon-red) !important;
-}
-
-.dashboard-orders-table a:hover {
-  color: var(--dastorkon-gold-hover) !important;
-}
+.dashboard-orders-table a { font-weight: 700; font-size: 14px; color: var(--dastorkon-red) !important; }
+.dashboard-orders-table a:hover { color: var(--dastorkon-gold-hover) !important; }
 
 .dashboard-orders-table .status-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: white;
+  display: inline-block; padding: 4px 10px; border-radius: 4px;
+  font-weight: 700; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.05em; color: white;
 }
 
 .dashboard-orders-empty {
-  padding: 36px 24px;
-  text-align: center;
-  color: var(--dastorkon-dark);
-  opacity: 0.45;
-  font-size: 14px;
-  font-style: italic;
+  padding: 36px 24px; text-align: center;
+  color: var(--dastorkon-dark); opacity: 0.45;
+  font-size: 14px; font-style: italic;
 }
