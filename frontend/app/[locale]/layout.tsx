@@ -49,8 +49,14 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={resolvedParams.locale} className="scroll-smooth">
       <head>
-        <link rel="preconnect" href="https://maps.googleapis.com" />
-        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+        {/* Preload heading font (critical for hero H1) without blocking Maps */}
+        <link
+          rel="preload"
+          href="/fonts/Skiff-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`

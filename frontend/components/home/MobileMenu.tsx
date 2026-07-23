@@ -112,10 +112,11 @@ export default function MobileMenu({ open, onClose, compact }: MobileMenuProps) 
                   `}
                 >
                   <Image
-                    src="/logo-2.png"
+                    src="/logo-2.webp"
                     alt="Dastorkon"
                     width={80}
                     height={80}
+                    sizes="80px"
                     className="object-contain h-full w-auto"
                     priority
                   />

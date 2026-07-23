@@ -81,7 +81,14 @@ function HoverCard({ cardKey, data }: { cardKey: string; data: CardData }) {
       {/* ═══ МОБИЛЬНЫЙ LAYOUT (только постер) ═══ */}
       <div className="grid grid-cols-1 grid-rows-[1fr_auto] md:hidden w-full h-full">
         <div className="relative w-full overflow-hidden bg-[#121212]" style={{ aspectRatio: "2/1" }}>
-          <Image src={data.poster} alt={card.title} fill sizes="100vw" className="object-cover" />
+          <Image
+            src={data.poster}
+            alt={card.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            quality={70}
+            className="object-cover"
+          />
           <div className="absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-[#ffefcb]/90 to-transparent pointer-events-none" />
         </div>
 
@@ -102,7 +109,14 @@ function HoverCard({ cardKey, data }: { cardKey: string; data: CardData }) {
       <div className="hidden md:block absolute inset-0">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden bg-[#121212]">
           {/* Постер */}
-          <Image src={data.poster} alt={card.title} fill sizes="33vw" className="object-cover" />
+          <Image
+            src={data.poster}
+            alt={card.title}
+            fill
+            sizes="33vw"
+            quality={70}
+            className="object-cover"
+          />
           {/* Видео — только при hover, начинается грузиться по событию */}
           {hovered && (
             <video
@@ -153,6 +167,8 @@ function PhilosophyVariant1() {
               src={src}
               alt="Philosophy"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={70}
               className={`object-cover transition-opacity duration-700 ${i === idx ? "opacity-100" : "opacity-0"}`}
               priority={i === 0}
             />

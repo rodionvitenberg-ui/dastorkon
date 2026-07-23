@@ -145,7 +145,8 @@ function VideoBentoCell({
               src={poster}
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, 60vw"
+              sizes="(max-width: 768px) 100vw, 40vw"
+              quality={70}
               className="object-cover"
             />
             {/* Видео — поверх постера при hover */}

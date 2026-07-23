@@ -1,34 +1,73 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
 
+/**
+ * Hero: poster paints LCP immediately; video mounts after first paint / idle
+ * so the ~MB autoplay file never blocks first content.
+ */
 export default function Hero() {
   const t = useTranslations("hero");
 
-  // Определяем, десктоп или мобильное устройство
+  // false on SSR / first paint — mobile path is the Lighthouse default and safer default
   const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)");
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    setIsDesktop(mql.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
-
-  // Отслеживаем ошибки загрузки видео
+  const [videoReady, setVideoReady] = useState(false);
   const [mobileVideoError, setMobileVideoError] = useState(false);
   const [desktopLeftVideoError, setDesktopLeftVideoError] = useState(false);
   const [desktopRightVideoError, setDesktopRightVideoError] = useState(false);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    const mql = window.matchMedia("(min-width: 768px)");
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", onChange);
+
+    // Defer both layout detection and video mount past first paint (poster = LCP).
+    const start = () => {
+      if (!mounted.current) return;
+      setIsDesktop(mql.matches);
+      setVideoReady(true);
+    };
+
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      timeoutId = setTimeout(start, 200);
+    }
+
+    return () => {
+      mounted.current = false;
+      mql.removeEventListener("change", onChange);
+      if (idleId !== undefined && typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
-    <section className="relative h-screen w-full bg-[#121212] overflow-hidden">
-      {/* Видео на весь экран — без скролл-анимации */}
+    <section className="relative min-h-[100dvh] w-full bg-[#121212] overflow-hidden no-overscroll">
+      {/* Background: poster first (LCP), then video */}
       <div className="absolute inset-0">
-        {/* Мобильное видео — одно на всю ширину */}
-        {!isDesktop && (
+        {/* Always-on poster — priority for LCP, covers both breakpoints */}
+        <Image
+          src="/hero-poster.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
+        {/* Mobile video — single full-bleed */}
+        {!isDesktop && videoReady && (
           <>
             <video
               autoPlay
@@ -36,6 +75,7 @@ export default function Hero() {
               muted
               playsInline
               preload="metadata"
+              poster="/hero-poster.webp"
               className="absolute inset-0 h-full w-full object-cover"
               onError={() => setMobileVideoError(true)}
               onLoadedData={() => setMobileVideoError(false)}
@@ -44,18 +84,17 @@ export default function Hero() {
             </video>
             {mobileVideoError && (
               <Image
-                src="/background-hero.png"
+                src="/hero-poster.webp"
                 alt="Hero background"
                 fill
                 className="absolute inset-0 h-full w-full object-cover"
-                priority
               />
             )}
           </>
         )}
 
-        {/* Десктопное видео — два вертикальных рядом на весь экран */}
-        {isDesktop && (
+        {/* Desktop — two vertical clips side by side */}
+        {isDesktop && videoReady && (
           <div className="absolute inset-0 flex">
             <div className="relative w-1/2 h-full overflow-hidden">
               <video
@@ -63,7 +102,8 @@ export default function Hero() {
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
+                poster="/hero-poster.webp"
                 className="absolute inset-0 h-full w-full object-cover"
                 onError={() => setDesktopLeftVideoError(true)}
                 onLoadedData={() => setDesktopLeftVideoError(false)}
@@ -72,11 +112,10 @@ export default function Hero() {
               </video>
               {desktopLeftVideoError && (
                 <Image
-                  src="/background-hero.png"
+                  src="/hero-poster.webp"
                   alt="Hero background"
                   fill
                   className="absolute inset-0 h-full w-full object-cover"
-                  priority
                 />
               )}
             </div>
@@ -95,11 +134,10 @@ export default function Hero() {
               </video>
               {desktopRightVideoError && (
                 <Image
-                  src="/background-hero.png"
+                  src="/hero-poster.webp"
                   alt="Hero background"
                   fill
                   className="absolute inset-0 h-full w-full object-cover"
-                  priority
                 />
               )}
             </div>
@@ -110,14 +148,14 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
       </div>
 
-      {/* Headline — над кнопками */}
+      {/* Headline */}
       <div className="absolute z-10 inset-x-0 text-center px-4" style={{ bottom: "160px" }}>
         <h1 className="font-heading text-4xl uppercase leading-[1.1] tracking-[0.1em] text-[#fffdf9] md:text-6xl md:tracking-[0.15em] lg:text-[72px] [text-shadow:0_2px_16px_rgba(0,0,0,0.7)]">
           {t("headline")}
         </h1>
       </div>
 
-      {/* Кнопки */}
+      {/* CTAs */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-row items-center gap-3 md:bottom-12 md:gap-6 w-full max-w-md px-4">
         <Link
           href="/menu"

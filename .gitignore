@@ -5,3 +5,7 @@ frontend/out/
 frontend/build/
 .env*
 .DS_Store
+
+# Local uncompressed media backups
+frontend/public/.originals/
+frontend/public/logo-opt.png

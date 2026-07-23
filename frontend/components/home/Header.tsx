@@ -67,6 +67,7 @@ export default function Header() {
               : "bg-transparent"
           }
         `}
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="max-w-[1800px] mx-auto px-6 sm:px-12 md:px-20 lg:px-28 xl:px-36">
           <div
@@ -121,10 +122,11 @@ export default function Header() {
                 `}
               >
                 <Image
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Dastorkon"
                   width={300}
                   height={120}
+                  sizes="(max-width: 768px) 200px, 320px"
                   className="object-contain object-left md:object-center w-full h-full"
                   priority
                 />
@@ -139,10 +141,11 @@ export default function Header() {
                 `}
               >
                 <Image
-                  src="/logo-2.png"
+                  src="/logo-2.webp"
                   alt="Dastorkon"
                   width={80}
                   height={80}
+                  sizes="80px"
                   className="object-contain h-full w-auto"
                   priority
                 />

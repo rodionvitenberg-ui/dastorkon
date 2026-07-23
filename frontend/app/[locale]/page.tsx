@@ -21,6 +21,8 @@ export default function Home() {
             src="/parchment-bg.jpg"
             alt=""
             fill
+            sizes="100vw"
+            quality={65}
             className="object-cover mix-blend-multiply opacity-[0.45]"
           />
         </div>
