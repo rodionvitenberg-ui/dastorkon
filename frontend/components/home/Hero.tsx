@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/routing";
@@ -19,6 +19,31 @@ export default function Hero() {
   const [desktopLeftVideoError, setDesktopLeftVideoError] = useState(false);
   const [desktopRightVideoError, setDesktopRightVideoError] = useState(false);
   const mounted = useRef(true);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+  const desktopLeftRef = useRef<HTMLVideoElement>(null);
+  const desktopRightRef = useRef<HTMLVideoElement>(null);
+
+  // Force-play a video element — mobile browsers often suppress autoPlay on deferred mount
+  const tryPlay = useCallback((el: HTMLVideoElement | null) => {
+    if (!el) return;
+    el.play().catch(() => {
+      // Autoplay blocked — retry on first user interaction
+      const handler = () => { el.play(); document.removeEventListener("pointerdown", handler); };
+      document.addEventListener("pointerdown", handler, { once: true });
+    });
+  }, []);
+
+  // Trigger play when videos mount
+  useEffect(() => {
+    if (videoReady) {
+      if (!isDesktop) {
+        tryPlay(mobileVideoRef.current);
+      } else {
+        tryPlay(desktopLeftRef.current);
+        tryPlay(desktopRightRef.current);
+      }
+    }
+  }, [videoReady, isDesktop, tryPlay]);
 
   useEffect(() => {
     mounted.current = true;
@@ -75,11 +100,12 @@ export default function Hero() {
         {!isDesktop && videoReady && (
           <>
             <video
+              ref={mobileVideoRef}
               autoPlay
               loop
               muted
               playsInline
-              preload="metadata"
+              preload="auto"
               poster="/hero-poster.webp"
               className="absolute inset-0 h-full w-full object-cover"
               style={{ pointerEvents: 'none' }}
@@ -105,11 +131,12 @@ export default function Hero() {
           <div className="absolute inset-0 flex">
             <div className="relative w-1/2 h-full overflow-hidden">
               <video
+                ref={desktopLeftRef}
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto"
                 poster="/hero-poster.webp"
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{ pointerEvents: 'none' }}
@@ -130,11 +157,12 @@ export default function Hero() {
             </div>
             <div className="relative w-1/2 h-full overflow-hidden">
               <video
+                ref={desktopRightRef}
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="none"
+                preload="auto"
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{ pointerEvents: 'none' }}
                 onWheel={handleVideoWheel}
