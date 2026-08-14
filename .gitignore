@@ -9,3 +9,13 @@ frontend/build/
 # Local uncompressed media backups
 frontend/public/.originals/
 frontend/public/logo-opt.png
+
+# Backend: база данных (проект работает на PostgreSQL)
+backend/db.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+backend/venv/
+backend/staticfiles/
