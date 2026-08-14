@@ -4,6 +4,8 @@ frontend/.next/
 frontend/out/
 frontend/build/
 .env*
+!.env.example
+!.env.local.example
 .DS_Store
 
 # Local uncompressed media backups
